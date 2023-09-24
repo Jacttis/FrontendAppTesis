@@ -1,7 +1,7 @@
 /node_modules/
 /.idea/
 /android/build/
-
+/android/app/build/
 # Android/IntelliJ
 #
 build/
@@ -10,4 +10,4 @@ build/
 local.properties
 *.iml
 *.hprof
-/android/app/build/
+

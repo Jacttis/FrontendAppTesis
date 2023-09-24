@@ -9,6 +9,7 @@ export default function Routes() {
         <Stack.Navigator>
             <Stack.Screen
                 name="Welcome"
+                options={{headerShown: false }}
                 component={Welcome}
             />
 
