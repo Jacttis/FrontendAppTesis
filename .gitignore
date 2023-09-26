@@ -2,6 +2,7 @@
 /.idea/
 /android/build/
 /android/.gradle/
+/android/app/
 /android/app/build/
 # Android/IntelliJ
 #
