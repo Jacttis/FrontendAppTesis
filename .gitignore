@@ -1,6 +1,7 @@
 /node_modules/
 /.idea/
 /android/build/
+/android/.gradle/
 /android/app/build/
 # Android/IntelliJ
 #
