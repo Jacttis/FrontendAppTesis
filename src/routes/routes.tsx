@@ -9,8 +9,6 @@ import VectorIcon from 'react-native-vector-icons/Ionicons';
 const Tab = createBottomTabNavigator();
 const RootStack = createNativeStackNavigator()
 
-//TODO: Lean aca agregarias las cosas, Fijate y borra los comentarios despues.
-//      El login no que lo estoy modificando despues rompe tod0
 export const BottomTabs = () => (
     <Tab.Navigator>
         <Tab.Screen

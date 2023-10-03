@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, SafeAreaView, StyleSheet, TextInput, ViewStyle, TouchableOpacity } from "react-native";
+import { Text, SafeAreaView, StyleSheet, TextInput, ViewStyle, TouchableOpacity } from "react-native";
 import * as Animatable from "react-native-animatable";
 import { useNavigation } from "@react-navigation/native";
 
@@ -49,7 +49,7 @@ export default function Login() {
       paddingVertical: 8,
       marginTop: 14,
       justifyContent: "center",
-      alignItems: "center",
+      alignItems: "center"
 
     },
     buttonText: {
@@ -65,7 +65,7 @@ export default function Login() {
       marginTop: 14,
       justifyContent: "center",
       alignItems: "center",
-      borderRadius: 15,
+      borderRadius: 15
     }
   });
 
@@ -102,13 +102,5 @@ export default function Login() {
       </Animatable.View>
 
     </SafeAreaView>
-    /*<SafeAreaView>
-      <View style={{ alignItems: "center" }}>
-        <Text style={{ color: "red", fontSize: 50 }}> Login </Text>
-        <Button onPress={() => navigation.navigate("bottomTabs")}>
-          <Text>a que no te da pa clickear</Text>
-        </Button>
-      </View>
-    </SafeAreaView>;*/
   );
 }
