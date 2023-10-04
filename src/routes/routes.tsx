@@ -9,8 +9,6 @@ import VectorIcon from 'react-native-vector-icons/Ionicons';
 const Tab = createBottomTabNavigator();
 const RootStack = createNativeStackNavigator()
 
-//TODO: Lean aca agregarias las cosas, Fijate y borra los comentarios despues.
-//      El login no que lo estoy modificando despues rompe tod0
 export const BottomTabs = () => (
     <Tab.Navigator>
         <Tab.Screen
@@ -32,7 +30,7 @@ export const BottomTabs = () => (
 
 export const MainStack = () => (
     <RootStack.Navigator initialRouteName={"login"}>
-        <RootStack.Screen name={"login"} component={Login}/>{/*//esto es solo una screen */}
+        <RootStack.Screen name={"login"} component={Login} options={{headerShown: false}} />{/*//esto es solo una screen */}
         <RootStack.Screen name={"bottomTabs"} component={BottomTabs}/>{/*// en cambio esto es un stack*/}
         {/*aca si vos queres agregar mas screens o stacks*/}
     </RootStack.Navigator>
