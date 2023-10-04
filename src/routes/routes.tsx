@@ -4,6 +4,7 @@ import Test from '../pages/Welcome/Test'
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import VectorIcon from 'react-native-vector-icons/Ionicons';
+import Home from '../pages/Home/home';
 
 
 const Tab = createBottomTabNavigator();
@@ -28,13 +29,20 @@ export const BottomTabs = () => (
 
         />
     </Tab.Navigator>
-)
+);
+
+export const HomeTabs = () => (
+    <Tab.Navigator>
+        <Tab.Screen name='Home' component={Home}/>
+    </Tab.Navigator>
+);
 
 export const MainStack = () => (
-    <RootStack.Navigator initialRouteName={"login"}>
+    <RootStack.Navigator initialRouteName={"home"}>
         <RootStack.Screen name={"login"} component={Login}/>{/*//esto es solo una screen */}
         <RootStack.Screen name={"bottomTabs"} component={BottomTabs}/>{/*// en cambio esto es un stack*/}
         {/*aca si vos queres agregar mas screens o stacks*/}
+        <RootStack.Screen name={"home"} component={Home} />
     </RootStack.Navigator>
 )
 //aca devolvemos el stack principal. el que tiene tod0
