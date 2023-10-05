@@ -18,18 +18,29 @@ export const BottomTabs = () => (
         tabBarIcon: ({ focused }) => (
           <VectorIcon name="home" color="black" size={30} />
         ),
+        headerShown: false,
       }}
     />
   </Tab.Navigator>
 );
 
 export const MainStack = () => (
-    <RootStack.Navigator initialRouteName={"login"}>
-        <RootStack.Screen name={"login"} component={Login} options={{headerShown: false}} />{/*//esto es solo una screen */}
-        <RootStack.Screen name={"bottomTabs"} component={BottomTabs} />{/*// en cambio esto es un stack*/}
-        {/*aca si vos queres agregar mas screens o stacks*/}
-    </RootStack.Navigator>
-)
+  <RootStack.Navigator initialRouteName={"login"}>
+    <RootStack.Screen
+      name={"login"}
+      component={Login}
+      options={{ headerShown: false }}
+    />
+    {/*//esto es solo una screen */}
+    <RootStack.Screen
+      name={"bottomTabs"}
+      options={{ headerShown: false }}
+      component={BottomTabs}
+    />
+    {/*// en cambio esto es un stack*/}
+    {/*aca si vos queres agregar mas screens o stacks*/}
+  </RootStack.Navigator>
+);
 //aca devolvemos el stack principal. el que tiene tod0
 export default function Routes() {
   return <MainStack />;
