@@ -3,28 +3,39 @@ import { View, Text, SafeAreaView, StyleSheet } from "react-native";
 import WorkerCard from "./workerCard";
 import { Button } from "react-native-paper";
 import { searchWorkers } from "../../connection/requests";
+import GetLocation from "react-native-get-location";
 
 export default function Home() {
   const [workers, setWorkers] = useState<{ [key: string]: any }>([]);
 
   useEffect(() => {
     getWorkersForClient();
+
+    GetLocation.getCurrentPosition({
+      enableHighAccuracy: true,
+      timeout: 60000,
+    })
+      .then((location) => {
+        console.log(location);
+      })
+      .catch((error) => {
+        const { code, message } = error;
+        console.warn(code, message);
+      });
   }, []);
 
-  useEffect(() => {
-    console.log(workers);
-  }, [workers]);
+  useEffect(() => {}, [workers]);
 
   const getWorkersForClient = () => {
     let mockClientData = {
       email: "client@asd.com",
       latitude: 37,
-      longitude: -120,
+      longitude: -122,
+      professionName: "Carpintero",
     };
     searchWorkers(mockClientData)
       .then((workersResponse) => setWorkers(workersResponse.data))
       .catch((error) => {
-        console.log(error);
         setWorkers([]);
       });
   };
