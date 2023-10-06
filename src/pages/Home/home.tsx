@@ -4,8 +4,9 @@ import WorkerCard from "./workerCard";
 import { Button } from "react-native-paper";
 import { searchWorkers } from "../../connection/requests";
 import GetLocation from "react-native-get-location";
-import { SegmentedButtons } from "react-native-paper";
+import { SegmentedButtons, ActivityIndicator } from "react-native-paper";
 import SelectDropdown from "react-native-select-dropdown";
+import { Image } from "react-native-elements";
 
 interface filter {
   minimumDistanceInKm: number;
@@ -15,7 +16,7 @@ interface filter {
 export default function Home() {
   const [workers, setWorkers] = useState<{ [key: string]: any }>([]);
   const [filters, setFilters] = useState<filter>({
-    minimumDistanceInKm: 50,
+    minimumDistanceInKm: 0,
     professionName: "",
   });
   const [professions, setProfessions] = useState<string[]>([]);
@@ -25,10 +26,6 @@ export default function Home() {
     getWorkersForClient();
     getProfessions();
   }, []);
-
-  useEffect(() => {
-    console.log(workers);
-  }, [workers]);
 
   useEffect(() => {
     getWorkersForClient();
@@ -51,6 +48,7 @@ export default function Home() {
       minimumDistanceInKm: filters.minimumDistanceInKm,
       professionName: filters.professionName,
     };
+
     searchWorkers(mockClientSearchInfo)
       .then((workersResponse) => setWorkers(workersResponse.data))
       .catch((error) => {
@@ -72,11 +70,19 @@ export default function Home() {
   const removeRefusedWorker = () => {
     let updatedWorkers = workers.slice(1, workers.length);
     setWorkers(updatedWorkers);
+    checkEmptyWorkers(updatedWorkers);
   };
 
   const acceptedWorker = () => {
     let updatedWorkers = workers.slice(1, workers.length);
     setWorkers(updatedWorkers);
+    checkEmptyWorkers(updatedWorkers);
+  };
+
+  const checkEmptyWorkers = (updatedWorkers: any) => {
+    if (updatedWorkers.length === 0) {
+      getWorkersForClient();
+    }
   };
 
   return (
@@ -112,6 +118,8 @@ export default function Home() {
           <SelectDropdown
             data={professions}
             defaultValueByIndex={0}
+            search={true}
+            buttonStyle={styles.select}
             onSelect={(selectedItem, index) => {
               let professionSelected = index === 0 ? "" : selectedItem;
               setFilters({
@@ -122,9 +130,9 @@ export default function Home() {
           />
         </View>
       </View>
-      <View style={styles.searchResultContainer}>
-        <Text>These are workers for you!</Text>
-        {workers.length > 0 ? (
+      {workers.length > 0 ? (
+        <View style={styles.searchResultContainer}>
+          <Text>These are workers for you!</Text>
           <WorkerCard
             workerInfo={workers[0]}
             onRefused={() => {
@@ -132,16 +140,13 @@ export default function Home() {
             }}
             onAccepted={() => acceptedWorker()}
           />
-        ) : (
-          <Button
-            onPress={() => {
-              getWorkersForClient();
-            }}
-          >
-            Search Workers
-          </Button>
-        )}
-      </View>
+        </View>
+      ) : (
+        <View style={styles.searchResultContainer}>
+          <ActivityIndicator size={"large"} animating={true} />
+          <Text>Searching more workers</Text>
+        </View>
+      )}
     </SafeAreaView>
   );
 }
@@ -171,8 +176,14 @@ const styles = StyleSheet.create({
   searchResultContainer: {
     display: "flex",
     height: "60%",
+    width: "90%",
     flexDirection: "column",
+    justifyContent: "center",
     alignItems: "center",
     gap: 10,
+  },
+  select: {
+    backgroundColor: "grey",
+    borderRadius: 20,
   },
 });

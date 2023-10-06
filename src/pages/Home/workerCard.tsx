@@ -1,5 +1,6 @@
 import react, { useEffect, useState } from "react";
 import { View, Text, SafeAreaView, StyleSheet } from "react-native";
+import { Image } from "react-native-animatable";
 import { Avatar, Button, Card } from "react-native-paper";
 
 export default function WorkerCard(props: any) {
@@ -9,7 +10,7 @@ export default function WorkerCard(props: any) {
     <Card style={styles.container}>
       <Card.Cover
         source={{
-          uri: "https://simeon.com.co/media/k2/items/cache/954fb0ebf1d84fb921bfb0b6e045d57f_XL.jpg",
+          uri: "https://nypost.com/wp-content/uploads/sites/2/2013/08/construction_worker-300x450.jpg?quality=75&strip=all",
         }}
       />
       <Card.Title
@@ -17,8 +18,8 @@ export default function WorkerCard(props: any) {
         subtitle={workerInfo?.professionName}
       />
       <Card.Content>
-        <Text>Rating : {workerInfo?.averageRating}</Text>
-        <Text>Distance to you {workerInfo?.distanceToClientInKm} Km</Text>
+        <Text>⭐ {workerInfo?.averageRating}</Text>
+        <Text> ⛯ {workerInfo?.distanceToClientInKm} Km</Text>
       </Card.Content>
       <Card.Actions style={styles.buttonContainer}>
         <Button
@@ -27,7 +28,7 @@ export default function WorkerCard(props: any) {
             props.onRefused();
           }}
         >
-          Nope
+          ✘
         </Button>
         <Button
           style={styles.button}
@@ -35,7 +36,15 @@ export default function WorkerCard(props: any) {
             props.onAccepted();
           }}
         >
-          Ok
+          ✔
+        </Button>
+        <Button
+          style={styles.button}
+          onPress={() => {
+            props.onAccepted();
+          }}
+        >
+          ⓘ
         </Button>
       </Card.Actions>
     </Card>
@@ -44,17 +53,25 @@ export default function WorkerCard(props: any) {
 
 const styles = StyleSheet.create({
   container: {
-    width: "70%",
-    padding: 20,
+    width: "80%",
+    height: "90%",
+    padding: 10,
+  },
+  cardText: {
+    width: "80%",
+    height: "15%",
   },
   buttonContainer: {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    margin: 1,
-    width: "90%",
+    width: "95%",
+    height: "20%",
   },
   button: {
-    width: "45%",
+    width: "25%",
+  },
+  buttonInfo: {
+    width: "25%",
   },
 });
