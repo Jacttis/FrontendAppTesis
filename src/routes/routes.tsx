@@ -25,7 +25,7 @@ export const BottomTabs = () => (
 );
 
 export const MainStack = () => (
-  <RootStack.Navigator initialRouteName={"login"}>
+  <RootStack.Navigator initialRouteName={"bottomTabs"}>
     <RootStack.Screen
       name={"login"}
       component={Login}

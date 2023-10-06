@@ -12,10 +12,13 @@ export default function WorkerCard(props: any) {
           uri: "https://simeon.com.co/media/k2/items/cache/954fb0ebf1d84fb921bfb0b6e045d57f_XL.jpg",
         }}
       />
-      <Card.Title title={workerInfo?.name} subtitle={workerInfo?.email} />
+      <Card.Title
+        title={workerInfo?.name}
+        subtitle={workerInfo?.professionName}
+      />
       <Card.Content>
-        <Text>{workerInfo?.name}</Text>
-        <Text>{workerInfo?.email}</Text>
+        <Text>Rating : {workerInfo?.averageRating}</Text>
+        <Text>Distance to you {workerInfo?.distanceToClientInKm} Km</Text>
       </Card.Content>
       <Card.Actions style={styles.buttonContainer}>
         <Button
