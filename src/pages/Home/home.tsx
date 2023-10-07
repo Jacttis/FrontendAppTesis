@@ -1,17 +1,21 @@
-import react, { useEffect, useState } from "react";
-import { View, Text, SafeAreaView, StyleSheet } from "react-native";
-import WorkerCard from "./workerCard";
-import { Button } from "react-native-paper";
+import { useEffect, useState } from "react";
+import { View, Text, SafeAreaView, StyleSheet, ScrollView } from "react-native";
 import { searchWorkers } from "../../connection/requests";
-import GetLocation from "react-native-get-location";
-import { SegmentedButtons, ActivityIndicator } from "react-native-paper";
+import {
+  SegmentedButtons,
+  ActivityIndicator,
+  Button,
+} from "react-native-paper";
 import SelectDropdown from "react-native-select-dropdown";
-import { Image } from "react-native-elements";
+import WorkerCard from "./workerCard";
+import Modal from "react-native-modal";
 
 interface filter {
   minimumDistanceInKm: number;
   professionName: string;
 }
+
+interface worker {}
 
 export default function Home() {
   const [workers, setWorkers] = useState<{ [key: string]: any }>([]);
@@ -21,6 +25,14 @@ export default function Home() {
   });
   const [professions, setProfessions] = useState<string[]>([]);
   const [minimumDistanceSelected, setMinimumDistanceSelected] = useState("");
+
+  const [visibleWorkerModal, setVisibleWorkerModal] = useState(false);
+  const [actualWorker, setActualWorker] = useState<{ [key: string]: any }>({});
+  const hideWorkerModal = () => setVisibleWorkerModal(false);
+  const showWorkerModal = (worker: any) => {
+    setActualWorker(worker);
+    setVisibleWorkerModal(true);
+  };
 
   useEffect(() => {
     getWorkersForClient();
@@ -87,6 +99,29 @@ export default function Home() {
 
   return (
     <SafeAreaView style={styles.mainContainer}>
+      <Modal isVisible={visibleWorkerModal}>
+        <View style={styles.modalContainer}>
+          <View style={styles.modalTop}>
+            <Text style={{ fontWeight: "800", color: "black" }}>
+              {workers[0]?.name}
+            </Text>
+          </View>
+          <View style={styles.modalBody}>
+            <View style={styles.modalDescriptionContainer}></View>
+            <ScrollView style={styles.modalReviewsContainer}>
+              <Text style={{ height: 100 }}>ASD</Text>
+              <Text style={{ height: 100 }}>ASD</Text>
+              <Text style={{ height: 100 }}>ASD</Text>
+              <Text style={{ height: 100 }}>ASD</Text>
+              <Text style={{ height: 100 }}>ASD</Text>
+              <Text style={{ height: 100 }}>ASD</Text>
+            </ScrollView>
+          </View>
+          <View style={styles.modalButtonContainer}>
+            <Button onPress={() => hideWorkerModal()}>X</Button>
+          </View>
+        </View>
+      </Modal>
       <View style={styles.searchOptionsContainer}>
         <View style={styles.searchOptionsDistanceSelection}>
           <Text>Choose minimum distance to worker</Text>
@@ -118,6 +153,7 @@ export default function Home() {
           <SelectDropdown
             data={professions}
             defaultValueByIndex={0}
+            defaultValue={"All Professions"}
             search={true}
             buttonStyle={styles.select}
             onSelect={(selectedItem, index) => {
@@ -139,12 +175,13 @@ export default function Home() {
               removeRefusedWorker();
             }}
             onAccepted={() => acceptedWorker()}
+            onShowInfo={(worker: any) => showWorkerModal(worker)}
           />
         </View>
       ) : (
         <View style={styles.searchResultContainer}>
           <ActivityIndicator size={"large"} animating={true} />
-          <Text>Searching more workers</Text>
+          <Text>Searching workers...</Text>
         </View>
       )}
     </SafeAreaView>
@@ -183,7 +220,45 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   select: {
-    backgroundColor: "grey",
     borderRadius: 20,
+    backgroundColor: "white",
+    elevation: 15,
+  },
+  modalContainer: {
+    width: "90%",
+    height: "65%",
+    backgroundColor: "white",
+    marginLeft: "auto",
+    marginRight: "auto",
+    borderRadius: 10,
+    justifyContent: "space-between",
+  },
+  modalTop: {
+    width: "100%",
+    height: "8%",
+    borderBottomWidth: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalBody: {
+    width: "100%",
+    height: "80%",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalDescriptionContainer: {
+    height: "35%",
+    width: "90%",
+  },
+  modalReviewsContainer: {
+    width: "90%",
+    height: "60%",
+  },
+  modalButtonContainer: {
+    backgroundColor: "blue",
+    width: "100%",
+    height: "8%",
+    borderBottomRightRadius: 10,
+    borderBottomLeftRadius: 10,
   },
 });
