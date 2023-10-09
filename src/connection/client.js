@@ -10,6 +10,11 @@ export default axios.create({
   headers: { "Content-Type": "application/json" },
 });
 
+export const axiosReview = axios.create({
+  baseURL: "http://10.0.2.2:8082/api/",
+  headers: { "Content-Type": "application/json" },
+});
+
 export const axiosAuth = (accessToken) =>
   axios.create({
     baseURL: server_path,

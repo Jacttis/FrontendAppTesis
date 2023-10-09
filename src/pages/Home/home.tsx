@@ -9,6 +9,7 @@ import {
 import SelectDropdown from "react-native-select-dropdown";
 import WorkerCard from "./workerCard";
 import Modal from "react-native-modal";
+import WorkerModal from "./workerModal";
 
 interface filter {
   minimumDistanceInKm: number;
@@ -99,29 +100,11 @@ export default function Home() {
 
   return (
     <SafeAreaView style={styles.mainContainer}>
-      <Modal isVisible={visibleWorkerModal}>
-        <View style={styles.modalContainer}>
-          <View style={styles.modalTop}>
-            <Text style={{ fontWeight: "800", color: "black" }}>
-              {workers[0]?.name}
-            </Text>
-          </View>
-          <View style={styles.modalBody}>
-            <View style={styles.modalDescriptionContainer}></View>
-            <ScrollView style={styles.modalReviewsContainer}>
-              <Text style={{ height: 100 }}>ASD</Text>
-              <Text style={{ height: 100 }}>ASD</Text>
-              <Text style={{ height: 100 }}>ASD</Text>
-              <Text style={{ height: 100 }}>ASD</Text>
-              <Text style={{ height: 100 }}>ASD</Text>
-              <Text style={{ height: 100 }}>ASD</Text>
-            </ScrollView>
-          </View>
-          <View style={styles.modalButtonContainer}>
-            <Button onPress={() => hideWorkerModal()}>X</Button>
-          </View>
-        </View>
-      </Modal>
+      <WorkerModal
+        visible={visibleWorkerModal}
+        workerInfo={workers[0]}
+        onClose={() => hideWorkerModal()}
+      />
       <View style={styles.searchOptionsContainer}>
         <View style={styles.searchOptionsDistanceSelection}>
           <Text>Choose minimum distance to worker</Text>
@@ -223,42 +206,5 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     backgroundColor: "white",
     elevation: 15,
-  },
-  modalContainer: {
-    width: "90%",
-    height: "65%",
-    backgroundColor: "white",
-    marginLeft: "auto",
-    marginRight: "auto",
-    borderRadius: 10,
-    justifyContent: "space-between",
-  },
-  modalTop: {
-    width: "100%",
-    height: "8%",
-    borderBottomWidth: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  modalBody: {
-    width: "100%",
-    height: "80%",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  modalDescriptionContainer: {
-    height: "35%",
-    width: "90%",
-  },
-  modalReviewsContainer: {
-    width: "90%",
-    height: "60%",
-  },
-  modalButtonContainer: {
-    backgroundColor: "blue",
-    width: "100%",
-    height: "8%",
-    borderBottomRightRadius: 10,
-    borderBottomLeftRadius: 10,
   },
 });
