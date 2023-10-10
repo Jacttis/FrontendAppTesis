@@ -58,8 +58,8 @@ export default function WorkerCard(props: any) {
 
 const styles = StyleSheet.create({
   container: {
-    width: "80%",
-    height: "90%",
+    width: "90%",
+    height: 500,
     padding: 10,
     justifyContent: "space-evenly",
     alignItems: "center",
@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
     elevation: 20,
   },
   imageContainer: {
-    height: "55%",
+    height: "60%",
     width: "95%",
     justifyContent: "center",
     alignItems: "center",
@@ -79,14 +79,14 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   bodyContainer: {
-    height: "45%",
+    height: "40%",
     width: "90%",
     justifyContent: "space-evenly",
   },
   titlesContainer: {
     width: "70%",
     height: "40%",
-    justifyContent: "space-evenly",
+    justifyContent: "center",
   },
   title: {
     fontSize: 17,
@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     width: "90%",
-    height: "30%",
+    height: "35%",
     marginLeft: "auto",
     marginRight: "auto",
     flexDirection: "row",
@@ -112,8 +112,5 @@ const styles = StyleSheet.create({
   button: {
     width: "20%",
     height: "70%",
-    borderStyle: "solid",
-    borderColor: "blue",
-    borderWidth: 1,
   },
 });

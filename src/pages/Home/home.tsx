@@ -24,6 +24,9 @@ export default function Home() {
     minimumDistanceInKm: 0,
     professionName: "",
   });
+
+  const [searching, setSearching] = useState(false);
+
   const [professions, setProfessions] = useState<string[]>([]);
   const [minimumDistanceSelected, setMinimumDistanceSelected] = useState("");
 
@@ -61,11 +64,15 @@ export default function Home() {
       minimumDistanceInKm: filters.minimumDistanceInKm,
       professionName: filters.professionName,
     };
-
+    setSearching(true);
     searchWorkers(mockClientSearchInfo)
-      .then((workersResponse) => setWorkers(workersResponse.data))
+      .then((workersResponse) => {
+        setWorkers(workersResponse.data);
+        setSearching(false);
+      })
       .catch((error) => {
         setWorkers([]);
+        setSearching(false);
       });
   };
 
@@ -107,7 +114,7 @@ export default function Home() {
       />
       <View style={styles.searchOptionsContainer}>
         <View style={styles.searchOptionsDistanceSelection}>
-          <Text>Choose minimum distance to worker</Text>
+          <Text>Choose maximum distance to worker</Text>
           <SegmentedButtons
             value={minimumDistanceSelected}
             onValueChange={setMinimumDistanceSelected}
@@ -161,10 +168,14 @@ export default function Home() {
             onShowInfo={(worker: any) => showWorkerModal(worker)}
           />
         </View>
-      ) : (
+      ) : searching ? (
         <View style={styles.searchResultContainer}>
           <ActivityIndicator size={"large"} animating={true} />
           <Text>Searching workers...</Text>
+        </View>
+      ) : (
+        <View style={styles.searchResultContainer}>
+          <Text>There are no workers for you with those filters...</Text>
         </View>
       )}
     </SafeAreaView>
@@ -182,7 +193,7 @@ const styles = StyleSheet.create({
   },
   searchOptionsContainer: {
     width: "90%",
-    height: "30%",
+    height: "20%",
     display: "flex",
     flexDirection: "column",
     justifyContent: "space-evenly",
@@ -195,7 +206,7 @@ const styles = StyleSheet.create({
   },
   searchResultContainer: {
     display: "flex",
-    height: "60%",
+    height: "70%",
     width: "90%",
     flexDirection: "column",
     justifyContent: "center",

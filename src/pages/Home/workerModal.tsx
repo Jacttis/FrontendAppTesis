@@ -16,6 +16,7 @@ interface review {
 
 export default function WorkerModal(props: any) {
   const [workerReviews, setWorkerReviews] = useState<review[]>([]);
+  const [searching, setSearching] = useState(false);
 
   const { visible, workerInfo } = props;
 
@@ -31,9 +32,17 @@ export default function WorkerModal(props: any) {
       email: workerInfo?.email,
     };
 
+    setSearching(true);
+
     getWorkerReviews(workerData)
-      .then((response) => setWorkerReviews(response.data))
-      .catch((error) => console.log(error));
+      .then((response) => {
+        setWorkerReviews(response.data);
+        setSearching(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        setSearching(false);
+      });
   };
 
   return (
@@ -77,8 +86,12 @@ export default function WorkerModal(props: any) {
                   );
                 })}
               </ScrollView>
-            ) : (
+            ) : searching ? (
               <ActivityIndicator size={"small"} animating={true} />
+            ) : (
+              <Text style={{ marginLeft: "auto", marginRight: "auto" }}>
+                Worker has no reviews!
+              </Text>
             )}
           </View>
         </View>
@@ -94,7 +107,7 @@ export default function WorkerModal(props: any) {
 
 const styles = StyleSheet.create({
   modalContainer: {
-    width: "90%",
+    width: "100%",
     height: "65%",
     backgroundColor: "white",
     marginLeft: "auto",
