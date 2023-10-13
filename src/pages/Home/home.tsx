@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { View, Text, SafeAreaView, StyleSheet, ScrollView } from "react-native";
-import { searchWorkers } from "../../connection/requests";
+import { interactWorker, searchWorkers } from "../../connection/requests";
 import {
   SegmentedButtons,
   ActivityIndicator,
@@ -58,7 +58,7 @@ export default function Home() {
 
   const getWorkersForClient = () => {
     let mockClientSearchInfo = {
-      email: "client@asd.com",
+      email: "clientemail1@example.com",
       latitude: 37,
       longitude: -122,
       minimumDistanceInKm: filters.minimumDistanceInKm,
@@ -87,16 +87,35 @@ export default function Home() {
     setProfessions(prof);
   };
 
-  const removeRefusedWorker = () => {
-    let updatedWorkers = workers.slice(1, workers.length);
-    setWorkers(updatedWorkers);
-    checkEmptyWorkers(updatedWorkers);
+  const refusedWorker = () => {
+    let mockInteractionInfo = {
+      workerEmail: workers[0].email,
+      clientEmail: "clientemail1@example.com",
+      interactionType: "disliked",
+    };
+    interactWorker(mockInteractionInfo)
+      .then((response) => {
+        let updatedWorkers = workers.slice(1, workers.length);
+        setWorkers(updatedWorkers);
+        checkEmptyWorkers(updatedWorkers);
+      })
+      .catch((error) => console.log(error));
   };
 
   const acceptedWorker = () => {
-    let updatedWorkers = workers.slice(1, workers.length);
-    setWorkers(updatedWorkers);
-    checkEmptyWorkers(updatedWorkers);
+    let mockInteractionInfo = {
+      workerEmail: workers[0].email,
+      clientEmail: "clientemail1@example.com",
+      interactionType: "liked",
+    };
+    console.log(mockInteractionInfo);
+    interactWorker(mockInteractionInfo)
+      .then((response) => {
+        let updatedWorkers = workers.slice(1, workers.length);
+        setWorkers(updatedWorkers);
+        checkEmptyWorkers(updatedWorkers);
+      })
+      .catch((error) => console.log(error));
   };
 
   const checkEmptyWorkers = (updatedWorkers: any) => {
@@ -162,7 +181,7 @@ export default function Home() {
           <WorkerCard
             workerInfo={workers[0]}
             onRefused={() => {
-              removeRefusedWorker();
+              refusedWorker();
             }}
             onAccepted={() => acceptedWorker()}
             onShowInfo={(worker: any) => showWorkerModal(worker)}
