@@ -226,7 +226,7 @@ export default function Home() {
               }}
               onSwipedLeft={() => refusedWorker()}
               onSwipedRight={() => acceptedWorker()}
-              stackSize={4}
+              stackSize={3}
               stackSeparation={10}
               disableBottomSwipe
               disableTopSwipe
