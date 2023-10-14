@@ -130,6 +130,14 @@ export default function Home() {
         visible={visibleWorkerModal}
         workerInfo={workers[0]}
         onClose={() => hideWorkerModal()}
+        onAccepted={() => {
+          acceptedWorker();
+          hideWorkerModal();
+        }}
+        onRefused={() => {
+          refusedWorker();
+          hideWorkerModal();
+        }}
       />
       <View style={styles.searchOptionsContainer}>
         <View style={styles.searchOptionsDistanceSelection}>
