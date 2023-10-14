@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { View, Text, SafeAreaView, StyleSheet, ScrollView } from "react-native";
+import { useEffect, useState, useRef } from "react";
+import { View, Text, SafeAreaView, StyleSheet } from "react-native";
 import { interactWorker, searchWorkers } from "../../connection/requests";
 import {
   SegmentedButtons,
@@ -8,18 +8,39 @@ import {
 } from "react-native-paper";
 import SelectDropdown from "react-native-select-dropdown";
 import WorkerCard from "./workerCard";
-import Modal from "react-native-modal";
 import WorkerModal from "./workerModal";
+import Swiper, { SwiperProps } from "react-native-deck-swiper";
+import React from "react";
 
 interface filter {
   minimumDistanceInKm: number;
   professionName: string;
 }
 
-interface worker {}
+interface worker {
+  email: string;
+  name: string;
+  description: string;
+  professionName: string;
+  averageRating: number;
+  picture: string;
+  distanceToClientInKm: number;
+}
+
+const colors = {
+  red: "#EC2379",
+  blue: "#0070FF",
+  gray: "#777777",
+  white: "#ffffff",
+  black: "#000000",
+};
+
+const swiperRef = React.createRef<Swiper<worker>>();
 
 export default function Home() {
-  const [workers, setWorkers] = useState<{ [key: string]: any }>([]);
+  const [workers, setWorkers] = useState<worker[]>([]);
+  const [index, setIndex] = useState(0);
+
   const [filters, setFilters] = useState<filter>({
     minimumDistanceInKm: 0,
     professionName: "",
@@ -31,10 +52,8 @@ export default function Home() {
   const [minimumDistanceSelected, setMinimumDistanceSelected] = useState("");
 
   const [visibleWorkerModal, setVisibleWorkerModal] = useState(false);
-  const [actualWorker, setActualWorker] = useState<{ [key: string]: any }>({});
   const hideWorkerModal = () => setVisibleWorkerModal(false);
-  const showWorkerModal = (worker: any) => {
-    setActualWorker(worker);
+  const showWorkerModal = () => {
     setVisibleWorkerModal(true);
   };
 
@@ -65,15 +84,21 @@ export default function Home() {
       professionName: filters.professionName,
     };
     setSearching(true);
+    resetWorkers();
+
     searchWorkers(mockClientSearchInfo)
       .then((workersResponse) => {
         setWorkers(workersResponse.data);
         setSearching(false);
       })
       .catch((error) => {
-        setWorkers([]);
         setSearching(false);
       });
+  };
+
+  const resetWorkers = () => {
+    setIndex(0);
+    setWorkers([]);
   };
 
   const getProfessions = () => {
@@ -87,55 +112,45 @@ export default function Home() {
     setProfessions(prof);
   };
 
+  const onSwiped = () => {
+    setIndex(index + 1);
+  };
+
   const refusedWorker = () => {
     let mockInteractionInfo = {
-      workerEmail: workers[0].email,
+      workerEmail: workers[index]?.email,
       clientEmail: "clientemail1@example.com",
       interactionType: "disliked",
     };
     interactWorker(mockInteractionInfo)
-      .then((response) => {
-        let updatedWorkers = workers.slice(1, workers.length);
-        setWorkers(updatedWorkers);
-        checkEmptyWorkers(updatedWorkers);
-      })
+      .then((response) => {})
       .catch((error) => console.log(error));
   };
 
   const acceptedWorker = () => {
     let mockInteractionInfo = {
-      workerEmail: workers[0].email,
+      workerEmail: workers[index]?.email,
       clientEmail: "clientemail1@example.com",
       interactionType: "liked",
     };
-    console.log(mockInteractionInfo);
-    interactWorker(mockInteractionInfo)
-      .then((response) => {
-        let updatedWorkers = workers.slice(1, workers.length);
-        setWorkers(updatedWorkers);
-        checkEmptyWorkers(updatedWorkers);
-      })
-      .catch((error) => console.log(error));
-  };
 
-  const checkEmptyWorkers = (updatedWorkers: any) => {
-    if (updatedWorkers.length === 0) {
-      getWorkersForClient();
-    }
+    interactWorker(mockInteractionInfo)
+      .then((response) => {})
+      .catch((error) => console.log(error));
   };
 
   return (
     <SafeAreaView style={styles.mainContainer}>
       <WorkerModal
         visible={visibleWorkerModal}
-        workerInfo={workers[0]}
+        workerInfo={workers[index]}
         onClose={() => hideWorkerModal()}
         onAccepted={() => {
-          acceptedWorker();
+          swiperRef.current?.swipeRight();
           hideWorkerModal();
         }}
         onRefused={() => {
-          refusedWorker();
+          swiperRef.current?.swipeLeft();
           hideWorkerModal();
         }}
       />
@@ -185,15 +200,81 @@ export default function Home() {
       </View>
       {workers.length > 0 ? (
         <View style={styles.searchResultContainer}>
-          <Text>These are workers for you!</Text>
-          <WorkerCard
-            workerInfo={workers[0]}
-            onRefused={() => {
-              refusedWorker();
-            }}
-            onAccepted={() => acceptedWorker()}
-            onShowInfo={(worker: any) => showWorkerModal(worker)}
-          />
+          <Text style={{ position: "absolute", top: 50 }}>
+            These are workers for you!
+          </Text>
+          <View style={{ width: "100%", height: "90%" }}>
+            <Swiper
+              cards={workers}
+              ref={swiperRef}
+              cardIndex={index}
+              renderCard={(card) => (
+                <WorkerCard
+                  workerInfo={card}
+                  onRefused={() => {
+                    swiperRef.current?.swipeLeft();
+                  }}
+                  onAccepted={() => {
+                    swiperRef.current?.swipeRight();
+                  }}
+                  onShowInfo={() => showWorkerModal()}
+                />
+              )}
+              onSwiped={onSwiped}
+              onSwipedAll={() => {
+                getWorkersForClient();
+              }}
+              onSwipedLeft={() => refusedWorker()}
+              onSwipedRight={() => acceptedWorker()}
+              stackSize={4}
+              stackSeparation={10}
+              disableBottomSwipe
+              disableTopSwipe
+              animateOverlayLabelsOpacity
+              backgroundColor={"transparent"}
+              animateCardOpacity
+              overlayLabels={{
+                left: {
+                  title: "NOPE",
+                  style: {
+                    label: {
+                      backgroundColor: colors.red,
+                      borderColor: colors.red,
+                      color: colors.white,
+                      borderWidth: 1,
+                      fontSize: 24,
+                    },
+                    wrapper: {
+                      flexDirection: "column",
+                      alignItems: "flex-end",
+                      justifyContent: "flex-start",
+                      marginTop: 20,
+                      marginLeft: -20,
+                    },
+                  },
+                },
+                right: {
+                  title: "LIKE",
+                  style: {
+                    label: {
+                      backgroundColor: colors.blue,
+                      borderColor: colors.blue,
+                      color: colors.white,
+                      borderWidth: 1,
+                      fontSize: 24,
+                    },
+                    wrapper: {
+                      flexDirection: "column",
+                      alignItems: "flex-start",
+                      justifyContent: "flex-start",
+                      marginTop: 20,
+                      marginLeft: 20,
+                    },
+                  },
+                },
+              }}
+            />
+          </View>
         </View>
       ) : searching ? (
         <View style={styles.searchResultContainer}>
@@ -216,14 +297,14 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
-    gap: 1,
+    gap: -20,
   },
   searchOptionsContainer: {
     width: "90%",
     height: "20%",
     display: "flex",
     flexDirection: "column",
-    justifyContent: "space-evenly",
+    justifyContent: "space-around",
     alignItems: "center",
   },
   searchOptionsDistanceSelection: {
@@ -232,13 +313,11 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   searchResultContainer: {
-    display: "flex",
-    height: "70%",
+    height: "75%",
     width: "90%",
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
-    gap: 10,
   },
   select: {
     borderRadius: 20,

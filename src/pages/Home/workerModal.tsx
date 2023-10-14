@@ -61,7 +61,7 @@ export default function WorkerModal(props: any) {
           <Image
             style={styles.image}
             source={{
-              uri: "https://nypost.com/wp-content/uploads/sites/2/2013/08/construction_worker-300x450.jpg?quality=75&strip=all",
+              uri: "https://images.unsplash.com/photo-1614213951697-a45781262acf?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8d29ya2VyfGVufDB8fDB8fHww&w=1000&q=80",
             }}
           />
         </View>
@@ -174,7 +174,7 @@ const styles = StyleSheet.create({
   image: {
     width: "100%",
     height: "100%",
-    resizeMode: "stretch",
+    resizeMode: "cover",
   },
   modalBody: {
     width: "100%",
