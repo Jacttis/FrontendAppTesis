@@ -25,6 +25,7 @@ interface worker {
   averageRating: number;
   picture: string;
   distanceToClientInKm: number;
+  secretKey: string;
 }
 
 const colors = {
@@ -121,6 +122,7 @@ export default function Home() {
       workerEmail: workers[index]?.email,
       clientEmail: "clientemail1@example.com",
       interactionType: "disliked",
+      workerSecretKey: workers[index]?.secretKey,
     };
     interactWorker(mockInteractionInfo)
       .then((response) => {})
@@ -132,6 +134,7 @@ export default function Home() {
       workerEmail: workers[index]?.email,
       clientEmail: "clientemail1@example.com",
       interactionType: "liked",
+      workerSecretKey: workers[index]?.secretKey,
     };
 
     interactWorker(mockInteractionInfo)
