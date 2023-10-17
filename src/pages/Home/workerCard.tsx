@@ -12,14 +12,14 @@ export default function WorkerCard(props: any) {
         <Image
           style={styles.image}
           source={{
-            uri: "https://nypost.com/wp-content/uploads/sites/2/2013/08/construction_worker-300x450.jpg?quality=75&strip=all",
+            uri: "https://images.unsplash.com/photo-1614213951697-a45781262acf?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8d29ya2VyfGVufDB8fDB8fHww&w=1000&q=80",
           }}
         />
       </View>
       <View style={styles.bodyContainer}>
         <View style={styles.titlesContainer}>
-          <Text style={styles.title}>{workerInfo.name}</Text>
-          <Text style={styles.subTitle}>{workerInfo.professionName}</Text>
+          <Text style={styles.title}>{workerInfo?.name}</Text>
+          <Text style={styles.subTitle}>{workerInfo?.professionName}</Text>
         </View>
         <View style={styles.infoContainer}>
           <Text>⭐ {workerInfo?.averageRating}</Text>
@@ -29,15 +29,16 @@ export default function WorkerCard(props: any) {
           <Button
             style={styles.button}
             onPress={() => {
-              props.onAccepted();
+              props.onRefused();
             }}
           >
-            ✔
+            ✘
           </Button>
+
           <Button
             style={styles.button}
             onPress={() => {
-              props.onShowInfo(workerInfo);
+              props.onShowInfo();
             }}
           >
             ⓘ
@@ -45,10 +46,10 @@ export default function WorkerCard(props: any) {
           <Button
             style={styles.button}
             onPress={() => {
-              props.onRefused();
+              props.onAccepted();
             }}
           >
-            ✘
+            ✔
           </Button>
         </View>
       </View>
@@ -59,13 +60,13 @@ export default function WorkerCard(props: any) {
 const styles = StyleSheet.create({
   container: {
     width: "90%",
-    height: 500,
+    height: 475,
     padding: 10,
     justifyContent: "space-evenly",
     alignItems: "center",
     borderRadius: 20,
     backgroundColor: "white",
-    elevation: 20,
+    elevation: 5,
   },
   imageContainer: {
     height: "60%",
@@ -77,6 +78,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "95%",
     borderRadius: 10,
+    resizeMode: "cover",
   },
   bodyContainer: {
     height: "40%",
