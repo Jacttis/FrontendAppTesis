@@ -1,5 +1,6 @@
 import Welcome from "../pages/Welcome/welcome";
 import Login from "../pages/Login/login";
+import Register from "../pages/Login/register";
 import Test from "../pages/Welcome/Test";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -25,10 +26,15 @@ export const BottomTabs = () => (
 );
 
 export const MainStack = () => (
-  <RootStack.Navigator initialRouteName={"login"}>
+  <RootStack.Navigator initialRouteName={"register"}>
     <RootStack.Screen
       name={"login"}
       component={Login}
+      options={{ headerShown: false }}
+    />
+    <RootStack.Screen
+      name={"register"}
+      component={Register}
       options={{ headerShown: false }}
     />
     {/*//esto es solo una screen */}

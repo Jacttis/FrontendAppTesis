@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const server_path = "http://10.0.2.2:8080/api/";
+const server_path = "http://10.0.2.2:8080/api/auth";
 //const vercel_path = "https://best-ai-prompts-backend.vercel.app/restapi";
 
 //const server_path = process.env.REACT_APP_SERVER_PATH;
@@ -15,11 +15,10 @@ export const axiosReview = axios.create({
   headers: { "Content-Type": "application/json" },
 });
 
-export const axiosAuth = (accessToken) =>
+export const axiosAuth = () =>
   axios.create({
     baseURL: server_path,
     headers: {
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + accessToken,
+      "Content-Type": "application/json"
     },
   });

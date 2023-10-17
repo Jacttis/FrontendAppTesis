@@ -8,3 +8,7 @@ export const searchWorkers = async (clientData) => {
 export const getWorkerReviews = async (workerInfo) => {
   return axiosReview.post("review/workerReviews", JSON.stringify(workerInfo));
 };
+
+export const registerClient = async (clientInfo) => {
+  return axiosAuth().post("/client/register", JSON.stringify(clientInfo))
+}
