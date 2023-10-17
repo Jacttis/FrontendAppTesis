@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const server_path = "http://10.0.2.2:8080/api/";
+const server_path = "http://34.151.249.31:80/";
 //const vercel_path = "https://best-ai-prompts-backend.vercel.app/restapi";
 
 //const server_path = process.env.REACT_APP_SERVER_PATH;
