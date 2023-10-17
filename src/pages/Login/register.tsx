@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Text, SafeAreaView, StyleSheet, TextInput, View, TouchableOpacity, FlatList } from "react-native";
 import * as Animatable from "react-native-animatable";
-import { useNavigation } from "@react-navigation/native";
+import { StackActions, useNavigation } from "@react-navigation/native";
 import { fetchAddressSuggestions, AddressSuggestion, getLocation } from "../../services/GeoLocationService";
 import { registerClient } from "../../connection/requests";
 
@@ -233,6 +233,7 @@ export default function Register() {
           style={styles.buttonRegister}
           onPress={() => {
             makeRegisterClient();
+            navigation.dispatch(StackActions.replace('bottomTabs'));
           }
           }>
           <Text style={styles.buttonText}>Register</Text>
