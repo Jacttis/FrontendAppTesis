@@ -21,3 +21,7 @@ export const interactWorker = async (interactionInfo) => {
     JSON.stringify(interactionInfo)
   );
 };
+
+export const getWorkerReviews = async (workerInfo) => {
+  return axiosReview.post("review/workerReviews", JSON.stringify(workerInfo));
+};

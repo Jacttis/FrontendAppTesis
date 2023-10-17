@@ -41,7 +41,6 @@ const swiperRef = React.createRef<Swiper<worker>>();
 export default function Home() {
   const [workers, setWorkers] = useState<worker[]>([]);
   const [index, setIndex] = useState(0);
-
   const [filters, setFilters] = useState<filter>({
     minimumDistanceInKm: 0,
     professionName: "",
@@ -86,7 +85,6 @@ export default function Home() {
     };
     setSearching(true);
     resetWorkers();
-
     searchWorkers(mockClientSearchInfo)
       .then((workersResponse) => {
         setWorkers(workersResponse.data);
