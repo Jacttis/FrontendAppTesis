@@ -183,7 +183,7 @@ export default function Home() {
             ]}
           />
         </View>
-        <View>
+        <View style={{ gap: 5 }}>
           <Text>Choose the profession you want</Text>
           <SelectDropdown
             data={professions}
@@ -307,8 +307,9 @@ const styles = StyleSheet.create({
     height: "20%",
     display: "flex",
     flexDirection: "column",
-    justifyContent: "space-around",
+    justifyContent: "space-evenly",
     alignItems: "center",
+    gap: 10,
   },
   searchOptionsDistanceSelection: {
     width: "90%",

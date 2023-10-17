@@ -69,26 +69,28 @@ export default function WorkerModal(props: any) {
           <View style={styles.modalDescriptionContainer}>
             <View style={{ justifyContent: "space-evenly", height: "100%" }}>
               <View style={{ gap: 3, height: "55%", marginTop: 5 }}>
-                <Text style={{ fontSize: 25 }}>
-                  <FontAwesomeIcon icon={faPerson} />
+                <Text style={{ fontSize: 30, fontWeight: "700" }}>
                   {workerInfo?.name}
                 </Text>
-                <Text style={{ fontSize: 25 }}>
-                  <FontAwesomeIcon icon={faPersonDigging} />
-                  {" " + workerInfo?.professionName}
+                <Text style={{ fontSize: 22, fontWeight: "500" }}>
+                  {workerInfo?.professionName}
                 </Text>
                 <Text>
                   ⛯ {workerInfo?.distanceToClientInKm} Kilometers away
                 </Text>
               </View>
-              <View style={{ gap: 3, height: "40%" }}>
-                <Text style={{ fontWeight: "600" }}>Description</Text>
-                <Text>{workerInfo?.description}</Text>
+              <View style={{ gap: 7, height: "40%" }}>
+                <Text style={{ fontWeight: "600", fontSize: 18 }}>
+                  Description
+                </Text>
+                <Text style={{ fontSize: 15 }}>{workerInfo?.description}</Text>
               </View>
             </View>
           </View>
           <View style={styles.modalReviewsContainer}>
-            <Text style={{ fontWeight: "600" }}>Worker reviews</Text>
+            <Text style={{ fontWeight: "600", fontSize: 18 }}>
+              Worker reviews
+            </Text>
             {workerReviews.length > 0 ? (
               <ScrollView horizontal={true} style={styles.modalReviewsScroll}>
                 {workerReviews.map((review) => {
@@ -122,15 +124,16 @@ export default function WorkerModal(props: any) {
           justifyContent: "center",
           alignItems: "center",
           flexDirection: "row",
+          gap: 20,
         }}
       >
         <Button
           mode="elevated"
           onPress={() => {
-            props.onAccepted();
+            props.onRefused();
           }}
         >
-          ✔
+          ✘
         </Button>
         <Button
           mode="elevated"
@@ -143,10 +146,10 @@ export default function WorkerModal(props: any) {
         <Button
           mode="elevated"
           onPress={() => {
-            props.onRefused();
+            props.onAccepted();
           }}
         >
-          ✘
+          ✔
         </Button>
       </View>
     </Modal>
@@ -174,6 +177,8 @@ const styles = StyleSheet.create({
   image: {
     width: "100%",
     height: "100%",
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 10,
     resizeMode: "cover",
   },
   modalBody: {

@@ -29,11 +29,12 @@ export default function WorkerCard(props: any) {
           <Button
             style={styles.button}
             onPress={() => {
-              props.onAccepted();
+              props.onRefused();
             }}
           >
-            ✔
+            ✘
           </Button>
+
           <Button
             style={styles.button}
             onPress={() => {
@@ -45,10 +46,10 @@ export default function WorkerCard(props: any) {
           <Button
             style={styles.button}
             onPress={() => {
-              props.onRefused();
+              props.onAccepted();
             }}
           >
-            ✘
+            ✔
           </Button>
         </View>
       </View>
