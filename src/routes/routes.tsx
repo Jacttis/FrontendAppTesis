@@ -1,6 +1,5 @@
-import Welcome from "../pages/Welcome/welcome";
 import Login from "../pages/Login/login";
-import Test from "../pages/Welcome/Test";
+import Register from "../pages/Login/register";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import VectorIcon from "react-native-vector-icons/Ionicons";
@@ -29,6 +28,11 @@ export const MainStack = () => (
     <RootStack.Screen
       name={"login"}
       component={Login}
+      options={{ headerShown: false }}
+    />
+    <RootStack.Screen
+      name={"register"}
+      component={Register}
       options={{ headerShown: false }}
     />
     {/*//esto es solo una screen */}

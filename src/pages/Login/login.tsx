@@ -1,7 +1,7 @@
 import React from "react";
 import { Text, SafeAreaView, StyleSheet, TextInput, ViewStyle, TouchableOpacity } from "react-native";
 import * as Animatable from "react-native-animatable";
-import { useNavigation } from "@react-navigation/native";
+import { StackActions, useNavigation } from "@react-navigation/native";
 
 export default function Login() {
   const navigation = useNavigation();
@@ -95,7 +95,12 @@ export default function Login() {
           <Text style={styles.buttonText}>Log in</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.buttonRegister}>
+        <TouchableOpacity
+          style={styles.buttonRegister}
+          onPress={() => {
+            navigation.dispatch(StackActions.replace('register'))
+          }
+          }>
           <Text style={styles.buttonText}>Register</Text>
         </TouchableOpacity>
 

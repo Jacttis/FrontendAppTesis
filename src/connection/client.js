@@ -20,11 +20,10 @@ export const axiosMatching = axios.create({
   headers: { "Content-Type": "application/json" },
 });
 
-export const axiosAuth = (accessToken) =>
+export const axiosAuth = () =>
   axios.create({
     baseURL: server_path,
     headers: {
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + accessToken,
+      "Content-Type": "application/json"
     },
   });

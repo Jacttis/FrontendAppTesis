@@ -21,3 +21,7 @@ export const interactWorker = async (interactionInfo) => {
     JSON.stringify(interactionInfo)
   );
 };
+
+export const registerClient = async (clientInfo) => {
+  return axiosAuth().post("/client/register", JSON.stringify(clientInfo))
+}
