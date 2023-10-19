@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import VectorIcon from "react-native-vector-icons/Ionicons";
 import Home from "../pages/Home/home";
+import WorkerHome from "../pages/Home/workerHome";
 
 const Tab = createBottomTabNavigator();
 const RootStack = createNativeStackNavigator();
@@ -11,8 +12,18 @@ const RootStack = createNativeStackNavigator();
 export const BottomTabs = () => (
   <Tab.Navigator>
     <Tab.Screen
-      name="home"
+      name="Home"
       component={Home}
+      options={{
+        tabBarIcon: ({ focused }) => (
+          <VectorIcon name="home" color="black" size={30} />
+        ),
+        headerShown: false,
+      }}
+    />
+    <Tab.Screen
+      name="workerHome"
+      component={WorkerHome}
       options={{
         tabBarIcon: ({ focused }) => (
           <VectorIcon name="home" color="black" size={30} />
@@ -24,7 +35,7 @@ export const BottomTabs = () => (
 );
 
 export const MainStack = () => (
-  <RootStack.Navigator initialRouteName={"login"}>
+  <RootStack.Navigator initialRouteName={"bottomTabs"}>
     <RootStack.Screen
       name={"login"}
       component={Login}
