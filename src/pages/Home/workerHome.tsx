@@ -85,7 +85,8 @@ export default function WorkerHome() {
       distanceToWorkerInKm: 15,
       birthDate: "1995-03-10",
       secretKey: "A1231asFA",
-      clientProblemDescription: "Me anda mal malamalmal daskjdaskjda el termo",
+      clientProblemDescription:
+        "Me anda mal malamalmal daskjdaskjda el aaaaaaaa aa a a aaaaaaaaaaaa aaaaaatermo",
     },
   ]);
 

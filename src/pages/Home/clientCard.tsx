@@ -18,7 +18,9 @@ export default function ClientCard(props: any) {
       </View>
       <View style={styles.topSection}>
         <View style={styles.infoContainer}>
-          <Text style={{ fontWeight: "700", fontSize: 13 }}>
+          <Text
+            style={{ fontWeight: "700", fontSize: 13, textAlign: "center" }}
+          >
             {clientInfo.name}
           </Text>
           <Text style={{ fontSize: 11 }}>
@@ -29,7 +31,7 @@ export default function ClientCard(props: any) {
           <Text style={{ fontSize: 11, fontWeight: "700" }}>
             Client problem
           </Text>
-          <Text style={{ fontSize: 10 }}>
+          <Text style={{ fontSize: 10, textAlign: "center" }}>
             "{clientInfo.clientProblemDescription}"
           </Text>
         </View>
@@ -63,6 +65,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     justifyContent: "center",
     alignItems: "center",
+    marginTop: 10,
     marginBottom: 15,
     elevation: 10,
     borderRadius: 20,
@@ -80,7 +83,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     justifyContent: "center",
     alignItems: "center",
-    bottom: "40%",
+    bottom: "45%",
   },
   image: {
     width: 60,
@@ -98,7 +101,7 @@ const styles = StyleSheet.create({
   },
   descriptionContainer: {
     height: "40%",
-    width: "100%",
+    width: "80%",
     justifyContent: "center",
     alignItems: "center",
     gap: 5,
