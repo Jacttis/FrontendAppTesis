@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Text, View } from "react-native-animatable";
 import ClientCard from "./clientCard";
 import { ScrollView, StyleSheet } from "react-native";
@@ -43,7 +43,47 @@ export default function WorkerHome() {
       birthDate: "1995-03-10",
       secretKey: "A1231asFA",
     },
+    {
+      email: "cliente5@example.com",
+      name: "Cliente 5",
+      phoneNumber: "987-654-3210",
+      picture: "url_de_la_imagen_2.jpg",
+      distanceToWorkerInKm: 20,
+      birthDate: "1985-08-20",
+      secretKey: "A1231asFA",
+    },
+    {
+      email: "cliente4@example.com",
+      name: "Cliente 4",
+      phoneNumber: "555-123-4567",
+      picture: "url_de_la_imagen_3.jpg",
+      distanceToWorkerInKm: 15,
+      birthDate: "1995-03-10",
+      secretKey: "A1231asFA",
+    },
+    {
+      email: "cliente6@example.com",
+      name: "Cliente 6",
+      phoneNumber: "555-123-4567",
+      picture: "url_de_la_imagen_3.jpg",
+      distanceToWorkerInKm: 15,
+      birthDate: "1995-03-10",
+      secretKey: "A1231asFA",
+    },
+    {
+      email: "cliente7@example.com",
+      name: "Cliente 7",
+      phoneNumber: "555-123-4567",
+      picture: "url_de_la_imagen_3.jpg",
+      distanceToWorkerInKm: 15,
+      birthDate: "1995-03-10",
+      secretKey: "A1231asFA",
+    },
   ]);
+
+  useEffect(() => {
+    //setClients([]);
+  }, []);
 
   const matchClient = (client: client) => {
     const matchInfo = {
@@ -80,7 +120,9 @@ export default function WorkerHome() {
   return (
     <View style={styles.container}>
       <View style={styles.topSection}>
-        <Text>Clients that liked you :</Text>
+        <Text style={{ fontWeight: "700", color: "black" }}>
+          Clients who liked you
+        </Text>
       </View>
       <ScrollView
         style={styles.resultsContainer}
@@ -97,6 +139,7 @@ export default function WorkerHome() {
           clients.map((client) => {
             return (
               <ClientCard
+                key={client.email}
                 clientInfo={client}
                 onMatch={(client: client) => matchClient(client)}
                 onReject={(client: client) => rejectClient(client)}
@@ -104,7 +147,7 @@ export default function WorkerHome() {
             );
           })
         ) : (
-          <Text>No clients liked you!</Text>
+          <Text>Still no clients liked you...</Text>
         )}
       </ScrollView>
     </View>
@@ -114,15 +157,16 @@ export default function WorkerHome() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "white",
   },
   topSection: {
-    height: "20%",
+    height: "10%",
     width: "100%",
     justifyContent: "center",
     alignItems: "center",
   },
   resultsContainer: {
     width: "100%",
-    height: "60%",
+    height: "80%",
   },
 });

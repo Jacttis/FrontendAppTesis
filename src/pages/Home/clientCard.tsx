@@ -51,7 +51,7 @@ export default function ClientCard(props: any) {
 const styles = StyleSheet.create({
   container: {
     width: "48%",
-    height: 180,
+    height: 170,
     backgroundColor: "white",
     justifyContent: "center",
     alignItems: "center",
@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     justifyContent: "center",
     alignItems: "center",
-    bottom: "35%",
+    bottom: "40%",
   },
   image: {
     width: 60,
@@ -91,10 +91,9 @@ const styles = StyleSheet.create({
   },
   bottomSection: {
     width: "100%",
-    height: "20%",
+    height: "30%",
     flexDirection: "row",
     justifyContent: "center",
-    alignItems: "center",
     gap: 20,
   },
 });
