@@ -12,6 +12,7 @@ interface client {
   distanceToWorkerInKm: number;
   birthDate: string;
   secretKey: string;
+  clientProblemDescription: string;
 }
 
 export default function WorkerHome() {
@@ -24,6 +25,7 @@ export default function WorkerHome() {
       distanceToWorkerInKm: 10,
       birthDate: "1990-01-15",
       secretKey: "A1231asFA",
+      clientProblemDescription: "Me anda mal el termo",
     },
     {
       email: "cliente2@example.com",
@@ -33,6 +35,7 @@ export default function WorkerHome() {
       distanceToWorkerInKm: 20,
       birthDate: "1985-08-20",
       secretKey: "A1231asFA",
+      clientProblemDescription: "Me anda mal el termo",
     },
     {
       email: "cliente3@example.com",
@@ -42,6 +45,7 @@ export default function WorkerHome() {
       distanceToWorkerInKm: 15,
       birthDate: "1995-03-10",
       secretKey: "A1231asFA",
+      clientProblemDescription: "Me anda mal el termo",
     },
     {
       email: "cliente5@example.com",
@@ -51,6 +55,7 @@ export default function WorkerHome() {
       distanceToWorkerInKm: 20,
       birthDate: "1985-08-20",
       secretKey: "A1231asFA",
+      clientProblemDescription: "Me anda mal el termo",
     },
     {
       email: "cliente4@example.com",
@@ -60,6 +65,7 @@ export default function WorkerHome() {
       distanceToWorkerInKm: 15,
       birthDate: "1995-03-10",
       secretKey: "A1231asFA",
+      clientProblemDescription: "Me anda mal el termo",
     },
     {
       email: "cliente6@example.com",
@@ -69,6 +75,7 @@ export default function WorkerHome() {
       distanceToWorkerInKm: 15,
       birthDate: "1995-03-10",
       secretKey: "A1231asFA",
+      clientProblemDescription: "Me anda mal el termo",
     },
     {
       email: "cliente7@example.com",
@@ -78,6 +85,7 @@ export default function WorkerHome() {
       distanceToWorkerInKm: 15,
       birthDate: "1995-03-10",
       secretKey: "A1231asFA",
+      clientProblemDescription: "Me anda mal malamalmal daskjdaskjda el termo",
     },
   ]);
 
@@ -128,9 +136,7 @@ export default function WorkerHome() {
         style={styles.resultsContainer}
         contentContainerStyle={{
           justifyContent: "center",
-          flexDirection: "row",
           alignItems: "center",
-          flexWrap: "wrap",
           gap: 10,
           padding: 10,
         }}

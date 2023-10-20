@@ -7,7 +7,7 @@ export default function ClientCard(props: any) {
 
   return (
     <View style={styles.container}>
-      <View style={{ height: "20%", width: "100%" }}></View>
+      <View style={{ height: "10%", width: "100%" }}></View>
       <View style={styles.imageContainer}>
         <Image
           style={styles.image}
@@ -23,6 +23,14 @@ export default function ClientCard(props: any) {
           </Text>
           <Text style={{ fontSize: 11 }}>
             {clientInfo.distanceToWorkerInKm} Kilometers away
+          </Text>
+        </View>
+        <View style={styles.descriptionContainer}>
+          <Text style={{ fontSize: 11, fontWeight: "700" }}>
+            Client problem
+          </Text>
+          <Text style={{ fontSize: 10 }}>
+            "{clientInfo.clientProblemDescription}"
           </Text>
         </View>
       </View>
@@ -50,20 +58,19 @@ export default function ClientCard(props: any) {
 
 const styles = StyleSheet.create({
   container: {
-    width: "48%",
-    height: 170,
+    width: "80%",
+    height: 200,
     backgroundColor: "white",
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: 10,
+    marginBottom: 15,
     elevation: 10,
     borderRadius: 20,
   },
   topSection: {
     width: "100%",
-    height: "40%",
+    height: "60%",
     padding: 10,
-    flexDirection: "row",
     justifyContent: "flex-start",
     alignItems: "center",
   },
@@ -85,13 +92,20 @@ const styles = StyleSheet.create({
   },
   infoContainer: {
     width: "100%",
-    height: "100%",
+    height: "60%",
     justifyContent: "center",
     alignItems: "center",
   },
+  descriptionContainer: {
+    height: "40%",
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 5,
+  },
   bottomSection: {
     width: "100%",
-    height: "30%",
+    height: "20%",
     flexDirection: "row",
     justifyContent: "center",
     gap: 20,
