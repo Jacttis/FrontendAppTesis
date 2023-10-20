@@ -146,7 +146,7 @@ export default function Home() {
       .finally(() => setWaitToSearch(false));
   };
 
-  const startLikeProcess = async (workerLiked: worker) => {
+  const startLikeProcess = (workerLiked: worker) => {
     setActualLikedWorker(workerLiked);
     showLikedWorkerModal();
   };
@@ -188,7 +188,7 @@ export default function Home() {
         workerInfo={actualLikedWorker}
         onClose={(clientProblemDescription: string) => {
           hideLikedWorkerModal();
-          acceptedWorker(clientProblemDescription);
+          acceptedWorker(clientProblemDescription).then(onSwiped);
         }}
       />
       <View style={styles.searchOptionsContainer}>
@@ -263,7 +263,7 @@ export default function Home() {
               }}
               onSwipedRight={() => {
                 setWaitToSearch(true);
-                startLikeProcess(workers[index]).then(onSwiped);
+                startLikeProcess(workers[index]);
               }}
               stackSize={3}
               stackSeparation={10}
