@@ -1,16 +1,10 @@
 import { useEffect, useState } from "react";
-import { View, Text, SafeAreaView, StyleSheet, ScrollView } from "react-native";
+import { View, Text, StyleSheet, ScrollView } from "react-native";
 import Modal from "react-native-modal";
 import { Image } from "react-native-animatable";
 import { Button, ActivityIndicator, IconButton } from "react-native-paper";
 import { getWorkerReviews } from "../../connection/requests";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import {
-  faPersonDigging,
-  faPerson,
-  faThumbsUp,
-} from "@fortawesome/free-solid-svg-icons";
-import VectorIcon from "react-native-vector-icons/Ionicons";
 
 interface review {
   id: number;
@@ -20,7 +14,7 @@ interface review {
   clientPicture: string;
 }
 
-export default function WorkerModal(props: any) {
+export default function WorkerInfoModal(props: any) {
   const [workerReviews, setWorkerReviews] = useState<review[]>([]);
   const [searching, setSearching] = useState(false);
 
@@ -28,7 +22,6 @@ export default function WorkerModal(props: any) {
 
   useEffect(() => {
     if (visible) {
-      console.log(workerInfo);
       obtainWorkerReviews();
     }
   }, [visible]);

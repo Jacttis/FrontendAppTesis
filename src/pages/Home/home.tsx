@@ -8,9 +8,10 @@ import {
 } from "react-native-paper";
 import SelectDropdown from "react-native-select-dropdown";
 import WorkerCard from "./workerCard";
-import WorkerModal from "./workerModal";
+import WorkerInfoModal from "./workerInfoModal";
 import Swiper, { SwiperProps } from "react-native-deck-swiper";
 import React from "react";
+import LikedWorkerModal from "./likedWorkerModal";
 
 interface filter {
   minimumDistanceInKm: number;
@@ -40,6 +41,7 @@ const swiperRef = React.createRef<Swiper<worker>>();
 
 export default function Home() {
   const [workers, setWorkers] = useState<worker[]>([]);
+  const [actualLikedWorker, setActualLikedWorker] = useState<worker>();
   const [index, setIndex] = useState(0);
   const [filters, setFilters] = useState<filter>({
     minimumDistanceInKm: 0,
@@ -47,24 +49,36 @@ export default function Home() {
   });
 
   const [searching, setSearching] = useState(false);
+  const [waitToSearch, setWaitToSearch] = useState(false);
 
   const [professions, setProfessions] = useState<string[]>([]);
   const [minimumDistanceSelected, setMinimumDistanceSelected] = useState("");
 
-  const [visibleWorkerModal, setVisibleWorkerModal] = useState(false);
-  const hideWorkerModal = () => setVisibleWorkerModal(false);
-  const showWorkerModal = () => {
-    setVisibleWorkerModal(true);
+  const [visibleWorkerInfoModal, setVisibleWorkerInfoModal] = useState(false);
+  const hideWorkerInfoModal = () => setVisibleWorkerInfoModal(false);
+  const showWorkerInfoModal = () => {
+    setVisibleWorkerInfoModal(true);
   };
+  const [visibleLikedWorkerModal, setVisibleLikedWorkerModal] = useState(false);
+  const hideLikedWorkerModal = () => setVisibleLikedWorkerModal(false);
+  const showLikedWorkerModal = () => setVisibleLikedWorkerModal(true);
 
   useEffect(() => {
-    getWorkersForClient();
     getProfessions();
+    getWorkersForClient();
   }, []);
 
   useEffect(() => {
+    resetWorkers();
     getWorkersForClient();
   }, [filters]);
+
+  useEffect(() => {
+    console.log(waitToSearch);
+    if (!waitToSearch && index >= workers.length) {
+      getWorkersForClient();
+    }
+  }, [waitToSearch]);
 
   useEffect(() => {
     let numberMinimumDistanceSelected = Number(minimumDistanceSelected);
@@ -75,7 +89,17 @@ export default function Home() {
     });
   }, [minimumDistanceSelected]);
 
+  const sleep = (ms: number) =>
+    new Promise((resolve) => setTimeout(resolve, ms));
+
   const getWorkersForClient = () => {
+    resetWorkers();
+    setSearching(true);
+
+    console.log("ENTERED");
+    console.log("wait to search is " + waitToSearch);
+
+    console.log("can search");
     let mockClientSearchInfo = {
       email: "clientemail1@example.com",
       latitude: 37,
@@ -83,14 +107,15 @@ export default function Home() {
       minimumDistanceInKm: filters.minimumDistanceInKm,
       professionName: filters.professionName,
     };
-    setSearching(true);
-    resetWorkers();
+
     searchWorkers(mockClientSearchInfo)
       .then((workersResponse) => {
         setWorkers(workersResponse.data);
+        console.log("gucci");
         setSearching(false);
       })
       .catch((error) => {
+        console.log("error");
         setSearching(false);
       });
   };
@@ -111,48 +136,75 @@ export default function Home() {
     setProfessions(prof);
   };
 
+  useEffect(() => {
+    if (index >= workers.length && index != 0) {
+      //resetWorkers();
+      //getWorkersForClient();
+    }
+  }, [index]);
+
   const onSwiped = () => {
     setIndex(index + 1);
   };
 
-  const refusedWorker = () => {
+  const refusedWorker = (refusedWorker: worker) => {
     let mockInteractionInfo = {
-      workerEmail: workers[index]?.email,
+      workerEmail: refusedWorker?.email,
       clientEmail: "clientemail1@example.com",
       interactionType: "disliked",
-      workerSecretKey: workers[index]?.secretKey,
+      workerSecretKey: refusedWorker?.secretKey,
     };
     interactWorker(mockInteractionInfo)
       .then((response) => {})
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        console.log(error);
+      })
+      .finally(() => setWaitToSearch(false));
   };
 
-  const acceptedWorker = () => {
+  const startLikeProcess = (workerLiked: worker) => {
+    setActualLikedWorker(workerLiked);
+    showLikedWorkerModal();
+  };
+
+  const acceptedWorker = (clientProblemDescription: string) => {
     let mockInteractionInfo = {
-      workerEmail: workers[index]?.email,
+      workerEmail: actualLikedWorker?.email,
+      clientProblemDescription: clientProblemDescription,
       clientEmail: "clientemail1@example.com",
       interactionType: "liked",
-      workerSecretKey: workers[index]?.secretKey,
+      workerSecretKey: actualLikedWorker?.secretKey,
     };
 
     interactWorker(mockInteractionInfo)
       .then((response) => {})
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        console.log(error);
+      })
+      .finally(() => setWaitToSearch(false));
   };
 
   return (
     <SafeAreaView style={styles.mainContainer}>
-      <WorkerModal
-        visible={visibleWorkerModal}
+      <WorkerInfoModal
+        visible={visibleWorkerInfoModal}
         workerInfo={workers[index]}
-        onClose={() => hideWorkerModal()}
+        onClose={() => hideWorkerInfoModal()}
         onAccepted={() => {
+          hideWorkerInfoModal();
           swiperRef.current?.swipeRight();
-          hideWorkerModal();
         }}
         onRefused={() => {
           swiperRef.current?.swipeLeft();
-          hideWorkerModal();
+          hideWorkerInfoModal();
+        }}
+      />
+      <LikedWorkerModal
+        visible={visibleLikedWorkerModal}
+        workerInfo={actualLikedWorker}
+        onClose={(clientProblemDescription: string) => {
+          hideLikedWorkerModal();
+          acceptedWorker(clientProblemDescription);
         }}
       />
       <View style={styles.searchOptionsContainer}>
@@ -218,15 +270,18 @@ export default function Home() {
                   onAccepted={() => {
                     swiperRef.current?.swipeRight();
                   }}
-                  onShowInfo={() => showWorkerModal()}
+                  onShowInfo={() => showWorkerInfoModal()}
                 />
               )}
               onSwiped={onSwiped}
-              onSwipedAll={() => {
-                getWorkersForClient();
+              onSwipedLeft={() => {
+                setWaitToSearch(true);
+                refusedWorker(workers[index]);
               }}
-              onSwipedLeft={() => refusedWorker()}
-              onSwipedRight={() => acceptedWorker()}
+              onSwipedRight={() => {
+                setWaitToSearch(true);
+                startLikeProcess(workers[index]);
+              }}
               stackSize={3}
               stackSeparation={10}
               disableBottomSwipe
@@ -299,6 +354,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     gap: -20,
+    backgroundColor: "white",
   },
   searchOptionsContainer: {
     width: "90%",
@@ -315,7 +371,7 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   searchResultContainer: {
-    height: "75%",
+    height: "80%",
     width: "90%",
     flexDirection: "column",
     justifyContent: "center",
