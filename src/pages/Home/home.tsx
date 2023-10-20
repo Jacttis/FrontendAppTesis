@@ -50,6 +50,9 @@ export default function Home() {
 
   const [searching, setSearching] = useState(false);
   const [waitToSearch, setWaitToSearch] = useState(false);
+  const waitToSearchRef = useRef(waitToSearch);
+  waitToSearchRef.current = waitToSearch;
+  const [timeOutWaitToSearch, setTimeoutWaitToSearch] = useState<any>(null);
 
   const [professions, setProfessions] = useState<string[]>([]);
   const [minimumDistanceSelected, setMinimumDistanceSelected] = useState("");
@@ -65,20 +68,17 @@ export default function Home() {
 
   useEffect(() => {
     getProfessions();
-    getWorkersForClient();
   }, []);
 
   useEffect(() => {
-    resetWorkers();
-    getWorkersForClient();
-  }, [filters]);
-
-  useEffect(() => {
-    console.log(waitToSearch);
-    if (!waitToSearch && index >= workers.length) {
+    if (index >= workers.length && index != 0) {
       getWorkersForClient();
     }
-  }, [waitToSearch]);
+  }, [index]);
+
+  useEffect(() => {
+    getWorkersForClient();
+  }, [filters]);
 
   useEffect(() => {
     let numberMinimumDistanceSelected = Number(minimumDistanceSelected);
@@ -89,17 +89,9 @@ export default function Home() {
     });
   }, [minimumDistanceSelected]);
 
-  const sleep = (ms: number) =>
-    new Promise((resolve) => setTimeout(resolve, ms));
-
   const getWorkersForClient = () => {
     resetWorkers();
     setSearching(true);
-
-    console.log("ENTERED");
-    console.log("wait to search is " + waitToSearch);
-
-    console.log("can search");
     let mockClientSearchInfo = {
       email: "clientemail1@example.com",
       latitude: 37,
@@ -111,7 +103,6 @@ export default function Home() {
     searchWorkers(mockClientSearchInfo)
       .then((workersResponse) => {
         setWorkers(workersResponse.data);
-        console.log("gucci");
         setSearching(false);
       })
       .catch((error) => {
@@ -136,18 +127,11 @@ export default function Home() {
     setProfessions(prof);
   };
 
-  useEffect(() => {
-    if (index >= workers.length && index != 0) {
-      //resetWorkers();
-      //getWorkersForClient();
-    }
-  }, [index]);
-
   const onSwiped = () => {
     setIndex(index + 1);
   };
 
-  const refusedWorker = (refusedWorker: worker) => {
+  const refusedWorker = async (refusedWorker: worker) => {
     let mockInteractionInfo = {
       workerEmail: refusedWorker?.email,
       clientEmail: "clientemail1@example.com",
@@ -162,12 +146,12 @@ export default function Home() {
       .finally(() => setWaitToSearch(false));
   };
 
-  const startLikeProcess = (workerLiked: worker) => {
+  const startLikeProcess = async (workerLiked: worker) => {
     setActualLikedWorker(workerLiked);
     showLikedWorkerModal();
   };
 
-  const acceptedWorker = (clientProblemDescription: string) => {
+  const acceptedWorker = async (clientProblemDescription: string) => {
     let mockInteractionInfo = {
       workerEmail: actualLikedWorker?.email,
       clientProblemDescription: clientProblemDescription,
@@ -273,14 +257,13 @@ export default function Home() {
                   onShowInfo={() => showWorkerInfoModal()}
                 />
               )}
-              onSwiped={onSwiped}
               onSwipedLeft={() => {
                 setWaitToSearch(true);
-                refusedWorker(workers[index]);
+                refusedWorker(workers[index]).then(onSwiped);
               }}
               onSwipedRight={() => {
                 setWaitToSearch(true);
-                startLikeProcess(workers[index]);
+                startLikeProcess(workers[index]).then(onSwiped);
               }}
               stackSize={3}
               stackSeparation={10}
