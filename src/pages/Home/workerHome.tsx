@@ -21,7 +21,7 @@ export default function WorkerHome() {
       email: "cliente1@example.com",
       name: "Ramon Martinez",
       phoneNumber: "123-456-7890",
-      picture: "url_de_la_imagen_1.jpg",
+      picture: "",
       distanceToWorkerInKm: 10,
       birthDate: "1990-01-15",
       secretKey: "A1231asFA",
