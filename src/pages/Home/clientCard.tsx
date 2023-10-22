@@ -1,83 +1,85 @@
-import { StyleSheet } from "react-native";
-import { Image, View } from "react-native-animatable";
-import { Button, Text } from "react-native-paper";
+import { useEffect, useState } from "react";
+import { StyleSheet, View } from "react-native";
+import {
+  TouchableOpacity,
+  GestureHandlerRootView,
+} from "react-native-gesture-handler";
+import { Image } from "react-native-animatable";
+import { Text } from "react-native-paper";
 import { Avatar } from "react-native-paper";
+import Animated, { FadeIn, FadeOut, Layout } from "react-native-reanimated";
 
 export default function ClientCard(props: any) {
-  const { clientInfo } = props;
+  const [selected, setSelected] = useState(false);
+  const { clientInfo, selectedClient } = props;
+
+  useEffect(() => {
+    if (clientInfo.email !== selectedClient) setSelected(false);
+  }, [selectedClient]);
 
   return (
-    <View style={styles.container}>
-      <View style={{ height: "10%", width: "100%" }}></View>
-      <View style={styles.imageContainer}>
-        {clientInfo?.picture === "" ? (
-          <Avatar.Text
-            style={styles.avatar}
-            labelStyle={{ bottom: 4 }}
-            label={clientInfo?.name.charAt(0)}
-          ></Avatar.Text>
-        ) : (
-          <Image
-            style={styles.image}
-            source={{
-              uri: "https://images.unsplash.com/photo-1614213951697-a45781262acf?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8d29ya2VyfGVufDB8fDB8fHww&w=1000&q=80",
-            }}
-          />
-        )}
-      </View>
-      <View style={styles.topSection}>
-        <View style={styles.infoContainer}>
-          <Text
-            style={{ fontWeight: "700", fontSize: 13, textAlign: "center" }}
-          >
-            {clientInfo.name}
-          </Text>
-          <Text style={{ fontSize: 11 }}>
-            {clientInfo.distanceToWorkerInKm} Kilometers away
-          </Text>
+    <GestureHandlerRootView>
+      <TouchableOpacity
+        style={selected ? styles.selectedContainer : styles.container}
+        onPress={() => {
+          props.onTouch(clientInfo);
+          setSelected(true);
+        }}
+      >
+        <View style={{ height: "10%", width: "100%" }}></View>
+        <View style={styles.imageContainer}>
+          {clientInfo?.picture === "" ? (
+            <Avatar.Text
+              style={styles.avatar}
+              labelStyle={{ bottom: 4 }}
+              label={clientInfo?.name.charAt(0)}
+            ></Avatar.Text>
+          ) : (
+            <Image
+              style={styles.image}
+              source={{
+                uri: "https://images.unsplash.com/photo-1614213951697-a45781262acf?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8d29ya2VyfGVufDB8fDB8fHww&w=1000&q=80",
+              }}
+            />
+          )}
         </View>
-        <View style={styles.descriptionContainer}>
-          <Text style={{ fontSize: 11, fontWeight: "700" }}>
-            Client problem
-          </Text>
-          <Text style={{ fontSize: 10, textAlign: "center" }}>
-            "{clientInfo.clientProblemDescription}"
-          </Text>
+        <View style={styles.topSection}>
+          <View style={styles.infoContainer}>
+            <Text
+              style={{ fontWeight: "700", fontSize: 13, textAlign: "center" }}
+            >
+              {clientInfo.name}
+            </Text>
+            <Text style={{ fontSize: 11 }}>
+              {clientInfo.distanceToWorkerInKm} Kilometers away
+            </Text>
+          </View>
         </View>
-      </View>
-      <View style={styles.bottomSection}>
-        <Button
-          style={{ backgroundColor: "white", borderRadius: 100 }}
-          onPress={() => {
-            props.onReject(clientInfo);
-          }}
-        >
-          <Text style={{ color: "red" }}>✘</Text>
-        </Button>
-        <Button
-          style={{ backgroundColor: "white", borderRadius: 100 }}
-          onPress={() => {
-            props.onMatch(clientInfo);
-          }}
-        >
-          ✔
-        </Button>
-      </View>
-    </View>
+      </TouchableOpacity>
+    </GestureHandlerRootView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    width: "80%",
-    height: 200,
+    width: 250,
+    height: 110,
     backgroundColor: "white",
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 10,
-    marginBottom: 15,
     elevation: 10,
     borderRadius: 20,
+  },
+  selectedContainer: {
+    width: 250,
+    height: 110,
+    backgroundColor: "white",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 20,
+    borderWidth: 1,
+    elevation: 10,
+    borderColor: "black",
   },
   topSection: {
     width: "100%",
@@ -111,22 +113,8 @@ const styles = StyleSheet.create({
   },
   infoContainer: {
     width: "100%",
-    height: "60%",
+    height: "100%",
     justifyContent: "center",
     alignItems: "center",
-  },
-  descriptionContainer: {
-    height: "40%",
-    width: "80%",
-    justifyContent: "center",
-    alignItems: "center",
-    gap: 5,
-  },
-  bottomSection: {
-    width: "100%",
-    height: "20%",
-    flexDirection: "row",
-    justifyContent: "center",
-    gap: 20,
   },
 });

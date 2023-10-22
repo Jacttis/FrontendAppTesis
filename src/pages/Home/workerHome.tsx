@@ -1,8 +1,17 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Text, View } from "react-native-animatable";
 import ClientCard from "./clientCard";
 import { ScrollView, StyleSheet } from "react-native";
 import { postMatchClient, postRejectClient } from "../../connection/requests";
+import ClientInfo from "./clientInfo";
+import client from "../../connection/client";
+import ClientScroll from "./clientScroll";
+import {
+  ALERT_TYPE,
+  Dialog,
+  AlertNotificationRoot,
+  Toast,
+} from "react-native-alert-notification";
 
 interface client {
   email: string;
@@ -16,6 +25,7 @@ interface client {
 }
 
 export default function WorkerHome() {
+  const [clientSelected, setClientSelected] = useState<client>();
   const [clients, setClients] = useState<client[]>([
     {
       email: "cliente1@example.com",
@@ -94,13 +104,33 @@ export default function WorkerHome() {
     //setClients([]);
   }, []);
 
+  useEffect(() => {
+    if (clients.length > 0) {
+      setClientSelected(clients[0]);
+    } else setClientSelected(undefined);
+  }, [clients]);
+
+  const onRemoveClient = useCallback((clientEmail: string) => {
+    setClients((currentClients) => {
+      return currentClients.filter((client) => client.email !== clientEmail);
+    });
+  }, []);
+
   const matchClient = (client: client) => {
     const matchInfo = {
       workerEmail: "email1@example.com",
       clientEmail: client.email,
       clientSecretKey: client.secretKey,
     };
+    onRemoveClient(client.email);
+    Dialog.show({
+      type: ALERT_TYPE.SUCCESS,
+      title: "Matched client",
+      textBody: "Congrats! You accepted the job for client!",
+      button: "Close",
+    });
 
+    /*
     postMatchClient(matchInfo)
       .then((response) => {
         console.log(response);
@@ -108,6 +138,7 @@ export default function WorkerHome() {
       .catch((error) => {
         console.log(error);
       });
+      */
   };
 
   const rejectClient = (client: client) => {
@@ -116,7 +147,8 @@ export default function WorkerHome() {
       clientEmail: client.email,
       clientSecretKey: client.secretKey,
     };
-
+    onRemoveClient(client.email);
+    /*
     postRejectClient(rejectInfo)
       .then((response) => {
         console.log(response);
@@ -124,6 +156,7 @@ export default function WorkerHome() {
       .catch((error) => {
         console.log(error);
       });
+      */
   };
 
   return (
@@ -133,30 +166,32 @@ export default function WorkerHome() {
           Clients who liked you
         </Text>
       </View>
-      <ScrollView
-        style={styles.resultsContainer}
-        contentContainerStyle={{
-          justifyContent: "center",
-          alignItems: "center",
-          gap: 10,
-          padding: 10,
-        }}
-      >
+      <View style={styles.resultsContainer}>
         {clients.length > 0 ? (
-          clients.map((client) => {
-            return (
-              <ClientCard
-                key={client.email}
-                clientInfo={client}
-                onMatch={(client: client) => matchClient(client)}
-                onReject={(client: client) => rejectClient(client)}
-              />
-            );
-          })
+          <ClientScroll
+            clients={clients}
+            clientSelected={clientSelected}
+            onClientSelected={(client: client) => setClientSelected(client)}
+          />
         ) : (
           <Text>Still no clients liked you...</Text>
         )}
-      </ScrollView>
+      </View>
+      <View style={styles.clientInfoContainer}>
+        {clientSelected === undefined ? (
+          clients.length > 0 ? (
+            <Text>Touch a client to see his description!</Text>
+          ) : (
+            <Text>Wait for a client to like you!</Text>
+          )
+        ) : (
+          <ClientInfo
+            clientInfo={clientSelected}
+            onMatch={(client: client) => matchClient(client)}
+            onReject={(client: client) => rejectClient(client)}
+          />
+        )}
+      </View>
     </View>
   );
 }
@@ -165,6 +200,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "white",
+    alignItems: "center",
   },
   topSection: {
     height: "10%",
@@ -174,6 +210,24 @@ const styles = StyleSheet.create({
   },
   resultsContainer: {
     width: "100%",
-    height: "80%",
+    height: 170,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  clientInfoContainer: {
+    width: "80%",
+    height: "40%",
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 90,
+    borderWidth: 1,
+    borderStyle: "dotted",
+    borderRadius: 20,
+  },
+  clientInfo: {
+    width: "100%",
+    height: "100%",
+    justifyContent: "space-evenly",
+    alignItems: "center",
   },
 });
