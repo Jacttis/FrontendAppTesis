@@ -4,6 +4,7 @@ import { Text, View } from "react-native-animatable";
 import ClientCard from "./clientCard";
 import { ScrollView, StyleSheet } from "react-native";
 import { scrollTo } from "react-native-reanimated";
+import { colors } from "../../assets/colors";
 
 interface client {
   email: string;
@@ -36,7 +37,7 @@ export default function ClientScroll(props: any) {
         alignItems: "center",
         justifyContent: "center",
         padding: 10,
-        marginLeft: 50,
+        marginLeft: "17%",
         gap: 20,
       }}
     >
@@ -56,8 +57,9 @@ export default function ClientScroll(props: any) {
 
 const styles = StyleSheet.create({
   scrollContainer: {
-    width: "90%",
-    borderRadius: 20,
-    backgroundColor: "grey",
+    width: "100%",
+    backgroundColor: colors.background,
+    borderBottomWidth: 0.5,
+    borderTopWidth: 0.5,
   },
 });

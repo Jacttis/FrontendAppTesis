@@ -8,6 +8,7 @@ import { Image } from "react-native-animatable";
 import { Text } from "react-native-paper";
 import { Avatar } from "react-native-paper";
 import Animated, { FadeIn, FadeOut, Layout } from "react-native-reanimated";
+import { colors } from "../../assets/colors";
 
 export default function ClientCard(props: any) {
   const [selected, setSelected] = useState(false);
@@ -51,7 +52,7 @@ export default function ClientCard(props: any) {
               {clientInfo.name}
             </Text>
             <Text style={{ fontSize: 11 }}>
-              {clientInfo.distanceToWorkerInKm} Kilometers away
+              {clientInfo?.distanceInKm} Kilometers away
             </Text>
           </View>
         </View>
@@ -64,7 +65,7 @@ const styles = StyleSheet.create({
   container: {
     width: 250,
     height: 110,
-    backgroundColor: "white",
+    backgroundColor: colors.terciary,
     justifyContent: "center",
     alignItems: "center",
     elevation: 10,
@@ -73,7 +74,7 @@ const styles = StyleSheet.create({
   selectedContainer: {
     width: 250,
     height: 110,
-    backgroundColor: "white",
+    backgroundColor: colors.terciary,
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 20,
