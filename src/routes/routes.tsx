@@ -10,7 +10,6 @@ import { AuthContext } from "../context/AuthContext";
 const Tab = createBottomTabNavigator();
 const RootStack = createNativeStackNavigator();
 
-
 export const BottomTabs = () => {
   const { isLoading, userToken } = useContext(AuthContext);
   return (
