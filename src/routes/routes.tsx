@@ -34,7 +34,19 @@ export const MainStack = () => (
     {/*//esto es solo una screen */}
     <RootStack.Screen
       name={"bottomTabs"}
-      options={{ headerShown: false }}
+      options={{
+        title: "Jobder",
+        headerStyle: {
+          backgroundColor: "white",
+        },
+
+        headerTitleAlign: "center",
+        headerShadowVisible: false,
+        headerTintColor: "red",
+        headerTitleStyle: {
+          fontWeight: "bold",
+        },
+      }}
       component={BottomTabs}
     />
     {/*// en cambio esto es un stack*/}
