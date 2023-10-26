@@ -1,16 +1,15 @@
 import { useEffect, useState } from "react";
-import { View, Text, SafeAreaView, StyleSheet, ScrollView } from "react-native";
+import { View, Text, StyleSheet, ScrollView } from "react-native";
 import Modal from "react-native-modal";
 import { Image } from "react-native-animatable";
-import { Button, ActivityIndicator, IconButton } from "react-native-paper";
+import {
+  Button,
+  ActivityIndicator,
+  IconButton,
+  Avatar,
+} from "react-native-paper";
 import { getWorkerReviews } from "../../connection/requests";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import {
-  faPersonDigging,
-  faPerson,
-  faThumbsUp,
-} from "@fortawesome/free-solid-svg-icons";
-import VectorIcon from "react-native-vector-icons/Ionicons";
 
 interface review {
   id: number;
@@ -20,7 +19,7 @@ interface review {
   clientPicture: string;
 }
 
-export default function WorkerModal(props: any) {
+export default function WorkerInfoModal(props: any) {
   const [workerReviews, setWorkerReviews] = useState<review[]>([]);
   const [searching, setSearching] = useState(false);
 
@@ -28,7 +27,6 @@ export default function WorkerModal(props: any) {
 
   useEffect(() => {
     if (visible) {
-      console.log(workerInfo);
       obtainWorkerReviews();
     }
   }, [visible]);
@@ -96,10 +94,29 @@ export default function WorkerModal(props: any) {
                 {workerReviews.map((review) => {
                   return (
                     <View key={review?.id} style={styles.modalReviewItem}>
-                      <Text style={{ fontWeight: "500" }}>
-                        {review?.clientName} ⭐{review?.rating}
-                      </Text>
-                      <Text>" {review?.description} "</Text>
+                      <View style={styles.modalReviewItemClientInfo}>
+                        {workerInfo?.picture === "" ? (
+                          <Avatar.Text
+                            label={workerInfo?.name.charAt(0)}
+                            style={styles.modalReviewItemAvatar}
+                          ></Avatar.Text>
+                        ) : (
+                          <Image
+                            style={styles.modalReviewItemImage}
+                            source={{
+                              uri: "https://images.unsplash.com/photo-1614213951697-a45781262acf?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8d29ya2VyfGVufDB8fDB8fHww&w=1000&q=80",
+                            }}
+                          ></Image>
+                        )}
+                        <Text style={{ fontWeight: "500" }}>
+                          {review?.clientName} ⭐{review?.rating}
+                        </Text>
+                      </View>
+                      <View style={styles.modalReviewItemDescriptionContainer}>
+                        <Text style={{ fontSize: 12 }}>
+                          " {review?.description} "
+                        </Text>
+                      </View>
                     </View>
                   );
                 })}
@@ -194,7 +211,7 @@ const styles = StyleSheet.create({
   },
   modalReviewsContainer: {
     width: "95%",
-    height: "25%",
+    height: "30%",
     borderStyle: "solid",
     backgroundColor: "white",
     justifyContent: "space-around",
@@ -207,15 +224,37 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   modalReviewItem: {
-    height: 90,
+    height: 100,
     width: 250,
     padding: 10,
     marginRight: 15,
-    justifyContent: "space-evenly",
+    justifyContent: "space-between",
     borderStyle: "dotted",
     borderRadius: 10,
     borderWidth: 1,
-    marginBottom: 10,
+    gap: 15,
+  },
+  modalReviewItemClientInfo: {
+    width: "100%",
+    height: "30%",
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+  },
+  modalReviewItemImage: {
+    height: 30,
+    width: 30,
+    borderRadius: 100,
+    resizeMode: "cover",
+  },
+  modalReviewItemAvatar: {
+    height: 30,
+    width: 30,
+    borderRadius: 100,
+  },
+  modalReviewItemDescriptionContainer: {
+    width: "80%",
+    height: "60%",
   },
   bottomContainer: {
     height: "20%",

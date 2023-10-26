@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Text, SafeAreaView, StyleSheet, TextInput, View, TouchableOpacity, FlatList } from "react-native";
 import * as Animatable from "react-native-animatable";
 import { StackActions, useNavigation } from "@react-navigation/native";
 import { fetchAddressSuggestions, AddressSuggestion, getLocation } from "../../services/GeoLocationService";
 import { registerClient } from "../../connection/requests";
+import { AuthContext } from "../../context/AuthContext";
 
 
 export default function Register() {
@@ -90,13 +91,18 @@ export default function Register() {
   const [showPassword, setShowPassword] = useState(false);
   const [addressSuggestions, setAddressSuggestions] = useState<AddressSuggestion[]>([]);
   const [address, setAddress] = useState<string>("");
+  const { isLoading, signIn, setIsLoading } = useContext(AuthContext);
 
   const makeRegisterClient = () => {
+    setIsLoading(true);
     registerClient(client).then((response) => {
-      console.log(response);
+      const { accessToken, refreshToken } = response.data;
+      signIn(accessToken, refreshToken);
+      navigation.dispatch(StackActions.replace('bottomTabs'));
     }).catch((error) => {
       console.log(error);
     });
+    setIsLoading(false);
   };
 
   type ClientProps = {
@@ -233,7 +239,7 @@ export default function Register() {
           style={styles.buttonRegister}
           onPress={() => {
             makeRegisterClient();
-            navigation.dispatch(StackActions.replace('bottomTabs'));
+
           }
           }>
           <Text style={styles.buttonText}>Register</Text>
