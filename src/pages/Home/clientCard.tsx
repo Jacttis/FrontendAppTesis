@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
   container: {
     width: 250,
     height: 110,
-    backgroundColor: colors.terciary,
+    backgroundColor: colors.background,
     justifyContent: "center",
     alignItems: "center",
     elevation: 10,
@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
   selectedContainer: {
     width: 250,
     height: 110,
-    backgroundColor: colors.terciary,
+    backgroundColor: colors.background,
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 20,

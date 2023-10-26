@@ -4,4 +4,5 @@ export const colors = {
   secondary: "#563444",
   terciary: "#6a5e72",
   background: "#dad6ca",
+  white: "white",
 };

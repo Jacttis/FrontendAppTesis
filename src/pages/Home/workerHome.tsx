@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, useContext } from "react";
+import { AuthContext } from "../../context/AuthContext";
 import { Text, View } from "react-native-animatable";
 import ClientCard from "./clientCard";
 import { ImageBackground, ScrollView, StyleSheet } from "react-native";
@@ -32,6 +33,8 @@ interface interaction {
 }
 
 export default function WorkerHome() {
+  const { userToken } = useContext(AuthContext);
+
   const [clientSelected, setClientSelected] = useState<client>();
   const [clients, setClients] = useState<client[]>([
     {
@@ -80,7 +83,6 @@ export default function WorkerHome() {
 
   const matchClient = (client: client) => {
     const matchInfo = {
-      workerEmail: "email1@example.com",
       clientEmail: client.email,
       clientSecretKey: client.secretKey,
     };
@@ -92,33 +94,29 @@ export default function WorkerHome() {
       button: "Close",
     });
 
-    /*
-    postMatchClient(matchInfo)
+    postMatchClient(userToken, matchInfo)
       .then((response) => {
         console.log(response);
       })
       .catch((error) => {
         console.log(error);
       });
-      */
   };
 
   const rejectClient = (client: client) => {
     const rejectInfo = {
-      workerEmail: "email1@example.com",
       clientEmail: client.email,
       clientSecretKey: client.secretKey,
     };
     onRemoveClient(client.email);
-    /*
-    postRejectClient(rejectInfo)
+
+    postRejectClient(userToken, rejectInfo)
       .then((response) => {
         console.log(response);
       })
       .catch((error) => {
         console.log(error);
       });
-      */
   };
 
   return (
@@ -172,7 +170,7 @@ export default function WorkerHome() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.background,
+    backgroundColor: colors.white,
     alignItems: "center",
   },
   topSection: {

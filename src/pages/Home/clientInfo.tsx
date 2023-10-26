@@ -94,11 +94,11 @@ const styles = StyleSheet.create({
   container: {
     width: "100%",
     height: "100%",
-    backgroundColor: colors.terciary,
+    backgroundColor: colors.background,
     justifyContent: "space-evenly",
     alignItems: "center",
     borderRadius: 20,
-    elevation: 10,
+    elevation: 20,
   },
   topSection: {
     width: "100%",
