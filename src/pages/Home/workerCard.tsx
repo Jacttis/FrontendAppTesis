@@ -23,7 +23,7 @@ export default function WorkerCard(props: any) {
         </View>
         <View style={styles.infoContainer}>
           <Text>⭐ {workerInfo?.averageRating}</Text>
-          <Text> ⛯ {workerInfo?.distanceToClientInKm} Km</Text>
+          <Text> ⛯ {workerInfo?.distanceInKm} Km</Text>
         </View>
         <View style={styles.buttonContainer}>
           <Button

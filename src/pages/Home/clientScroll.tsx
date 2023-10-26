@@ -58,8 +58,6 @@ export default function ClientScroll(props: any) {
 const styles = StyleSheet.create({
   scrollContainer: {
     width: "100%",
-    backgroundColor: colors.background,
-    borderBottomWidth: 0.5,
-    borderTopWidth: 0.5,
+    backgroundColor: colors.white,
   },
 });

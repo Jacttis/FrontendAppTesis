@@ -73,9 +73,7 @@ export default function WorkerInfoModal(props: any) {
                 <Text style={{ fontSize: 22, fontWeight: "500" }}>
                   {workerInfo?.professionName}
                 </Text>
-                <Text>
-                  ⛯ {workerInfo?.distanceToClientInKm} Kilometers away
-                </Text>
+                <Text>⛯ {workerInfo?.distanceInKm} Kilometers away</Text>
               </View>
               <View style={{ gap: 7, height: "40%" }}>
                 <Text style={{ fontWeight: "600", fontSize: 18 }}>

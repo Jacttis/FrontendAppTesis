@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useContext } from "react";
 import { View, Text, SafeAreaView, StyleSheet } from "react-native";
 import { interactWorker, searchWorkers } from "../../connection/requests";
 import {
@@ -12,6 +12,7 @@ import WorkerInfoModal from "./workerInfoModal";
 import Swiper, { SwiperProps } from "react-native-deck-swiper";
 import React from "react";
 import LikedWorkerModal from "./likedWorkerModal";
+import { AuthContext } from "../../context/AuthContext";
 
 interface filter {
   minimumDistanceInKm: number;
@@ -40,6 +41,8 @@ const colors = {
 const swiperRef = React.createRef<Swiper<worker>>();
 
 export default function Home() {
+  const { userToken } = useContext(AuthContext);
+
   const [workers, setWorkers] = useState<worker[]>([]);
   const [actualLikedWorker, setActualLikedWorker] = useState<worker>();
   const [index, setIndex] = useState(0);
@@ -92,15 +95,13 @@ export default function Home() {
   const getWorkersForClient = () => {
     resetWorkers();
     setSearching(true);
+
     let mockClientSearchInfo = {
-      email: "clientemail1@example.com",
-      latitude: 37,
-      longitude: -122,
       minimumDistanceInKm: filters.minimumDistanceInKm,
       professionName: filters.professionName,
     };
 
-    searchWorkers(mockClientSearchInfo)
+    searchWorkers(userToken, mockClientSearchInfo)
       .then((workersResponse) => {
         setWorkers(workersResponse.data);
         setSearching(false);
@@ -134,11 +135,10 @@ export default function Home() {
   const refusedWorker = async (refusedWorker: worker) => {
     let mockInteractionInfo = {
       workerEmail: refusedWorker?.email,
-      clientEmail: "clientemail1@example.com",
       interactionType: "disliked",
       workerSecretKey: refusedWorker?.secretKey,
     };
-    interactWorker(mockInteractionInfo)
+    interactWorker(userToken, mockInteractionInfo)
       .then((response) => {})
       .catch((error) => {
         console.log(error);
@@ -155,12 +155,11 @@ export default function Home() {
     let mockInteractionInfo = {
       workerEmail: actualLikedWorker?.email,
       clientProblemDescription: clientProblemDescription,
-      clientEmail: "clientemail1@example.com",
       interactionType: "liked",
       workerSecretKey: actualLikedWorker?.secretKey,
     };
 
-    interactWorker(mockInteractionInfo)
+    interactWorker(userToken, mockInteractionInfo)
       .then((response) => {})
       .catch((error) => {
         console.log(error);
