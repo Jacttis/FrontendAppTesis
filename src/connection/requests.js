@@ -15,3 +15,11 @@ export const interactWorker = async (interactionInfo) => {
     JSON.stringify(interactionInfo)
   );
 };
+
+export const registerClient = async (clientInfo) => {
+  return axiosAuth().post("api/auth/client/register", JSON.stringify(clientInfo));
+};
+
+export const loginClient = async (clientInfo) => {
+  return axiosAuth().post("api/auth/client/login", JSON.stringify(clientInfo));
+};

@@ -1,9 +1,36 @@
-import React from "react";
-import { Text, SafeAreaView, StyleSheet, TextInput, ViewStyle, TouchableOpacity } from "react-native";
+import React, { useContext, useState } from "react";
+import { Text, SafeAreaView, StyleSheet, TextInput, ViewStyle, TouchableOpacity, Alert } from "react-native";
 import * as Animatable from "react-native-animatable";
-import { useNavigation } from "@react-navigation/native";
+import { StackActions, useNavigation } from "@react-navigation/native";
+import { AuthContext } from "../../context/AuthContext";
+import { loginClient, registerClient } from "../../connection/requests";
+import { ActivityIndicator } from "react-native";
 
 export default function Login() {
+  const { isLoading, signIn, setIsLoading } = useContext(AuthContext);
+
+  type UserProps = {
+    email: string;
+    password: string;
+  };
+
+  const [user, setUser] = useState<UserProps>({
+    email: "",
+    password: ""
+  });
+
+  const makeLoginClient = () => {
+    setIsLoading(true);
+    loginClient(user).then((response) => {
+      const { accessToken, refreshToken } = response.data;
+      signIn(accessToken, refreshToken);
+      navigation.dispatch(StackActions.replace("bottomTabs"));
+    }).catch((error) => {
+      console.log(error);
+      Alert.alert("Error", "Email or password invalid, try again");
+    });
+    setIsLoading(false);
+  };
   const navigation = useNavigation();
   const styles = StyleSheet.create({
     viewMain: {
@@ -82,20 +109,41 @@ export default function Login() {
           placeholder="Insert your email"
           placeholderTextColor="#000000"
           style={styles.input}
+          value={user.email}
+          onChangeText={(value) => {
+            setUser({ ...user, email: value });
+          }}
         />
 
         <Text style={styles.title}>Password</Text>
         <TextInput
           placeholder="Insert your password"
           placeholderTextColor="#000000"
+          value={user.password}
           style={styles.input}
+          onChangeText={(value) => {
+            setUser({ ...user, password: value });
+          }}
         />
 
-        <TouchableOpacity style={styles.buttonLogIn}>
+        <TouchableOpacity style={styles.buttonLogIn}
+                          onPress={() => {
+                            makeLoginClient();
+
+                          }
+                          }>
           <Text style={styles.buttonText}>Log in</Text>
         </TouchableOpacity>
+        {isLoading ? (
+          <ActivityIndicator size="large" color="#0000ff" />  // Puedes cambiar el tamaño y el color a tu preferencia
+        ) : null}
 
-        <TouchableOpacity style={styles.buttonRegister}>
+        <TouchableOpacity
+          style={styles.buttonRegister}
+          onPress={() => {
+            navigation.dispatch(StackActions.replace("register"));
+          }
+          }>
           <Text style={styles.buttonText}>Register</Text>
         </TouchableOpacity>
 
