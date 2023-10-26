@@ -4,8 +4,10 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import VectorIcon from "react-native-vector-icons/Ionicons";
 import Home from "../pages/Home/home";
+import WorkerHome from "../pages/Home/workerHome";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
+
 
 const Tab = createBottomTabNavigator();
 const RootStack = createNativeStackNavigator();
@@ -24,6 +26,16 @@ export const BottomTabs = () => {
           headerShown: false
         }}
       />
+      <Tab.Screen
+      name="workerHome"
+      component={WorkerHome}
+      options={{
+        tabBarIcon: ({ focused }) => (
+          <VectorIcon name="home" color="black" size={30} />
+        ),
+        headerShown: false,
+      }}
+    />
     </Tab.Navigator>
   );
 };

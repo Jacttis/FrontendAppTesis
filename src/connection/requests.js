@@ -16,6 +16,14 @@ export const interactWorker = async (interactionInfo) => {
   );
 };
 
+export const postMatchClient = async (matchInfo) => {
+  return axiosMatching.post("api/matching/match", JSON.stringify(matchInfo));
+};
+
+export const postRejectClient = async (rejectInfo) => {
+  return axiosMatching.post("api/matching/reject", JSON.stringify(rejectInfo));
+};
+
 export const registerClient = async (clientInfo) => {
   return axiosAuth().post("api/auth/client/register", JSON.stringify(clientInfo));
 };
