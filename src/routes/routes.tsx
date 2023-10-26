@@ -7,15 +7,25 @@ import Home from "../pages/Home/home";
 import WorkerHome from "../pages/Home/workerHome";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
-
+import Profile from "../pages/Profile/profile";
 
 const Tab = createBottomTabNavigator();
 const RootStack = createNativeStackNavigator();
 
-export const BottomTabs = () => {
+export const ClientBottomTabs = () => {
   const { isLoading, userToken } = useContext(AuthContext);
   return (
-    <Tab.Navigator>
+    <Tab.Navigator initialRouteName="home">
+      <Tab.Screen
+        name="profile"
+        component={Profile}
+        options={{
+          tabBarIcon: ({ focused }) => (
+            <VectorIcon name="user" color="black" size={30} />
+          ),
+          headerShown: false,
+        }}
+      />
       <Tab.Screen
         name="home"
         component={Home}
@@ -23,27 +33,99 @@ export const BottomTabs = () => {
           tabBarIcon: ({ focused }) => (
             <VectorIcon name="home" color="black" size={30} />
           ),
-          headerShown: false
+          headerShown: false,
         }}
       />
-      <Tab.Screen
-      name="workerHome"
-      component={WorkerHome}
-      options={{
-        tabBarIcon: ({ focused }) => (
-          <VectorIcon name="home" color="black" size={30} />
-        ),
-        headerShown: false,
-      }}
-    />
     </Tab.Navigator>
   );
 };
 
-export const MainStack = () => {
-  const { isLoading, userToken, setIsLoading } = useContext(AuthContext);
+export const WorkerBottomTabs = () => {
+  const { isLoading, userToken } = useContext(AuthContext);
+  return (
+    <Tab.Navigator initialRouteName="home">
+      <Tab.Screen
+        name="profile"
+        component={Profile}
+        options={{
+          tabBarIcon: ({ focused }) => (
+            <VectorIcon name="user" color="black" size={30} />
+          ),
+          headerShown: false,
+        }}
+      />
+      <Tab.Screen
+        name="home"
+        component={WorkerHome}
+        options={{
+          tabBarIcon: ({ focused }) => (
+            <VectorIcon name="home" color="black" size={30} />
+          ),
+          headerShown: false,
+        }}
+      />
+    </Tab.Navigator>
+  );
+};
 
-  return (<RootStack.Navigator initialRouteName={!!userToken ? "bottomTabs" : "login"}>
+export const AuthClientStack = () => {
+  return (
+    <RootStack.Navigator initialRouteName={"bottomTabs"}>
+      {/*//esto es solo una screen */}
+      <RootStack.Screen
+        name={"bottomTabs"}
+        options={{
+          title: "Jobder",
+          headerStyle: {
+            backgroundColor: "white",
+          },
+
+          headerTitleAlign: "center",
+          headerShadowVisible: false,
+          headerTintColor: "red",
+          headerTitleStyle: {
+            fontWeight: "bold",
+          },
+        }}
+        component={ClientBottomTabs}
+      />
+
+      {/*// en cambio esto es un stack*/}
+      {/*aca si vos queres agregar mas screens o stacks*/}
+    </RootStack.Navigator>
+  );
+};
+
+export const AuthWorkerStack = () => {
+  return (
+    <RootStack.Navigator initialRouteName={"bottomTabs"}>
+      {/*//esto es solo una screen */}
+      <RootStack.Screen
+        name={"bottomTabs"}
+        options={{
+          title: "Jobder",
+          headerStyle: {
+            backgroundColor: "white",
+          },
+
+          headerTitleAlign: "center",
+          headerShadowVisible: false,
+          headerTintColor: "red",
+          headerTitleStyle: {
+            fontWeight: "bold",
+          },
+        }}
+        component={WorkerBottomTabs}
+      />
+      {/*// en cambio esto es un stack*/}
+      {/*aca si vos queres agregar mas screens o stacks*/}
+    </RootStack.Navigator>
+  );
+};
+
+export const MainStack = () => {
+  return (
+    <RootStack.Navigator initialRouteName={"login"}>
       <RootStack.Screen
         name={"login"}
         component={Login}
@@ -54,31 +136,16 @@ export const MainStack = () => {
         component={Register}
         options={{ headerShown: false }}
       />
-      {/*//esto es solo una screen */}
-      <RootStack.Screen
-        name={"bottomTabs"}
-        options={{
-        title: "Jobder",
-        headerStyle: {
-          backgroundColor: "white",
-        },
-
-        headerTitleAlign: "center",
-        headerShadowVisible: false,
-        headerTintColor: "red",
-        headerTitleStyle: {
-          fontWeight: "bold",
-        },
-        }}
-        component={BottomTabs}
-      />
-      {/*// en cambio esto es un stack*/}
-      {/*aca si vos queres agregar mas screens o stacks*/}
     </RootStack.Navigator>
   );
 };
 
 //aca devolvemos el stack principal. el que tiene tod0
 export default function Routes() {
-  return <MainStack />;
+  const { userToken, role } = useContext(AuthContext);
+
+  if (userToken !== null && role !== null) {
+    if (role === "client") return <AuthClientStack />;
+    else return <AuthWorkerStack />;
+  } else return <MainStack />;
 }

@@ -26,7 +26,7 @@ interface worker {
   professionName: string;
   averageRating: number;
   picture: string;
-  distanceToClientInKm: number;
+  distanceInKm: number;
   secretKey: string;
 }
 
