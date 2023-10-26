@@ -60,7 +60,7 @@ export default function WorkerCard(props: any) {
 const styles = StyleSheet.create({
   container: {
     width: "90%",
-    height: 475,
+    height: 450,
     padding: 10,
     justifyContent: "space-evenly",
     alignItems: "center",
