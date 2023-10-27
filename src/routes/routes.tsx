@@ -13,7 +13,6 @@ const Tab = createBottomTabNavigator();
 const RootStack = createNativeStackNavigator();
 
 export const ClientBottomTabs = () => {
-  const { isLoading, userToken } = useContext(AuthContext);
   return (
     <Tab.Navigator initialRouteName="home">
       <Tab.Screen
@@ -21,7 +20,7 @@ export const ClientBottomTabs = () => {
         component={Profile}
         options={{
           tabBarIcon: ({ focused }) => (
-            <VectorIcon name="user" color="black" size={30} />
+            <VectorIcon name="person" color="black" size={30} />
           ),
           headerShown: false,
         }}
@@ -36,12 +35,21 @@ export const ClientBottomTabs = () => {
           headerShown: false,
         }}
       />
+      <Tab.Screen
+        name="matches"
+        component={Home}
+        options={{
+          tabBarIcon: ({ focused }) => (
+            <VectorIcon name="message-circle" color="black" size={30} />
+          ),
+          headerShown: false,
+        }}
+      />
     </Tab.Navigator>
   );
 };
 
 export const WorkerBottomTabs = () => {
-  const { isLoading, userToken } = useContext(AuthContext);
   return (
     <Tab.Navigator initialRouteName="home">
       <Tab.Screen
@@ -60,6 +68,16 @@ export const WorkerBottomTabs = () => {
         options={{
           tabBarIcon: ({ focused }) => (
             <VectorIcon name="home" color="black" size={30} />
+          ),
+          headerShown: false,
+        }}
+      />
+      <Tab.Screen
+        name="matches"
+        component={WorkerHome}
+        options={{
+          tabBarIcon: ({ focused }) => (
+            <VectorIcon name="message-circle" color="black" size={30} />
           ),
           headerShown: false,
         }}

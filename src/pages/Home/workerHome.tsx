@@ -1,18 +1,17 @@
 import { useCallback, useEffect, useState, useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import { Text, View } from "react-native-animatable";
-import ClientCard from "./clientCard";
-import { ImageBackground, ScrollView, StyleSheet } from "react-native";
-import { postMatchClient, postRejectClient } from "../../connection/requests";
+import { ImageBackground, StyleSheet } from "react-native";
+import { ActivityIndicator } from "react-native-paper";
+import {
+  postMatchClient,
+  postRejectClient,
+  getLikedClients,
+} from "../../connection/requests";
 import ClientInfo from "./clientInfo";
 import client from "../../connection/client";
 import ClientScroll from "./clientScroll";
-import {
-  ALERT_TYPE,
-  Dialog,
-  AlertNotificationRoot,
-  Toast,
-} from "react-native-alert-notification";
+import { ALERT_TYPE, Dialog } from "react-native-alert-notification";
 import { colors } from "../../assets/colors";
 import images from "../../assets/images";
 
@@ -36,43 +35,35 @@ export default function WorkerHome() {
   const { userToken } = useContext(AuthContext);
 
   const [clientSelected, setClientSelected] = useState<client>();
-  const [clients, setClients] = useState<client[]>([
-    {
-      email: "cliente1@example.com",
-      name: "Ramon Martinez",
-      phoneNumber: "123-456-7890",
-      picture: "",
-      distanceInKm: 10,
-      birthDate: "1990-01-15",
-      secretKey: "A1231asFA",
-      interactionInfo: {
-        clientProblemDescription: "Me anda mal el termo",
-        createdAt: "1999-05-01",
-      },
-    },
-    {
-      email: "cliente2@example.com",
-      name: "WA Martinez",
-      phoneNumber: "123-456-7890",
-      picture: "",
-      distanceInKm: 10,
-      birthDate: "1990-01-15",
-      secretKey: "A1231asFA",
-      interactionInfo: {
-        clientProblemDescription: "asdasdasde anaadadaadamal el tadadermo",
-        createdAt: "1999-05-01",
-      },
-    },
-  ]);
+  const [clients, setClients] = useState<client[]>([]);
+
+  const [searching, setSearching] = useState<boolean>(false);
 
   useEffect(() => {
-    //setClients([]);
+    searchLikedClients();
   }, []);
+
+  const searchLikedClients = () => {
+    setSearching(true);
+
+    getLikedClients(userToken)
+      .then((clientsResponse) => {
+        if (clientsResponse.data.length > 0) setClients(clientsResponse.data);
+        setSearching(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        setSearching(false);
+      });
+  };
 
   useEffect(() => {
     if (clients.length > 0) {
       setClientSelected(clients[0]);
-    } else setClientSelected(undefined);
+    } else {
+      setClientSelected(undefined);
+      searchLikedClients();
+    }
   }, [clients]);
 
   const onRemoveClient = useCallback((clientEmail: string) => {
@@ -87,16 +78,16 @@ export default function WorkerHome() {
       clientSecretKey: client.secretKey,
     };
     onRemoveClient(client.email);
-    Dialog.show({
-      type: ALERT_TYPE.SUCCESS,
-      title: "Matched client",
-      textBody: "Congrats! You accepted the job for client!",
-      button: "Close",
-    });
 
     postMatchClient(userToken, matchInfo)
       .then((response) => {
         console.log(response);
+        Dialog.show({
+          type: ALERT_TYPE.SUCCESS,
+          title: "Matched client",
+          textBody: "Congrats! You accepted the job for client!",
+          button: "Close",
+        });
       })
       .catch((error) => {
         console.log(error);
@@ -143,6 +134,11 @@ export default function WorkerHome() {
               clientSelected={clientSelected}
               onClientSelected={(client: client) => setClientSelected(client)}
             />
+          ) : searching ? (
+            <View>
+              <ActivityIndicator size={"large"} animating={true} />
+              <Text>Searching clients who liked you...</Text>
+            </View>
           ) : (
             <Text>Still no clients liked you...</Text>
           )}
