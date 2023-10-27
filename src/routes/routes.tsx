@@ -40,7 +40,7 @@ export const ClientBottomTabs = () => {
         component={Home}
         options={{
           tabBarIcon: ({ focused }) => (
-            <VectorIcon name="message-circle" color="black" size={30} />
+            <VectorIcon name="chatbubble" color="black" size={30} />
           ),
           headerShown: false,
         }}
@@ -77,7 +77,7 @@ export const WorkerBottomTabs = () => {
         component={WorkerHome}
         options={{
           tabBarIcon: ({ focused }) => (
-            <VectorIcon name="message-circle" color="black" size={30} />
+            <VectorIcon name="chatbubble" color="black" size={30} />
           ),
           headerShown: false,
         }}
