@@ -8,6 +8,18 @@ export const searchWorkers = async (accessToken, clientData) => {
   );
 };
 
+export const getLikedClients = async (accessToken) => {
+  return axiosAuth(accessToken).post("search/worker/getLikedClients");
+};
+
+export const getMatchedClients = async (accessToken) => {
+  return axiosAuth(accessToken).post("search/worker/getMatchedClients");
+};
+
+export const getMatchedWorkers = async (accessToken) => {
+  return axiosAuth(accessToken).post("search/client/getMatchedWorkers");
+};
+
 export const getWorkerReviews = async (workerInfo) => {
   return axios.post("review/workerReviews", JSON.stringify(workerInfo));
 };
