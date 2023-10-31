@@ -4,7 +4,7 @@ import { Text, View } from "react-native-animatable";
 import ClientCard from "./clientCard";
 import { ScrollView, StyleSheet } from "react-native";
 import { scrollTo } from "react-native-reanimated";
-import { colors } from "../../assets/colors";
+import { colors } from "../../../assets/colors";
 import { client, interaction } from "./workerHome";
 
 const scrollRef = React.createRef<ScrollView>();

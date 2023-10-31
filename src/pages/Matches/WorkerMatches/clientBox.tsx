@@ -5,7 +5,7 @@ import {
   GestureHandlerRootView,
 } from "react-native-gesture-handler";
 import { Image } from "react-native-animatable";
-import { Text } from "react-native-paper";
+import { IconButton, Text } from "react-native-paper";
 import { Avatar } from "react-native-paper";
 import Animated, { FadeIn, FadeOut, Layout } from "react-native-reanimated";
 import { colors } from "../../../assets/colors";
@@ -14,9 +14,9 @@ export default function ClientBox(props: any) {
   const { clientInfo } = props;
 
   return (
-    <GestureHandlerRootView>
+    <GestureHandlerRootView style={styles.container}>
       <TouchableOpacity
-        style={styles.container}
+        style={styles.chatContainer}
         onPress={() => {
           props.onTouch(clientInfo);
         }}
@@ -43,13 +43,19 @@ export default function ClientBox(props: any) {
             {clientInfo.name}
           </Text>
           <Text style={{ fontSize: 11 }}>
-            "{clientInfo?.interactionInfo.clientProblemDescription}"
+            "{clientInfo?.matchInfo?.clientProblemDescription}"
           </Text>
           <Text style={{ fontSize: 11 }}>
-            Matched on {clientInfo?.interactionInfo?.createdAt}
+            Matched on {clientInfo?.matchInfo?.createdAt}
           </Text>
         </View>
       </TouchableOpacity>
+      <View>
+        <IconButton
+          icon={"flag"}
+          onPress={() => props.onCancelMatch(clientInfo)}
+        ></IconButton>
+      </View>
     </GestureHandlerRootView>
   );
 }
@@ -60,6 +66,12 @@ const styles = StyleSheet.create({
     height: 90,
     flexDirection: "row",
     justifyContent: "center",
+    alignItems: "center",
+  },
+  chatContainer: {
+    width: "70%",
+    height: "100%",
+    flexDirection: "row",
     alignItems: "center",
   },
   imageContainer: {
@@ -84,7 +96,7 @@ const styles = StyleSheet.create({
     borderColor: "blue",
   },
   infoContainer: {
-    width: "80%",
+    width: "100%",
     height: "100%",
     justifyContent: "center",
     paddingLeft: 20,

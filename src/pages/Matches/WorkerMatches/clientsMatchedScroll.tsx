@@ -3,7 +3,7 @@ import React from "react";
 import { Text, View } from "react-native-animatable";
 import { ScrollView, StyleSheet } from "react-native";
 import { colors } from "../../../assets/colors";
-import { client, interaction } from "../../Home/workerHome";
+import { client, interaction } from "../../Home/Worker/workerHome";
 import ClientBox from "./clientBox";
 
 const scrollRef = React.createRef<ScrollView>();
@@ -34,6 +34,7 @@ export default function ClientsMatchedScroll(props: any) {
             selectedClient={clientSelected?.email}
             clientInfo={client}
             onTouch={(client: client) => props.onClientSelected(client)}
+            onCancelMatch={(client: client) => props.onCancelMatch(client)}
           />
         );
       })}

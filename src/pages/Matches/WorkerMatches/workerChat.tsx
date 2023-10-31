@@ -53,7 +53,7 @@ export default function WorkerChat() {
       <View style={styles.infoContainer}>
         <View style={{ flexDirection: "row", gap: 5, alignItems: "center" }}>
           <VectorIcon name="calendar" color="black" size={20} />
-          <Text>Matched on {clientInfo?.interactionInfo?.createdAt}</Text>
+          <Text>Matched on {clientInfo?.matchInfo?.createdAt}</Text>
         </View>
         <View style={{ flexDirection: "row", gap: 5, alignItems: "center" }}>
           <VectorIcon name="phone-portrait" color="black" size={20} />
@@ -61,7 +61,7 @@ export default function WorkerChat() {
         </View>
         <View style={{ flexDirection: "row", gap: 5, alignItems: "center" }}>
           <VectorIcon name="person-circle" color="black" size={20} />
-          <Text>"{clientInfo?.interactionInfo?.clientProblemDescription}"</Text>
+          <Text>"{clientInfo?.matchInfo?.clientProblemDescription}"</Text>
         </View>
         <View style={{ flexDirection: "row", gap: 5, alignItems: "center" }}>
           <VectorIcon name="location" color="black" size={20} />

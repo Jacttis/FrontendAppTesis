@@ -2,7 +2,7 @@ import { StyleSheet } from "react-native";
 import { Image, View } from "react-native-animatable";
 import { Button, Text } from "react-native-paper";
 import { Avatar } from "react-native-paper";
-import { colors } from "../../assets/colors";
+import { colors } from "../../../assets/colors";
 
 export default function ClientInfo(props: any) {
   const { clientInfo } = props;

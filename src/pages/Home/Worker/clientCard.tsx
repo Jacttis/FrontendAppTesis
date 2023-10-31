@@ -8,7 +8,7 @@ import { Image } from "react-native-animatable";
 import { Text } from "react-native-paper";
 import { Avatar } from "react-native-paper";
 import Animated, { FadeIn, FadeOut, Layout } from "react-native-reanimated";
-import { colors } from "../../assets/colors";
+import { colors } from "../../../assets/colors";
 
 export default function ClientCard(props: any) {
   const [selected, setSelected] = useState(false);
@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
   container: {
     width: 250,
     height: 110,
-    backgroundColor: colors.background,
+    backgroundColor: colors.white,
     justifyContent: "center",
     alignItems: "center",
     elevation: 10,
@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
   selectedContainer: {
     width: 250,
     height: 110,
-    backgroundColor: colors.background,
+    backgroundColor: colors.white,
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 20,

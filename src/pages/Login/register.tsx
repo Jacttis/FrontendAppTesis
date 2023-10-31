@@ -1,35 +1,46 @@
 import React, { useContext, useState } from "react";
-import { Text, SafeAreaView, StyleSheet, TextInput, View, TouchableOpacity, FlatList } from "react-native";
+import {
+  Text,
+  SafeAreaView,
+  StyleSheet,
+  TextInput,
+  View,
+  TouchableOpacity,
+  FlatList,
+} from "react-native";
 import * as Animatable from "react-native-animatable";
 import { StackActions, useNavigation } from "@react-navigation/native";
-import { fetchAddressSuggestions, AddressSuggestion, getLocation } from "../../services/GeoLocationService";
+import {
+  fetchAddressSuggestions,
+  AddressSuggestion,
+  getLocation,
+} from "../../services/GeoLocationService";
 import { registerClient } from "../../connection/requests";
 import { AuthContext } from "../../context/AuthContext";
-
 
 export default function Register() {
   const navigation = useNavigation();
   const styles = StyleSheet.create({
     viewMain: {
       flex: 1,
-      backgroundColor: "#215a7d"
+      backgroundColor: "#215a7d",
     },
     viewPassword: {
       width: "100%",
       justifyContent: "space-between",
       flexDirection: "row",
-      alignItems: "center"
+      alignItems: "center",
     },
     viewHeader: {
       marginTop: "14%",
       marginBottom: "8%",
-      marginStart: "5%"
+      marginStart: "5%",
     },
     title: {
       fontSize: 20,
       marginTop: 28,
       color: "#2d2d29",
-      fontFamily: "Roboto"
+      fontFamily: "Roboto",
     },
     viewForm: {
       backgroundColor: "#FFF",
@@ -37,30 +48,29 @@ export default function Register() {
       borderTopLeftRadius: 25,
       borderTopRightRadius: 25,
       paddingStart: "5%",
-      paddingEnd: "5%"
+      paddingEnd: "5%",
     },
     message: {
       color: "#FFF",
       fontSize: 28,
       fontWeight: "bold",
-      fontFamily: "Roboto"
+      fontFamily: "Roboto",
     },
     input: {
       borderBottomWidth: 1,
       height: 40,
       marginBottom: 12,
       fontSize: 16,
-      color: "#000000"
+      color: "#000000",
     },
     inputPassword: {
-
       borderBottomWidth: 1,
       height: 40,
       marginBottom: 12,
       fontSize: 16,
       color: "#000000",
       width: "100%",
-      flex: 1
+      flex: 1,
     },
     buttonLogIn: {
       backgroundColor: "#215a6d",
@@ -69,14 +79,13 @@ export default function Register() {
       paddingVertical: 8,
       marginTop: 14,
       justifyContent: "center",
-      alignItems: "center"
-
+      alignItems: "center",
     },
     buttonText: {
       color: "#FFF",
       fontWeight: "bold",
       fontSize: 18,
-      fontFamily: "Roboto"
+      fontFamily: "Roboto",
     },
     buttonRegister: {
       backgroundColor: "#215a6d",
@@ -85,23 +94,27 @@ export default function Register() {
       marginTop: 14,
       justifyContent: "center",
       alignItems: "center",
-      borderRadius: 15
-    }
+      borderRadius: 15,
+    },
   });
   const [showPassword, setShowPassword] = useState(false);
-  const [addressSuggestions, setAddressSuggestions] = useState<AddressSuggestion[]>([]);
+  const [addressSuggestions, setAddressSuggestions] = useState<
+    AddressSuggestion[]
+  >([]);
   const [address, setAddress] = useState<string>("");
   const { isLoading, signIn, setIsLoading } = useContext(AuthContext);
 
   const makeRegisterClient = () => {
     setIsLoading(true);
-    registerClient(client).then((response) => {
-      const { accessToken, refreshToken } = response.data;
-      signIn(accessToken, refreshToken);
-      navigation.dispatch(StackActions.replace('bottomTabs'));
-    }).catch((error) => {
-      console.log(error);
-    });
+    registerClient(client)
+      .then((response) => {
+        const { accessToken, refreshToken, role } = response.data;
+        signIn(accessToken, refreshToken, role);
+        navigation.dispatch(StackActions.replace("bottomTabs"));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
     setIsLoading(false);
   };
 
@@ -120,10 +133,12 @@ export default function Register() {
     latitude: "",
     longitude: "",
     address: "",
-    password: ""
+    password: "",
   });
 
-  const [debounceTimer, setDebounceTimer] = useState<NodeJS.Timeout | null>(null);
+  const [debounceTimer, setDebounceTimer] = useState<NodeJS.Timeout | null>(
+    null
+  );
 
   const handleAddressChange = (address: string) => {
     setAddress(address);
@@ -140,11 +155,13 @@ export default function Register() {
     setDebounceTimer(timer);
   };
 
-
   return (
     <SafeAreaView style={styles.viewMain}>
-
-      <Animatable.View animation="fadeInLeft" delay={500} style={styles.viewHeader}>
+      <Animatable.View
+        animation="fadeInLeft"
+        delay={500}
+        style={styles.viewHeader}
+      >
         <Text style={styles.message}>Register</Text>
       </Animatable.View>
 
@@ -182,12 +199,12 @@ export default function Register() {
             placeholderTextColor="#000000"
             style={styles.inputPassword}
             secureTextEntry={!showPassword}
-
           />
-          <TouchableOpacity onPress={() => setShowPassword(prevShow => !prevShow)}>
+          <TouchableOpacity
+            onPress={() => setShowPassword((prevShow) => !prevShow)}
+          >
             <Text>{showPassword ? "Hide" : "Show"}</Text>
           </TouchableOpacity>
-
         </View>
         <View>
           <Text style={styles.title}>Address</Text>
@@ -202,12 +219,16 @@ export default function Register() {
             data={addressSuggestions}
             keyExtractor={(item: AddressSuggestion) => item.place_id.toString()}
             renderItem={({ item }) => (
-              <TouchableOpacity onPress={() => setClient((prevClient: ClientProps) => ({
-                ...prevClient,
-                address: item.display_name,
-                latitude: item.lat,
-                longitude: item.lon
-              }))}>
+              <TouchableOpacity
+                onPress={() =>
+                  setClient((prevClient: ClientProps) => ({
+                    ...prevClient,
+                    address: item.display_name,
+                    latitude: item.lat,
+                    longitude: item.lon,
+                  }))
+                }
+              >
                 <Text>{item.display_name}</Text>
               </TouchableOpacity>
             )}
@@ -222,34 +243,25 @@ export default function Register() {
                     ...prevClient,
                     address: location.display_name,
                     latitude: location.lat,
-                    longitude: location.lon
+                    longitude: location.lon,
                   }));
                 }
-
               });
-            }
-            }>
+            }}
+          >
             <Text style={styles.buttonText}>My actual location</Text>
-
           </TouchableOpacity>
-
         </View>
 
         <TouchableOpacity
           style={styles.buttonRegister}
           onPress={() => {
             makeRegisterClient();
-
-          }
-          }>
+          }}
+        >
           <Text style={styles.buttonText}>Register</Text>
         </TouchableOpacity>
-
       </Animatable.View>
-
     </SafeAreaView>
   );
-
-
 }
-
