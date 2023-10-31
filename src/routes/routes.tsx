@@ -4,10 +4,19 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import VectorIcon from "react-native-vector-icons/Ionicons";
 import Home from "../pages/Home/home";
-import WorkerHome from "../pages/Home/workerHome";
+import WorkerHome, { client } from "../pages/Home/workerHome";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import Profile from "../pages/Profile/profile";
+import WorkerMatches from "../pages/Matches/WorkerMatches/workerMatches";
+import WorkerChat from "../pages/Matches/WorkerMatches/workerChat";
+import { Button } from "react-native";
+import { useNavigation, StackActions } from "@react-navigation/native";
+
+export type RootStackParamList = {
+  chat: { clientInfo: client };
+  bottomTabs: {};
+};
 
 const Tab = createBottomTabNavigator();
 const RootStack = createNativeStackNavigator();
@@ -57,7 +66,7 @@ export const WorkerBottomTabs = () => {
         component={Profile}
         options={{
           tabBarIcon: ({ focused }) => (
-            <VectorIcon name="user" color="black" size={30} />
+            <VectorIcon name="person" color="black" size={30} />
           ),
           headerShown: false,
         }}
@@ -74,7 +83,7 @@ export const WorkerBottomTabs = () => {
       />
       <Tab.Screen
         name="matches"
-        component={WorkerHome}
+        component={WorkerMatches}
         options={{
           tabBarIcon: ({ focused }) => (
             <VectorIcon name="chatbubble" color="black" size={30} />
@@ -107,7 +116,6 @@ export const AuthClientStack = () => {
         }}
         component={ClientBottomTabs}
       />
-
       {/*// en cambio esto es un stack*/}
       {/*aca si vos queres agregar mas screens o stacks*/}
     </RootStack.Navigator>
@@ -115,6 +123,7 @@ export const AuthClientStack = () => {
 };
 
 export const AuthWorkerStack = () => {
+  const navigation = useNavigation();
   return (
     <RootStack.Navigator initialRouteName={"bottomTabs"}>
       {/*//esto es solo una screen */}
@@ -134,6 +143,11 @@ export const AuthWorkerStack = () => {
           },
         }}
         component={WorkerBottomTabs}
+      />
+      <RootStack.Screen
+        name={"chat"}
+        options={{ headerShown: false }}
+        component={WorkerChat}
       />
       {/*// en cambio esto es un stack*/}
       {/*aca si vos queres agregar mas screens o stacks*/}
@@ -161,7 +175,6 @@ export const MainStack = () => {
 //aca devolvemos el stack principal. el que tiene tod0
 export default function Routes() {
   const { userToken, role } = useContext(AuthContext);
-
   if (userToken !== null && role !== null) {
     if (role === "client") return <AuthClientStack />;
     else return <AuthWorkerStack />;

@@ -15,7 +15,7 @@ import { ALERT_TYPE, Dialog } from "react-native-alert-notification";
 import { colors } from "../../assets/colors";
 import images from "../../assets/images";
 
-interface client {
+export interface client {
   email: string;
   name: string;
   phoneNumber: string;
@@ -23,10 +23,15 @@ interface client {
   distanceInKm: number;
   birthDate: string;
   secretKey: string;
-  interactionInfo: interaction;
+  interactionInfo: interaction | match;
 }
 
-interface interaction {
+export interface interaction {
+  createdAt: string;
+  clientProblemDescription: string;
+}
+
+export interface match {
   createdAt: string;
   clientProblemDescription: string;
 }

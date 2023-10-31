@@ -1,24 +1,22 @@
 import { useEffect, useState } from "react";
 import React from "react";
 import { Text, View } from "react-native-animatable";
-import ClientCard from "./clientCard";
 import { ScrollView, StyleSheet } from "react-native";
-import { scrollTo } from "react-native-reanimated";
-import { colors } from "../../assets/colors";
-import { client, interaction } from "./workerHome";
+import { colors } from "../../../assets/colors";
+import { client, interaction } from "../../Home/workerHome";
+import ClientBox from "./clientBox";
 
 const scrollRef = React.createRef<ScrollView>();
 
-export default function ClientScroll(props: any) {
-  const { clientSelected, clients } = props;
+export default function ClientsMatchedScroll(props: any) {
+  const { clientSelected, clientsMatched } = props;
 
   return (
     <ScrollView
       keyboardShouldPersistTaps="always"
       ref={scrollRef}
       style={styles.scrollContainer}
-      scrollEnabled={clients.length > 1}
-      horizontal
+      scrollEnabled={clientsMatched.length > 1}
       onContentSizeChange={() => {
         scrollRef.current?.scrollTo({ x: 0, y: 0, animated: true });
       }}
@@ -27,13 +25,11 @@ export default function ClientScroll(props: any) {
         alignItems: "center",
         justifyContent: "center",
         padding: 10,
-        marginLeft: "17%",
-        gap: 20,
       }}
     >
-      {clients.map((client: client) => {
+      {clientsMatched.map((client: client) => {
         return (
-          <ClientCard
+          <ClientBox
             key={client.email}
             selectedClient={clientSelected?.email}
             clientInfo={client}
