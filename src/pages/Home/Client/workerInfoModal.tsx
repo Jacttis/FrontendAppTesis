@@ -8,7 +8,7 @@ import {
   IconButton,
   Avatar,
 } from "react-native-paper";
-import { getWorkerReviews } from "../../connection/requests";
+import { getWorkerReviews } from "../../../connection/requests";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 
 interface review {

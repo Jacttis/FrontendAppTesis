@@ -34,7 +34,6 @@ export default function Login() {
     loginClient(user)
       .then((response) => {
         const { accessToken, refreshToken, role } = response.data;
-        console.log(response.data);
         signIn(accessToken, refreshToken, role);
       })
       .catch((error) => {

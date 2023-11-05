@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState, useContext } from "react";
-import { AuthContext } from "../../context/AuthContext";
+import { AuthContext } from "../../../context/AuthContext";
 import { Text, View } from "react-native-animatable";
 import { ImageBackground, StyleSheet } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
@@ -7,15 +7,15 @@ import {
   postMatchClient,
   postRejectClient,
   getLikedClients,
-} from "../../connection/requests";
+} from "../../../connection/requests";
 import ClientInfo from "./clientInfo";
-import client from "../../connection/client";
+import client from "../../../connection/client";
 import ClientScroll from "./clientScroll";
 import { ALERT_TYPE, Dialog } from "react-native-alert-notification";
-import { colors } from "../../assets/colors";
-import images from "../../assets/images";
+import { colors } from "../../../assets/colors";
+import images from "../../../assets/images";
 
-interface client {
+export interface client {
   email: string;
   name: string;
   phoneNumber: string;
@@ -23,10 +23,15 @@ interface client {
   distanceInKm: number;
   birthDate: string;
   secretKey: string;
-  interactionInfo: interaction;
+  interactionInfo: interaction | match;
 }
 
-interface interaction {
+export interface interaction {
+  createdAt: string;
+  clientProblemDescription: string;
+}
+
+export interface match {
   createdAt: string;
   clientProblemDescription: string;
 }
@@ -64,6 +69,7 @@ export default function WorkerHome() {
       setClientSelected(undefined);
       searchLikedClients();
     }
+    console.log(clients);
   }, [clients]);
 
   const onRemoveClient = useCallback((clientEmail: string) => {
@@ -77,17 +83,16 @@ export default function WorkerHome() {
       clientEmail: client.email,
       clientSecretKey: client.secretKey,
     };
-    onRemoveClient(client.email);
 
     postMatchClient(userToken, matchInfo)
       .then((response) => {
-        console.log(response);
         Dialog.show({
           type: ALERT_TYPE.SUCCESS,
           title: "Matched client",
           textBody: "Congrats! You accepted the job for client!",
           button: "Close",
         });
+        onRemoveClient(client.email);
       })
       .catch((error) => {
         console.log(error);
@@ -99,11 +104,11 @@ export default function WorkerHome() {
       clientEmail: client.email,
       clientSecretKey: client.secretKey,
     };
-    onRemoveClient(client.email);
 
     postRejectClient(userToken, rejectInfo)
       .then((response) => {
         console.log(response);
+        onRemoveClient(client.email);
       })
       .catch((error) => {
         console.log(error);
@@ -148,7 +153,7 @@ export default function WorkerHome() {
             clients.length > 0 ? (
               <Text>Touch a client to see his description!</Text>
             ) : (
-              <Text>Wait for a client to like you!</Text>
+              <Text> </Text>
             )
           ) : (
             <ClientInfo

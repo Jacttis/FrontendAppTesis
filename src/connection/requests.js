@@ -45,10 +45,32 @@ export const postRejectClient = async (accessToken, rejectInfo) => {
   );
 };
 
+export const workerCancelMatch = async (accessToken, cancelMatchInfo) => {
+  return axiosAuth(accessToken).post(
+    "matching/worker/cancelMatch",
+    JSON.stringify(cancelMatchInfo)
+  );
+};
+
+export const clientCancelMatch = async (accessToken, cancelMatchInfo) => {
+  return axiosAuth(accessToken).post(
+    "matching/client/cancelMatch",
+    JSON.stringify(cancelMatchInfo)
+  );
+};
+
 export const registerClient = async (clientInfo) => {
   return axios.post("auth/client/register", JSON.stringify(clientInfo));
 };
 
 export const loginClient = async (clientInfo) => {
   return axios.post("auth/client/login", JSON.stringify(clientInfo));
+};
+
+export const registerWorker = async (workerInfo) => {
+  return axios.post("auth/worker/register", JSON.stringify(workerInfo));
+};
+
+export const loginWorker = async (workerInfo) => {
+  return axios.post("auth/worker/login", JSON.stringify(workerInfo));
 };

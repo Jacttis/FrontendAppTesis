@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef, useContext } from "react";
 import { View, Text, SafeAreaView, StyleSheet } from "react-native";
-import { interactWorker, searchWorkers } from "../../connection/requests";
+import { interactWorker, searchWorkers } from "../../../connection/requests";
 import {
   SegmentedButtons,
   ActivityIndicator,
@@ -12,7 +12,7 @@ import WorkerInfoModal from "./workerInfoModal";
 import Swiper, { SwiperProps } from "react-native-deck-swiper";
 import React from "react";
 import LikedWorkerModal from "./likedWorkerModal";
-import { AuthContext } from "../../context/AuthContext";
+import { AuthContext } from "../../../context/AuthContext";
 
 interface filter {
   minimumDistanceInKm: number;

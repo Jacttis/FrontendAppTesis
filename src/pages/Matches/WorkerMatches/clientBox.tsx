@@ -5,29 +5,22 @@ import {
   GestureHandlerRootView,
 } from "react-native-gesture-handler";
 import { Image } from "react-native-animatable";
-import { Text } from "react-native-paper";
+import { IconButton, Text } from "react-native-paper";
 import { Avatar } from "react-native-paper";
 import Animated, { FadeIn, FadeOut, Layout } from "react-native-reanimated";
-import { colors } from "../../assets/colors";
+import { colors } from "../../../assets/colors";
 
-export default function ClientCard(props: any) {
-  const [selected, setSelected] = useState(false);
-  const { clientInfo, selectedClient } = props;
-
-  useEffect(() => {
-    if (clientInfo.email !== selectedClient) setSelected(false);
-  }, [selectedClient]);
+export default function ClientBox(props: any) {
+  const { clientInfo } = props;
 
   return (
-    <GestureHandlerRootView>
+    <GestureHandlerRootView style={styles.container}>
       <TouchableOpacity
-        style={selected ? styles.selectedContainer : styles.container}
+        style={styles.chatContainer}
         onPress={() => {
           props.onTouch(clientInfo);
-          setSelected(true);
         }}
       >
-        <View style={{ height: "10%", width: "100%" }}></View>
         <View style={styles.imageContainer}>
           {clientInfo?.picture === "" ? (
             <Avatar.Text
@@ -44,58 +37,48 @@ export default function ClientCard(props: any) {
             />
           )}
         </View>
-        <View style={styles.topSection}>
-          <View style={styles.infoContainer}>
-            <Text
-              style={{ fontWeight: "700", fontSize: 13, textAlign: "center" }}
-            >
-              {clientInfo.name}
-            </Text>
-            <Text style={{ fontSize: 11 }}>
-              {clientInfo?.distanceInKm} Kilometers away
-            </Text>
-          </View>
+
+        <View style={styles.infoContainer}>
+          <Text style={{ fontWeight: "700", fontSize: 13 }}>
+            {clientInfo.name}
+          </Text>
+          <Text style={{ fontSize: 11 }}>
+            "{clientInfo?.matchInfo?.clientProblemDescription}"
+          </Text>
+          <Text style={{ fontSize: 11 }}>
+            Matched on {clientInfo?.matchInfo?.createdAt}
+          </Text>
         </View>
       </TouchableOpacity>
+      <View>
+        <IconButton
+          icon={"flag"}
+          onPress={() => props.onCancelMatch(clientInfo)}
+        ></IconButton>
+      </View>
     </GestureHandlerRootView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    width: 250,
-    height: 110,
-    backgroundColor: colors.background,
-    justifyContent: "center",
-    alignItems: "center",
-    elevation: 10,
-    borderRadius: 20,
-  },
-  selectedContainer: {
-    width: 250,
-    height: 110,
-    backgroundColor: colors.background,
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 20,
-    borderWidth: 1,
-    elevation: 10,
-    borderColor: "black",
-  },
-  topSection: {
     width: "100%",
-    height: "60%",
-    padding: 10,
-    justifyContent: "flex-start",
+    height: 90,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  chatContainer: {
+    width: "70%",
+    height: "100%",
+    flexDirection: "row",
     alignItems: "center",
   },
   imageContainer: {
-    width: "100%",
-    height: "100%",
-    position: "absolute",
+    width: 60,
+    height: 60,
     justifyContent: "center",
     alignItems: "center",
-    bottom: "45%",
   },
   image: {
     width: 60,
@@ -116,6 +99,8 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
     justifyContent: "center",
-    alignItems: "center",
+    paddingLeft: 20,
+    borderBottomWidth: 0.5,
+    borderColor: "grey",
   },
 });
