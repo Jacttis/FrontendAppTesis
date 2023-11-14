@@ -1,30 +1,46 @@
 import { useEffect, useState, useContext } from "react";
 import { View, Text, ScrollView, StyleSheet } from "react-native";
-import { client } from "../../Home/Worker/workerHome";
-import ClientsMatchedScroll from "./clientsMatchedScroll";
+import WorkerMatchedScroll from "./workerMatchedScroll";
 import { colors } from "../../../assets/colors";
 import { StackActions } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/core";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../../routes/routes";
 import {
-  getMatchedClients,
-  workerCancelMatch,
+  clientCancelMatch,
+  getMatchedClients, getMatchedWorkers,
+  workerCancelMatch
 } from "../../../connection/requests";
 import { AuthContext } from "../../../context/AuthContext";
 import { useCallback } from "react";
 
-export default function WorkerMatches() {
+interface matchInfo {
+  createdAt: string,
+  clientProblemDescription: string
+}
+export interface workerInfo {
+  email: string;
+  name: string;
+  description: string;
+  professionName: string;
+  averageRating: number;
+  picture: string;
+  distanceInKm: number;
+  secretKey: string;
+  matchInfo: matchInfo;
+}
+export default function ClientMatches() {
   const { userToken } = useContext(AuthContext);
-  const [clientsMatched, setClientsMatched] = useState<client[]>([]);
+  const [workersMatched, setWorkersMatched] = useState<workerInfo[]>([]);
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
-  const onRemoveClient = useCallback((clientEmail: string) => {
-    setClientsMatched((currentClients) => {
+  const onRemoveWorker = useCallback((clientEmail: string) => {
+    setWorkersMatched((currentClients) => {
       return currentClients.filter((client) => client.email !== clientEmail);
     });
   }, []);
+
 
   const data = [
     {
@@ -35,7 +51,10 @@ export default function WorkerMatches() {
       birthDate: "1999-05-05",
       secretKey: "123123h1j2k",
       picture: "",
-      interactionInfo: {
+      description:"asd",
+      professionName: "sda",
+      averageRating:5,
+      matchInfo: {
         createdAt: "2023-10-31",
         clientProblemDescription: "asdasd",
       },
@@ -48,7 +67,10 @@ export default function WorkerMatches() {
       birthDate: "1999-05-05",
       secretKey: "123123h1j2k",
       picture: "",
-      interactionInfo: {
+      description:"asd",
+      professionName: "sda",
+      averageRating:5,
+      matchInfo: {
         createdAt: "2023-10-31",
         clientProblemDescription: "sscccasdasd",
       },
@@ -61,7 +83,10 @@ export default function WorkerMatches() {
       birthDate: "1999-05-05",
       secretKey: "123123h1j2k",
       picture: "",
-      interactionInfo: {
+      description:"asd",
+      professionName: "sda",
+      averageRating:5,
+      matchInfo: {
         createdAt: "2023-10-31",
         clientProblemDescription: "eaaaa",
       },
@@ -74,7 +99,10 @@ export default function WorkerMatches() {
       birthDate: "1999-05-05",
       secretKey: "123123h1j2k",
       picture: "",
-      interactionInfo: {
+      description:"asd",
+      professionName: "sda",
+      averageRating:5,
+      matchInfo: {
         createdAt: "2023-10-31",
         clientProblemDescription: "asdasd",
       },
@@ -87,33 +115,38 @@ export default function WorkerMatches() {
       birthDate: "1999-05-05",
       secretKey: "123123h1j2k",
       picture: "",
-      interactionInfo: {
+      description:"asd",
+      professionName: "sda",
+      averageRating:5,
+      matchInfo: {
         createdAt: "2023-10-31",
         clientProblemDescription: "xxxxxxasdasd",
       },
     },
   ];
+  
 
   useEffect(() => {
-    obtainClientsMatched();
+    //obtainWorkersMatched();
+    setWorkersMatched(data)
   }, []);
 
-  const obtainClientsMatched = () => {
-    getMatchedClients(userToken)
+  const obtainWorkersMatched = () => {
+    getMatchedWorkers(userToken)
       .then((response) => {
-        setClientsMatched(response.data);
+        setWorkersMatched(response.data);
       })
       .catch((error) => console.log(error));
   };
 
-  const cancelMatch = (client: client) => {
+  const cancelMatch = (worker: workerInfo) => {
     let cancelMatchInfo = {
-      clientEmail: client?.email,
+      workerEmail: worker?.email,
     };
 
-    workerCancelMatch(userToken, cancelMatchInfo)
+    clientCancelMatch(userToken, cancelMatchInfo)
       .then((response) => {
-        onRemoveClient(client.email);
+        onRemoveWorker(worker.email);
       })
       .catch((error) => {});
   };
@@ -124,13 +157,13 @@ export default function WorkerMatches() {
         <Text style={{ fontWeight: "700", color: "black" }}>Your matches</Text>
       </View>
       <View style={styles.matchesContainer}>
-        {clientsMatched.length > 0 ? (
-          <ClientsMatchedScroll
-            clientsMatched={clientsMatched}
-            onClientSelected={(client: client) =>
-              navigation.navigate("chat", { info: client })
+        {workersMatched.length > 0 ? (
+          <WorkerMatchedScroll
+            workersMatched={workersMatched}
+            onWorkerSelected={(worker: workerInfo) =>
+              navigation.navigate("chat", { info: worker })
             }
-            onCancelMatch={(client: client) => cancelMatch(client)}
+            onCancelMatch={(worker: workerInfo) => cancelMatch(worker)}
           />
         ) : (
           <Text>You have no matches...</Text>

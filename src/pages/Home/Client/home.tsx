@@ -19,7 +19,7 @@ interface filter {
   professionName: string;
 }
 
-interface worker {
+export interface worker {
   email: string;
   name: string;
   description: string;

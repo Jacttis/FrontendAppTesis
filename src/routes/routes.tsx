@@ -1,20 +1,23 @@
 import Login from "../pages/Login/login";
-import Register from "../pages/Login/register";
+import RegisterClient from "../pages/Login/Client/registerClient";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import VectorIcon from "react-native-vector-icons/Ionicons";
-import Home from "../pages/Home/Client/home";
+import Home, { worker } from "../pages/Home/Client/home";
 import WorkerHome, { client } from "../pages/Home/Worker/workerHome";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import Profile from "../pages/Profile/profile";
 import WorkerMatches from "../pages/Matches/WorkerMatches/workerMatches";
+import ClientMatches from "../pages/Matches/ClientMatches/clientMatches";
 import WorkerChat from "../pages/Matches/WorkerMatches/workerChat";
 import { Button } from "react-native";
 import { useNavigation, StackActions } from "@react-navigation/native";
+import RegisterWorker from "../pages/Login/Worker/registerWorker";
+import ClientChat from "../pages/Matches/ClientMatches/clientChat";
 
 export type RootStackParamList = {
-  chat: { clientInfo: client };
+  chat: { info: client | worker };
   bottomTabs: {};
 };
 
@@ -46,7 +49,7 @@ export const ClientBottomTabs = () => {
       />
       <Tab.Screen
         name="matches"
-        component={Home}
+        component={ClientMatches}
         options={{
           tabBarIcon: ({ focused }) => (
             <VectorIcon name="chatbubble" color="black" size={30} />
@@ -116,6 +119,11 @@ export const AuthClientStack = () => {
         }}
         component={ClientBottomTabs}
       />
+      <RootStack.Screen
+        name={"chat"}
+        options={{ headerShown: false }}
+        component={ClientChat}
+      />
       {/*// en cambio esto es un stack*/}
       {/*aca si vos queres agregar mas screens o stacks*/}
     </RootStack.Navigator>
@@ -164,8 +172,13 @@ export const MainStack = () => {
         options={{ headerShown: false }}
       />
       <RootStack.Screen
-        name={"register"}
-        component={Register}
+        name={"registerClient"}
+        component={RegisterClient}
+        options={{ headerShown: false }}
+      />
+      <RootStack.Screen
+        name={"registerWorker"}
+        component={RegisterWorker}
         options={{ headerShown: false }}
       />
     </RootStack.Navigator>
