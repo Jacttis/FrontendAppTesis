@@ -10,10 +10,10 @@ import { colors } from "../../../assets/colors";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import VectorIcon from "react-native-vector-icons/Ionicons";
 
-export default function WorkerChat() {
+export default function ClientChat() {
   const navigation = useNavigation();
   const route: any = useRoute();
-  const clientInfo = route.params?.info;
+  const workerInfo = route.params?.info;
 
   return (
     <View style={styles.container}>
@@ -26,11 +26,11 @@ export default function WorkerChat() {
         </View>
         <View style={styles.headerMiddleContainer}>
           <View style={styles.imageContainer}>
-            {clientInfo?.picture === "" ? (
+            {workerInfo?.picture === "" ? (
               <Avatar.Text
                 style={styles.avatar}
                 labelStyle={{ bottom: 14, fontSize: 25 }}
-                label={clientInfo?.name.charAt(0)}
+                label={workerInfo?.name.charAt(0)}
               ></Avatar.Text>
             ) : (
               <Image
@@ -41,7 +41,7 @@ export default function WorkerChat() {
               />
             )}
           </View>
-          <Text style={{ fontSize: 11 }}>{clientInfo?.name}</Text>
+          <Text style={{ fontSize: 11 }}>{workerInfo?.name}</Text>
         </View>
         <View style={styles.headerRightContainer}>
           <IconButton
@@ -53,19 +53,19 @@ export default function WorkerChat() {
       <View style={styles.infoContainer}>
         <View style={{ flexDirection: "row", gap: 5, alignItems: "center" }}>
           <VectorIcon name="calendar" color="black" size={20} />
-          <Text>Matched on {clientInfo?.matchInfo?.createdAt}</Text>
+          <Text>Matched on {workerInfo?.matchInfo?.createdAt}</Text>
         </View>
         <View style={{ flexDirection: "row", gap: 5, alignItems: "center" }}>
           <VectorIcon name="phone-portrait" color="black" size={20} />
-          <Text>{clientInfo?.phoneNumber}</Text>
+          <Text>{workerInfo?.phoneNumber}</Text>
         </View>
         <View style={{ flexDirection: "row", gap: 5, alignItems: "center" }}>
           <VectorIcon name="person-circle" color="black" size={20} />
-          <Text>"{clientInfo?.matchInfo?.clientProblemDescription}"</Text>
+          <Text>"{workerInfo?.matchInfo?.clientProblemDescription}"</Text>
         </View>
         <View style={{ flexDirection: "row", gap: 5, alignItems: "center" }}>
           <VectorIcon name="location" color="black" size={20} />
-          <Text>{clientInfo?.distanceInKm} Kilometers away</Text>
+          <Text>{workerInfo?.distanceInKm} Kilometers away</Text>
         </View>
       </View>
     </View>

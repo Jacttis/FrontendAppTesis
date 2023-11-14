@@ -74,3 +74,9 @@ export const registerWorker = async (workerInfo) => {
 export const loginWorker = async (workerInfo) => {
   return axios.post("auth/worker/login", JSON.stringify(workerInfo));
 };
+
+
+export const getWorker = async (accessToken, email) => {
+  return axiosAuth(accessToken).get(`/workers/getWorker?email=${email}`);
+};
+

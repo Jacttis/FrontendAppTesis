@@ -13,7 +13,9 @@ type AuthContextType = {
   setUserToken: (userToken: string | null) => void;
   refreshToken: string | null;
   setRefreshToken: (refreshToken: string | null) => void;
-  signIn: (accessToken: string, refreshToken: string, role: string) => void;
+  email: string | null;
+  setEmail: (email: string | null) => void
+  signIn: (accessToken: string, refreshToken: string, role: string, email: string) => void;
   signOut: () => void;
 };
 
@@ -25,6 +27,8 @@ export const AuthContext = createContext<AuthContextType>({
   refreshToken: null,
   role: null,
   setRefreshToken: () => {},
+  email: null,
+  setEmail: () => {},
   signIn: () => {},
   signOut: () => {},
 });
@@ -34,12 +38,14 @@ export const AuthProvider: React.FC<PropsWithChildren<{}>> = ({ children }) => {
   const [userToken, setUserToken] = useState<string | null>(null);
   const [refreshToken, setRefreshToken] = useState<string | null>(null);
   const [role, setRole] = useState<string | null>(null);
+  const [email,setEmail] = useState<string | null>(null)
 
   const signIn = useCallback(
-    (accessToken: string, refreshToken: string, role: string) => {
+    (accessToken: string, refreshToken: string, role: string,email:string) => {
       setUserToken(accessToken);
       setRefreshToken(refreshToken);
       setRole(role);
+      setEmail(email);
     },
     []
   );
@@ -48,6 +54,7 @@ export const AuthProvider: React.FC<PropsWithChildren<{}>> = ({ children }) => {
     setUserToken(null);
     setRefreshToken(null);
     setRole(null);
+    setEmail(null);
   }, []);
 
   return (
@@ -60,6 +67,8 @@ export const AuthProvider: React.FC<PropsWithChildren<{}>> = ({ children }) => {
         refreshToken,
         setRefreshToken,
         signIn,
+        setEmail,
+        email,
         role,
         signOut,
       }}
