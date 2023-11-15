@@ -118,14 +118,40 @@ export default function Home() {
   };
 
   const getProfessions = () => {
-    let prof = [
-      "All Professions",
-      "Carpintero",
-      "Cocinero",
-      "Electricista",
-      "Mecanico",
+    const freelancerProfessions = [
+      "All professions",
+      "Bricklayer",
+      "Plumber",
+      "Developer",
+      "Designer",
+      "Writer",
+      "Translator",
+      "Electrician",
+      "Carpenter",
+      "Painter",
+      "Welder",
+      "Mechanic",
+      "Chef",
+      "Baker",
+      "Tailor",
+      "Gardener",
+      "Locksmith",
+      "Photographer",
+      "Videographer",
+      "Editor",
+      "SEO Expert",
+      "Digital Marketer",
+      "Graphic Designer",
+      "Web Designer",
+      "Software Engineer",
+      "IT Consultant",
+      "Tutor",
+      "Fitness Coach",
+      "Yoga Instructor",
+      "Nutritionist",
+      "Lawyer",
     ];
-    setProfessions(prof);
+    setProfessions(freelancerProfessions);
   };
 
   const onSwiped = () => {
