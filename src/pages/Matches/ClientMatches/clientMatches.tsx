@@ -8,15 +8,16 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../../routes/routes";
 import {
   clientCancelMatch,
-  getMatchedClients, getMatchedWorkers,
-  workerCancelMatch
+  getMatchedClients,
+  getMatchedWorkers,
+  workerCancelMatch,
 } from "../../../connection/requests";
 import { AuthContext } from "../../../context/AuthContext";
 import { useCallback } from "react";
 
 interface matchInfo {
-  createdAt: string,
-  clientProblemDescription: string
+  createdAt: string;
+  clientProblemDescription: string;
 }
 export interface workerInfo {
   email: string;
@@ -41,94 +42,8 @@ export default function ClientMatches() {
     });
   }, []);
 
-
-  const data = [
-    {
-      email: "clientemail1@example.com",
-      name: "lean",
-      phoneNumber: "1231232",
-      distanceInKm: 50,
-      birthDate: "1999-05-05",
-      secretKey: "123123h1j2k",
-      picture: "",
-      description:"asd",
-      professionName: "sda",
-      averageRating:5,
-      matchInfo: {
-        createdAt: "2023-10-31",
-        clientProblemDescription: "asdasd",
-      },
-    },
-    {
-      email: "clientemail4@example.com",
-      name: "aaaalean",
-      phoneNumber: "1231232",
-      distanceInKm: 50,
-      birthDate: "1999-05-05",
-      secretKey: "123123h1j2k",
-      picture: "",
-      description:"asd",
-      professionName: "sda",
-      averageRating:5,
-      matchInfo: {
-        createdAt: "2023-10-31",
-        clientProblemDescription: "sscccasdasd",
-      },
-    },
-    {
-      email: "clientemail3@example.com",
-      name: "leasdasan",
-      phoneNumber: "1231232",
-      distanceInKm: 50,
-      birthDate: "1999-05-05",
-      secretKey: "123123h1j2k",
-      picture: "",
-      description:"asd",
-      professionName: "sda",
-      averageRating:5,
-      matchInfo: {
-        createdAt: "2023-10-31",
-        clientProblemDescription: "eaaaa",
-      },
-    },
-    {
-      email: "clientemail2@example.com",
-      name: "leanadas",
-      phoneNumber: "1231232",
-      distanceInKm: 50,
-      birthDate: "1999-05-05",
-      secretKey: "123123h1j2k",
-      picture: "",
-      description:"asd",
-      professionName: "sda",
-      averageRating:5,
-      matchInfo: {
-        createdAt: "2023-10-31",
-        clientProblemDescription: "asdasd",
-      },
-    },
-    {
-      email: "clientemail5@example.com",
-      name: "xxxxxleanadas",
-      phoneNumber: "1231232",
-      distanceInKm: 50,
-      birthDate: "1999-05-05",
-      secretKey: "123123h1j2k",
-      picture: "",
-      description:"asd",
-      professionName: "sda",
-      averageRating:5,
-      matchInfo: {
-        createdAt: "2023-10-31",
-        clientProblemDescription: "xxxxxxasdasd",
-      },
-    },
-  ];
-  
-
   useEffect(() => {
-    //obtainWorkersMatched();
-    setWorkersMatched(data)
+    obtainWorkersMatched();
   }, []);
 
   const obtainWorkersMatched = () => {
