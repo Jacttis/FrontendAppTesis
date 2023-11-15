@@ -38,6 +38,7 @@ export default function RegisterClient() {
   const showDatepicker = () => {
     setShow(true);
   };
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
 
   useEffect(() => {
     setIsLoading(true);
@@ -200,13 +201,13 @@ export default function RegisterClient() {
         <Text style={styles.title}>Birth Date</Text>
         <TouchableOpacity onPress={showDatepicker}>
           <Text style={styles.textBirthDate}>
-            {new Date().toLocaleDateString()}
+            {selectedDate.toLocaleDateString()}
           </Text>
         </TouchableOpacity>
 
         {show && (
           <DateTimePicker
-            value={new Date()}
+            value={selectedDate}
             mode="date"
             display="default"
             onChange={(event, selectedDate) => {
@@ -216,6 +217,7 @@ export default function RegisterClient() {
                 const day = selectedDate.getDate();
 
                 const dateString = `${year}-${month}-${day}`;
+                setSelectedDate(selectedDate);
                 setClient({ ...client, birthDate: dateString });
                 setShow(false);
               }
