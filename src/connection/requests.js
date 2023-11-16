@@ -85,3 +85,7 @@ export const loginWorker = async (workerInfo) => {
 export const getWorker = async (accessToken, email) => {
   return axiosAuth(accessToken).get(`/workers/getWorker?email=${email}`);
 };
+
+export const getClient = async (accessToken, email) => {
+  return axiosAuth(accessToken).get(`/clients/getClient?email=${email}`);
+};
