@@ -140,7 +140,11 @@ export default function WorkerHome() {
             alignItems: "center",
           }}
         >
-          <ActivityIndicator size={"large"} animating={true} />
+          <ActivityIndicator
+            size={"large"}
+            color={colors.primaryBlue}
+            animating={true}
+          />
           <Text>Searching clients who liked you...</Text>
         </View>
       ) : (

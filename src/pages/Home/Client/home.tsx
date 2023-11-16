@@ -308,7 +308,11 @@ export default function Home() {
         </View>
       ) : searching ? (
         <View style={styles.searchResultContainer}>
-          <ActivityIndicator size={"large"} animating={true} />
+          <ActivityIndicator
+            size={"large"}
+            color={colors.primaryBlue}
+            animating={true}
+          />
           <Text>Searching workers...</Text>
         </View>
       ) : (

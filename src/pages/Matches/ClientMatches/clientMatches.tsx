@@ -98,7 +98,11 @@ export default function ClientMatches() {
               alignItems: "center",
             }}
           >
-            <ActivityIndicator size={"large"} animating={true} />
+            <ActivityIndicator
+              size={"large"}
+              animating={true}
+              color={colors.primaryBlue}
+            />
             <Text>Searching matches...</Text>
           </View>
         ) : (
