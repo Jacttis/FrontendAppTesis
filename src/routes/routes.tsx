@@ -112,7 +112,7 @@ export const AuthClientStack = () => {
 
           headerTitleAlign: "center",
           headerShadowVisible: false,
-          headerTintColor: "red",
+          headerTintColor: "#6200ee",
           headerTitleStyle: {
             fontWeight: "bold",
           },
@@ -145,7 +145,7 @@ export const AuthWorkerStack = () => {
 
           headerTitleAlign: "center",
           headerShadowVisible: false,
-          headerTintColor: "red",
+          headerTintColor: "#6200ee",
           headerTitleStyle: {
             fontWeight: "bold",
           },

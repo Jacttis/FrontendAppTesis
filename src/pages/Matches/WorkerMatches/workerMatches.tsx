@@ -13,12 +13,16 @@ import {
 } from "../../../connection/requests";
 import { AuthContext } from "../../../context/AuthContext";
 import { useCallback } from "react";
+import { Image } from "react-native-animatable";
+import { ActivityIndicator } from "react-native-paper";
 
 export default function WorkerMatches() {
   const { userToken } = useContext(AuthContext);
   const [clientsMatched, setClientsMatched] = useState<client[]>([]);
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
+  const [isSearching, setIsSearching] = useState(false);
 
   const onRemoveClient = useCallback((clientEmail: string) => {
     setClientsMatched((currentClients) => {
@@ -31,11 +35,16 @@ export default function WorkerMatches() {
   }, []);
 
   const obtainClientsMatched = () => {
+    setIsSearching(true);
     getMatchedClients(userToken)
       .then((response) => {
         setClientsMatched(response.data);
+        setIsSearching(false);
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        console.log(error);
+        setIsSearching(false);
+      });
   };
 
   const cancelMatch = (client: client) => {
@@ -64,8 +73,23 @@ export default function WorkerMatches() {
             }
             onCancelMatch={(client: client) => cancelMatch(client)}
           />
+        ) : isSearching ? (
+          <View
+            style={{
+              height: "80%",
+              width: "80%",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <ActivityIndicator size={"large"} animating={true} />
+            <Text>Searching matches...</Text>
+          </View>
         ) : (
-          <Text>You have no matches...</Text>
+          <Image
+            style={styles.noResultImage}
+            source={require("../../../assets/noresult3.png")}
+          ></Image>
         )}
       </View>
     </View>
@@ -89,5 +113,11 @@ const styles = StyleSheet.create({
     marginTop: 15,
     padding: 10,
     alignItems: "center",
+  },
+  noResultImage: {
+    width: "60%",
+    height: "60%",
+    resizeMode: "cover",
+    marginTop: 40,
   },
 });

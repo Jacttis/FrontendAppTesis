@@ -1,3 +1,5 @@
 import background from "./background.png";
+import defaultuser from "./defaultuser.jpg";
 
-export default { background };
+export { background };
+export { defaultuser };

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { View, StyleSheet, Button } from "react-native";
+import { View, StyleSheet, Button, TouchableOpacity } from "react-native";
 import { Image } from "react-native-animatable";
 import { Text } from "react-native-paper";
 import { Avatar, IconButton } from "react-native-paper";
@@ -9,14 +9,23 @@ import { useRoute } from "@react-navigation/native";
 import { colors } from "../../../assets/colors";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import VectorIcon from "react-native-vector-icons/Ionicons";
+import ClientInfoModal from "./clientInfoModal";
+import { useState } from "react";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 export default function WorkerChat() {
   const navigation = useNavigation();
   const route: any = useRoute();
   const clientInfo = route.params?.info;
+  const [clientInfoModalVisible, setClientInfoModalVisible] = useState(false);
 
   return (
     <View style={styles.container}>
+      <ClientInfoModal
+        visible={clientInfoModalVisible}
+        clientInfo={clientInfo}
+        onClose={() => setClientInfoModalVisible(false)}
+      />
       <View style={styles.headerContainer}>
         <View style={styles.headerLeftContainer}>
           <IconButton
@@ -25,29 +34,31 @@ export default function WorkerChat() {
           />
         </View>
         <View style={styles.headerMiddleContainer}>
-          <View style={styles.imageContainer}>
-            {clientInfo?.picture === "" ? (
-              <Avatar.Text
-                style={styles.avatar}
-                labelStyle={{ bottom: 14, fontSize: 25 }}
-                label={clientInfo?.name.charAt(0)}
-              ></Avatar.Text>
-            ) : (
-              <Image
-                style={styles.image}
-                source={{
-                  uri: "https://images.unsplash.com/photo-1614213951697-a45781262acf?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8d29ya2VyfGVufDB8fDB8fHww&w=1000&q=80",
-                }}
-              />
-            )}
-          </View>
+          <GestureHandlerRootView>
+            <TouchableOpacity onPress={() => setClientInfoModalVisible(true)}>
+              <View style={styles.imageContainer}>
+                {clientInfo?.picture === null ? (
+                  <Avatar.Text
+                    style={styles.avatar}
+                    labelStyle={{ bottom: 10, fontSize: 20 }}
+                    label={clientInfo?.name.charAt(0)}
+                  ></Avatar.Text>
+                ) : (
+                  <Image
+                    style={styles.image}
+                    source={{
+                      uri: clientInfo?.picture,
+                    }}
+                  />
+                )}
+              </View>
+            </TouchableOpacity>
+          </GestureHandlerRootView>
+
           <Text style={{ fontSize: 11 }}>{clientInfo?.name}</Text>
         </View>
         <View style={styles.headerRightContainer}>
-          <IconButton
-            icon={"flag"}
-            onPress={() => navigation.dispatch(StackActions.pop())}
-          />
+          <IconButton icon={"flag"} onPress={() => {}} />
         </View>
       </View>
       <View style={styles.infoContainer}>

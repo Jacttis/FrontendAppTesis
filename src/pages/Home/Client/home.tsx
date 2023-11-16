@@ -13,6 +13,7 @@ import Swiper, { SwiperProps } from "react-native-deck-swiper";
 import React from "react";
 import LikedWorkerModal from "./likedWorkerModal";
 import { AuthContext } from "../../../context/AuthContext";
+import { Image } from "react-native-animatable";
 
 interface filter {
   minimumDistanceInKm: number;
@@ -177,22 +178,6 @@ export default function Home() {
     showLikedWorkerModal();
   };
 
-  const acceptedWorker = async (clientProblemDescription: string) => {
-    let mockInteractionInfo = {
-      workerEmail: actualLikedWorker?.email,
-      clientProblemDescription: clientProblemDescription,
-      interactionType: "liked",
-      workerSecretKey: actualLikedWorker?.secretKey,
-    };
-
-    interactWorker(userToken, mockInteractionInfo)
-      .then((response) => {})
-      .catch((error) => {
-        console.log(error);
-      })
-      .finally(() => setWaitToSearch(false));
-  };
-
   return (
     <SafeAreaView style={styles.mainContainer}>
       <WorkerInfoModal
@@ -211,9 +196,10 @@ export default function Home() {
       <LikedWorkerModal
         visible={visibleLikedWorkerModal}
         workerInfo={actualLikedWorker}
-        onClose={(clientProblemDescription: string) => {
+        onClose={() => {
           hideLikedWorkerModal();
-          acceptedWorker(clientProblemDescription).then(onSwiped);
+          setWaitToSearch(false);
+          onSwiped();
         }}
       />
       <View style={styles.searchOptionsContainer}>
@@ -346,7 +332,11 @@ export default function Home() {
           <Text>Searching workers...</Text>
         </View>
       ) : (
-        <View style={styles.searchResultContainer}>
+        <View style={styles.noResultContainer}>
+          <Image
+            style={styles.noResultImage}
+            source={require("../../../assets/noresultsearch.png")}
+          ></Image>
           <Text>There are no workers for you with those filters...</Text>
         </View>
       )}
@@ -358,8 +348,7 @@ const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
     display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
+    justifyContent: "flex-start",
     alignItems: "center",
     gap: -20,
     backgroundColor: "white",
@@ -381,9 +370,20 @@ const styles = StyleSheet.create({
   searchResultContainer: {
     height: "80%",
     width: "90%",
-    flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
+  },
+  noResultContainer: {
+    height: "80%",
+    width: "90%",
+    justifyContent: "flex-start",
+    alignItems: "center",
+  },
+  noResultImage: {
+    width: "100%",
+    height: "60%",
+    resizeMode: "contain",
+    marginTop: 80,
   },
   select: {
     borderRadius: 20,

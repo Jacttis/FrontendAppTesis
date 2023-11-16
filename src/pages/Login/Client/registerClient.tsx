@@ -95,6 +95,14 @@ export default function RegisterClient() {
     birthDate: string;
   };
 
+  const getDateString = (date: Date) => {
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+
+    return `${year}-${month}-${day}`;
+  };
+
   const [client, setClient] = useState<ClientProps>({
     email: "",
     name: "",
@@ -103,7 +111,7 @@ export default function RegisterClient() {
     address: "",
     password: "",
     phoneNumber: "",
-    birthDate: "",
+    birthDate: getDateString(new Date()),
   });
 
   const [debounceTimer, setDebounceTimer] = useState<NodeJS.Timeout | null>(
@@ -212,13 +220,11 @@ export default function RegisterClient() {
             display="default"
             onChange={(event, selectedDate) => {
               if (selectedDate != undefined) {
-                const year = selectedDate.getFullYear();
-                const month = selectedDate.getMonth() + 1;
-                const day = selectedDate.getDate();
-
-                const dateString = `${year}-${month}-${day}`;
                 setSelectedDate(selectedDate);
-                setClient({ ...client, birthDate: dateString });
+                setClient({
+                  ...client,
+                  birthDate: getDateString(selectedDate),
+                });
                 setShow(false);
               }
             }}
