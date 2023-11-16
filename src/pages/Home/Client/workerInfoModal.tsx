@@ -10,6 +10,7 @@ import {
 } from "react-native-paper";
 import { getWorkerReviews } from "../../../connection/requests";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { colors } from "../../../assets/colors";
 
 interface review {
   id: number;
@@ -106,6 +107,7 @@ export default function WorkerInfoModal(props: any) {
                             labelStyle={{
                               height: 200,
                               bottom: 3,
+                              fontSize: 20,
                             }}
                             style={styles.modalReviewItemAvatar}
                           ></Avatar.Text>
@@ -159,7 +161,7 @@ export default function WorkerInfoModal(props: any) {
             props.onRefused();
           }}
         >
-          ✘
+          <Text style={{ color: colors.red }}>✘</Text>
         </Button>
         <Button
           mode="elevated"
@@ -167,7 +169,7 @@ export default function WorkerInfoModal(props: any) {
             props.onClose();
           }}
         >
-          ⤵
+          <Text style={{ color: colors.primaryBlue }}>⤵</Text>
         </Button>
         <Button
           mode="elevated"
@@ -175,7 +177,7 @@ export default function WorkerInfoModal(props: any) {
             props.onAccepted();
           }}
         >
-          ✔
+          <Text style={{ color: colors.primaryBlue }}>✔</Text>
         </Button>
       </View>
     </Modal>
@@ -260,6 +262,7 @@ const styles = StyleSheet.create({
     height: 30,
     width: 30,
     borderRadius: 100,
+    backgroundColor: colors.primaryBlue,
   },
   modalReviewItemDescriptionContainer: {
     width: "80%",

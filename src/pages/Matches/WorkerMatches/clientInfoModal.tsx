@@ -8,6 +8,7 @@ import {
   IconButton,
   Avatar,
 } from "react-native-paper";
+import { colors } from "../../../assets/colors";
 
 export default function ClientInfoModal(props: any) {
   const { visible, clientInfo } = props;
@@ -73,7 +74,7 @@ export default function ClientInfoModal(props: any) {
             props.onClose();
           }}
         >
-          ⤵
+          <Text style={{ color: colors.primaryBlue }}>⤵</Text>
         </Button>
       </View>
     </Modal>

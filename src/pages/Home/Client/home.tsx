@@ -14,6 +14,8 @@ import React from "react";
 import LikedWorkerModal from "./likedWorkerModal";
 import { AuthContext } from "../../../context/AuthContext";
 import { Image } from "react-native-animatable";
+import Slider from "@react-native-community/slider";
+import { colors } from "../../../assets/colors";
 
 interface filter {
   minimumDistanceInKm: number;
@@ -31,14 +33,6 @@ export interface worker {
   secretKey: string;
 }
 
-const colors = {
-  red: "#EC2379",
-  blue: "#0070FF",
-  gray: "#777777",
-  white: "#ffffff",
-  black: "#000000",
-};
-
 const swiperRef = React.createRef<Swiper<worker>>();
 
 export default function Home() {
@@ -51,6 +45,7 @@ export default function Home() {
     minimumDistanceInKm: 0,
     professionName: "",
   });
+  const [distanceRange, setDistanceRange] = useState(20);
 
   const [searching, setSearching] = useState(false);
   const [waitToSearch, setWaitToSearch] = useState(false);
@@ -59,7 +54,6 @@ export default function Home() {
   const [timeOutWaitToSearch, setTimeoutWaitToSearch] = useState<any>(null);
 
   const [professions, setProfessions] = useState<string[]>([]);
-  const [minimumDistanceSelected, setMinimumDistanceSelected] = useState("");
 
   const [visibleWorkerInfoModal, setVisibleWorkerInfoModal] = useState(false);
   const hideWorkerInfoModal = () => setVisibleWorkerInfoModal(false);
@@ -85,13 +79,11 @@ export default function Home() {
   }, [filters]);
 
   useEffect(() => {
-    let numberMinimumDistanceSelected = Number(minimumDistanceSelected);
-
     setFilters({
-      minimumDistanceInKm: numberMinimumDistanceSelected,
+      minimumDistanceInKm: distanceRange,
       professionName: filters.professionName,
     });
-  }, [minimumDistanceSelected]);
+  }, [distanceRange]);
 
   const getWorkersForClient = () => {
     resetWorkers();
@@ -203,31 +195,6 @@ export default function Home() {
         }}
       />
       <View style={styles.searchOptionsContainer}>
-        <View style={styles.searchOptionsDistanceSelection}>
-          <Text>Choose maximum distance to worker</Text>
-          <SegmentedButtons
-            value={minimumDistanceSelected}
-            onValueChange={setMinimumDistanceSelected}
-            buttons={[
-              {
-                value: "10",
-                label: "10Km",
-              },
-              {
-                value: "25",
-                label: "25Km",
-              },
-              {
-                value: "50",
-                label: "50Km",
-              },
-              {
-                value: "100",
-                label: "100Km",
-              },
-            ]}
-          />
-        </View>
         <View style={{ gap: 5 }}>
           <Text>Choose the profession you want</Text>
           <SelectDropdown
@@ -244,6 +211,19 @@ export default function Home() {
               });
             }}
           />
+        </View>
+        <View style={styles.searchOptionsDistanceSelection}>
+          <Text>Choose maximum distance to worker</Text>
+          <Slider
+            style={{ width: "85%", height: 20 }}
+            minimumValue={1}
+            maximumValue={50}
+            minimumTrackTintColor={colors.primaryBlue}
+            thumbTintColor={colors.primaryBlue}
+            value={distanceRange}
+            onSlidingComplete={(value) => setDistanceRange(Math.trunc(value))}
+          ></Slider>
+          <Text>{distanceRange} Kilometers Away</Text>
         </View>
       </View>
       {workers.length > 0 ? (
@@ -307,8 +287,8 @@ export default function Home() {
                   title: "LIKE",
                   style: {
                     label: {
-                      backgroundColor: colors.blue,
-                      borderColor: colors.blue,
+                      backgroundColor: colors.primaryBlue,
+                      borderColor: colors.primaryBlue,
                       color: colors.white,
                       borderWidth: 1,
                       fontSize: 24,
@@ -360,12 +340,11 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "space-evenly",
     alignItems: "center",
-    gap: 10,
+    gap: 15,
   },
   searchOptionsDistanceSelection: {
     width: "90%",
     alignItems: "center",
-    gap: 10,
   },
   searchResultContainer: {
     height: "80%",

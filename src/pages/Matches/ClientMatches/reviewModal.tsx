@@ -43,10 +43,10 @@ export default function ReviewModal(props: any) {
     <Modal style={styles.container} isVisible={visible}>
       <View style={styles.inputContainer}>
         <Button
-          style={{ position: "absolute", top: 0, left: 0 }}
+          style={{ position: "absolute", top: 0, left: -10 }}
           onPress={() => props.onClose()}
         >
-          <Text>X</Text>
+          <Text style={{ fontWeight: "700" }}>X</Text>
         </Button>
         <View style={styles.topContainer}>
           <Text

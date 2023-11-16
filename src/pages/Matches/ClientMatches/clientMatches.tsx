@@ -121,12 +121,12 @@ const styles = StyleSheet.create({
   textContainer: {
     width: "100%",
     marginTop: 20,
-    padding: 5,
+    padding: 15,
   },
   matchesContainer: {
     width: "100%",
     height: "85%",
-    marginTop: 15,
+    marginTop: 5,
     padding: 10,
     alignItems: "center",
   },

@@ -70,7 +70,7 @@ export default function ClientInfo(props: any) {
             props.onReject(clientInfo);
           }}
         >
-          <Text style={{ color: "red" }}>✘</Text>
+          <Text style={{ color: colors.red }}>✘</Text>
         </Button>
         <Button
           style={{
@@ -83,7 +83,7 @@ export default function ClientInfo(props: any) {
             props.onMatch(clientInfo);
           }}
         >
-          ✔
+          <Text style={{ color: colors.primaryBlue }}>✔</Text>
         </Button>
       </View>
     </View>
@@ -129,7 +129,8 @@ const styles = StyleSheet.create({
     height: 120,
     borderRadius: 100,
     borderWidth: 4,
-    borderColor: colors.secondary,
+    borderColor: colors.black,
+    backgroundColor: colors.primaryBlue,
   },
   descriptionContainer: {
     height: "70%",

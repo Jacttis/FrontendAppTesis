@@ -109,8 +109,7 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     borderRadius: 100,
-    borderWidth: 0.5,
-    borderColor: "blue",
+    backgroundColor: colors.primaryBlue,
   },
   infoContainer: {
     width: "100%",

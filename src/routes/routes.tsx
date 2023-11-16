@@ -15,6 +15,7 @@ import { Button } from "react-native";
 import { useNavigation, StackActions } from "@react-navigation/native";
 import RegisterWorker from "../pages/Login/Worker/registerWorker";
 import ClientChat from "../pages/Matches/ClientMatches/clientChat";
+import { colors } from "../assets/colors";
 
 export type RootStackParamList = {
   chat: { info: client | worker };
@@ -112,7 +113,7 @@ export const AuthClientStack = () => {
 
           headerTitleAlign: "center",
           headerShadowVisible: false,
-          headerTintColor: "#6200ee",
+          headerTintColor: colors.primaryBlue,
           headerTitleStyle: {
             fontWeight: "bold",
           },
@@ -145,7 +146,7 @@ export const AuthWorkerStack = () => {
 
           headerTitleAlign: "center",
           headerShadowVisible: false,
-          headerTintColor: "#6200ee",
+          headerTintColor: colors.primaryBlue,
           headerTitleStyle: {
             fontWeight: "bold",
           },

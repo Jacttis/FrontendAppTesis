@@ -2,6 +2,7 @@ import react, { useEffect, useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { Image } from "react-native-animatable";
 import { Button } from "react-native-paper";
+import { colors } from "../../../assets/colors";
 
 export default function WorkerCard(props: any) {
   const { workerInfo } = props;
@@ -39,7 +40,7 @@ export default function WorkerCard(props: any) {
               props.onRefused();
             }}
           >
-            ✘
+            <Text style={{ color: colors.red }}>✘</Text>
           </Button>
 
           <Button
@@ -48,7 +49,7 @@ export default function WorkerCard(props: any) {
               props.onShowInfo();
             }}
           >
-            ⓘ
+            <Text style={{ color: colors.primaryBlue }}>ⓘ</Text>
           </Button>
           <Button
             style={styles.button}
@@ -56,7 +57,7 @@ export default function WorkerCard(props: any) {
               props.onAccepted();
             }}
           >
-            ✔
+            <Text style={{ color: colors.primaryBlue }}>✔</Text>
           </Button>
         </View>
       </View>

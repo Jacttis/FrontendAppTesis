@@ -40,7 +40,7 @@ export default function WorkerChat() {
                 {clientInfo?.picture === null ? (
                   <Avatar.Text
                     style={styles.avatar}
-                    labelStyle={{ bottom: 10, fontSize: 20 }}
+                    labelStyle={{ bottom: 11, fontSize: 22 }}
                     label={clientInfo?.name.charAt(0)}
                   ></Avatar.Text>
                 ) : (
@@ -139,8 +139,7 @@ const styles = StyleSheet.create({
     width: 45,
     height: 45,
     borderRadius: 100,
-    borderWidth: 0.5,
-    borderColor: "blue",
+    backgroundColor: colors.primaryBlue,
   },
   infoContainer: {
     width: "80%",
