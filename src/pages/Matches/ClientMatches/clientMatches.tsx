@@ -14,9 +14,11 @@ import {
 } from "../../../connection/requests";
 import { AuthContext } from "../../../context/AuthContext";
 import { useCallback } from "react";
+import { Image } from "react-native-animatable";
+import { ActivityIndicator } from "react-native-paper";
 
 interface matchInfo {
-  createdAt: string;
+  createdAt: Date;
   clientProblemDescription: string;
 }
 export interface workerInfo {
@@ -36,6 +38,8 @@ export default function ClientMatches() {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
+  const [isSearching, setIsSearching] = useState(false);
+
   const onRemoveWorker = useCallback((clientEmail: string) => {
     setWorkersMatched((currentClients) => {
       return currentClients.filter((client) => client.email !== clientEmail);
@@ -47,11 +51,16 @@ export default function ClientMatches() {
   }, []);
 
   const obtainWorkersMatched = () => {
+    setIsSearching(true);
     getMatchedWorkers(userToken)
       .then((response) => {
         setWorkersMatched(response.data);
+        setIsSearching(false);
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        console.log(error);
+        setIsSearching(false);
+      });
   };
 
   const cancelMatch = (worker: workerInfo) => {
@@ -80,8 +89,23 @@ export default function ClientMatches() {
             }
             onCancelMatch={(worker: workerInfo) => cancelMatch(worker)}
           />
+        ) : isSearching ? (
+          <View
+            style={{
+              height: "50%",
+              width: "80%",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <ActivityIndicator size={"large"} animating={true} />
+            <Text>Searching matches...</Text>
+          </View>
         ) : (
-          <Text>You have no matches...</Text>
+          <Image
+            style={styles.noResultImage}
+            source={require("../../../assets/noresult3.png")}
+          ></Image>
         )}
       </View>
     </View>
@@ -97,13 +121,19 @@ const styles = StyleSheet.create({
   textContainer: {
     width: "100%",
     marginTop: 20,
-    padding: 5,
+    padding: 15,
   },
   matchesContainer: {
     width: "100%",
     height: "85%",
-    marginTop: 15,
+    marginTop: 5,
     padding: 10,
     alignItems: "center",
+  },
+  noResultImage: {
+    width: "60%",
+    height: "60%",
+    resizeMode: "cover",
+    marginTop: 40,
   },
 });

@@ -2,6 +2,7 @@ import react, { useEffect, useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { Image } from "react-native-animatable";
 import { Button } from "react-native-paper";
+import { colors } from "../../../assets/colors";
 
 export default function WorkerCard(props: any) {
   const { workerInfo } = props;
@@ -9,12 +10,19 @@ export default function WorkerCard(props: any) {
   return (
     <View style={styles.container}>
       <View style={styles.imageContainer}>
-        <Image
-          style={styles.image}
-          source={{
-            uri: "https://images.unsplash.com/photo-1614213951697-a45781262acf?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8d29ya2VyfGVufDB8fDB8fHww&w=1000&q=80",
-          }}
-        />
+        {workerInfo?.picture === null ? (
+          <Image
+            style={styles.image}
+            source={require("../../../assets/defaultuser.jpg")}
+          />
+        ) : (
+          <Image
+            style={styles.image}
+            source={{
+              uri: workerInfo?.picture,
+            }}
+          />
+        )}
       </View>
       <View style={styles.bodyContainer}>
         <View style={styles.titlesContainer}>
@@ -32,7 +40,7 @@ export default function WorkerCard(props: any) {
               props.onRefused();
             }}
           >
-            ✘
+            <Text style={{ color: colors.red }}>✘</Text>
           </Button>
 
           <Button
@@ -41,7 +49,7 @@ export default function WorkerCard(props: any) {
               props.onShowInfo();
             }}
           >
-            ⓘ
+            <Text style={{ color: colors.primaryBlue }}>ⓘ</Text>
           </Button>
           <Button
             style={styles.button}
@@ -49,7 +57,7 @@ export default function WorkerCard(props: any) {
               props.onAccepted();
             }}
           >
-            ✔
+            <Text style={{ color: colors.primaryBlue }}>✔</Text>
           </Button>
         </View>
       </View>

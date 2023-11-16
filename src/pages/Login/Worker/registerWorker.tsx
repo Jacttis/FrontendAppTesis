@@ -8,32 +8,41 @@ import {
   TouchableOpacity,
   FlatList,
   TouchableHighlight,
-  Modal, Alert
+  Modal,
+  Alert,
 } from "react-native";
 import * as Animatable from "react-native-animatable";
 import { StackActions, useNavigation } from "@react-navigation/native";
-import { fetchAddressSuggestions, AddressSuggestion, getLocation } from "../../../services/GeoLocationService";
+import {
+  fetchAddressSuggestions,
+  AddressSuggestion,
+  getLocation,
+} from "../../../services/GeoLocationService";
 import { registerWorker } from "../../../connection/requests";
 import { AuthContext } from "../../../context/AuthContext";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { colors } from "../../../assets/colors";
-import {FreelancerProfession} from "./professions";
-import { Picker } from '@react-native-picker/picker';
+import { FreelancerProfession } from "./professions";
+import { Picker } from "@react-native-picker/picker";
 
 export default function RegisterWorker() {
   const navigation = useNavigation();
   const [showPassword, setShowPassword] = useState(false);
-  const [addressSuggestions, setAddressSuggestions] = useState<AddressSuggestion[]>([]);
+  const [addressSuggestions, setAddressSuggestions] = useState<
+    AddressSuggestion[]
+  >([]);
   const [address, setAddress] = useState<string>("");
   const { signIn, setIsLoading } = useContext(AuthContext);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [show, setShow] = useState(false);
-  const [selectedProfession, setSelectedProfession] = useState<FreelancerProfession>(FreelancerProfession.Unselected);
-  const [emailError, setEmailError] = useState('');
+  const [selectedProfession, setSelectedProfession] =
+    useState<FreelancerProfession>(FreelancerProfession.Unselected);
+  const [emailError, setEmailError] = useState("");
   const showDatepicker = () => {
     setShow(true);
   };
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
 
   useEffect(() => {
     setIsLoading(true);
@@ -44,33 +53,38 @@ export default function RegisterWorker() {
           ...prevWorker,
           address: location.display_name,
           latitude: location.lat,
-          longitude: location.lon
+          longitude: location.lon,
         }));
       }
-
     });
     setIsLoading(false);
   }, []);
 
   const checkWorkerIsFullySetted = () => {
-    return worker.address != "" && worker.name != "" && worker.email != "" && worker.password != ""
-            && worker.phoneNumber != "" && worker.profession != FreelancerProfession.Unselected ;
-  }
-
+    return (
+      worker.address != "" &&
+      worker.name != "" &&
+      worker.email != "" &&
+      worker.password != "" &&
+      worker.phoneNumber != "" &&
+      worker.profession != FreelancerProfession.Unselected
+    );
+  };
 
   const makeRegisterWorker = () => {
     setIsLoading(true);
-    if(checkWorkerIsFullySetted()) {
-      registerWorker(worker).then((response) => {
-        const { accessToken, refreshToken, role } = response.data;
-        signIn(accessToken, refreshToken, role,worker.email);
-        //navigation.dispatch(StackActions.replace('bottomTabs'));
-      }).catch((error) => {
-        console.log(error);
-      });
-    }
-    else {
-      return (Alert.alert("Please complete every field"))
+    if (checkWorkerIsFullySetted()) {
+      registerWorker(worker)
+        .then((response) => {
+          const { accessToken, refreshToken, role } = response.data;
+          signIn(accessToken, refreshToken, role, worker.email);
+          //navigation.dispatch(StackActions.replace('bottomTabs'));
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } else {
+      return Alert.alert("Please complete every field");
     }
 
     setIsLoading(false);
@@ -84,11 +98,9 @@ export default function RegisterWorker() {
     longitude: string;
     password: string;
     phoneNumber: string;
-    birthDate: Date;
-    profession :string;
+    birthDate: string;
+    profession: string;
   };
-
-
 
   const [worker, setWorker] = useState<WorkerProps>({
     email: "",
@@ -98,12 +110,13 @@ export default function RegisterWorker() {
     address: "",
     password: "",
     phoneNumber: "",
-    birthDate: new Date(),
-    profession:"",
+    birthDate: "",
+    profession: "",
   });
 
-
-  const [debounceTimer, setDebounceTimer] = useState<NodeJS.Timeout | null>(null);
+  const [debounceTimer, setDebounceTimer] = useState<NodeJS.Timeout | null>(
+    null
+  );
 
   const handleAddressChange = (address: string) => {
     setAddress(address);
@@ -121,21 +134,24 @@ export default function RegisterWorker() {
   };
 
   const validateEmail = (email: string) => {
-    const regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    const regex =
+      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     if (regex.test(email.toLowerCase())) {
-      setEmailError('');
+      setEmailError("");
       return true;
     } else {
-      setEmailError('Please enter a valid email address.');
+      setEmailError("Please enter a valid email address.");
       return false;
     }
   };
 
-
   return (
     <SafeAreaView style={styles.viewMain}>
-
-      <Animatable.View animation="fadeInLeft" delay={500} style={styles.viewHeader}>
+      <Animatable.View
+        animation="fadeInLeft"
+        delay={500}
+        style={styles.viewHeader}
+      >
         <Text style={styles.message}>Register</Text>
       </Animatable.View>
 
@@ -177,11 +193,19 @@ export default function RegisterWorker() {
             secureTextEntry={!showPassword}
           />
           <TouchableOpacity
-            onPress={() => setShowPassword(prevShow => !prevShow)}
-            style={{ position: "absolute", right: 10, height: "100%", justifyContent: "center" }}
-
+            onPress={() => setShowPassword((prevShow) => !prevShow)}
+            style={{
+              position: "absolute",
+              right: 10,
+              height: "100%",
+              justifyContent: "center",
+            }}
           >
-            <FontAwesome name={showPassword ? "eye-slash" : "eye"} size={20} color="#000" />
+            <FontAwesome
+              name={showPassword ? "eye-slash" : "eye"}
+              size={20}
+              color="#000"
+            />
           </TouchableOpacity>
         </View>
 
@@ -197,19 +221,26 @@ export default function RegisterWorker() {
           style={styles.input}
         />
         <Text style={styles.title}>Birth Date</Text>
-        <TouchableOpacity
-          onPress={showDatepicker}
-        >
-          <Text style={styles.textBirthDate}>{worker.birthDate.toLocaleDateString()}</Text>
+        <TouchableOpacity onPress={showDatepicker}>
+          <Text style={styles.textBirthDate}>
+            {selectedDate.toLocaleDateString()}
+          </Text>
         </TouchableOpacity>
 
-        {show && (<DateTimePicker
-            value={worker.birthDate}
+        {show && (
+          <DateTimePicker
+            value={selectedDate}
             mode="date"
             display="default"
             onChange={(event, selectedDate) => {
               if (selectedDate != undefined) {
-                setWorker({ ...worker, birthDate: selectedDate });
+                const year = selectedDate.getFullYear();
+                const month = selectedDate.getMonth() + 1;
+                const day = selectedDate.getDate();
+
+                const dateString = `${year}-${month}-${day}`;
+                setSelectedDate(selectedDate);
+                setWorker({ ...worker, birthDate: dateString });
                 setShow(false);
               }
             }}
@@ -223,7 +254,9 @@ export default function RegisterWorker() {
             style={styles.addressContainer}
           >
             <FontAwesome name="map-marker" size={20} color="#000" />
-            <Text style={styles.addressText}>{worker.address ?? "Enter an address"}</Text>
+            <Text style={styles.addressText}>
+              {worker.address ?? "Enter an address"}
+            </Text>
           </TouchableOpacity>
 
           <Modal
@@ -235,7 +268,10 @@ export default function RegisterWorker() {
             <View style={styles.modalView}>
               <View style={styles.modalHeader}>
                 <Text style={styles.modalTitle}>Select Your Address</Text>
-                <TouchableOpacity style={styles.closeButton} onPress={() => setIsModalVisible(false)}>
+                <TouchableOpacity
+                  style={styles.closeButton}
+                  onPress={() => setIsModalVisible(false)}
+                >
                   <FontAwesome name="close" size={24} color="#000" />
                 </TouchableOpacity>
               </View>
@@ -258,7 +294,7 @@ export default function RegisterWorker() {
                         ...prevWorker,
                         address: item.display_name,
                         latitude: item.lat,
-                        longitude: item.lon
+                        longitude: item.lon,
                       }));
                       setAddress(item.display_name);
                       setIsModalVisible(false);
@@ -274,11 +310,11 @@ export default function RegisterWorker() {
           <Text style={styles.title}>Profession</Text>
           <Picker
             selectedValue={selectedProfession}
-            onValueChange={(itemValue, itemIndex) =>{
+            onValueChange={(itemValue, itemIndex) => {
               setSelectedProfession(itemValue);
-              setWorker({ ...worker, profession: itemValue});
-            }
-            }>
+              setWorker({ ...worker, profession: itemValue });
+            }}
+          >
             {Object.values(FreelancerProfession).map((profession, index) => (
               <Picker.Item key={index} label={profession} value={profession} />
             ))}
@@ -289,14 +325,11 @@ export default function RegisterWorker() {
           style={styles.buttonRegister}
           onPress={() => {
             makeRegisterWorker();
-
-          }
-          }>
+          }}
+        >
           <Text style={styles.buttonText}>Register</Text>
         </TouchableOpacity>
-
       </Animatable.View>
-
     </SafeAreaView>
   );
 }
@@ -304,7 +337,7 @@ export default function RegisterWorker() {
 const styles = StyleSheet.create({
   viewMain: {
     flex: 1,
-    backgroundColor: colors.primary
+    backgroundColor: colors.primary,
   },
   viewPassword: {
     borderRadius: 8,
@@ -315,19 +348,19 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     paddingRight: 30, // espacio para el ícono
-    marginBottom: 12
+    marginBottom: 12,
   },
   viewHeader: {
     marginTop: "7%",
     marginBottom: "8%",
-    marginStart: "5%"
+    marginStart: "5%",
   },
   title: {
     fontSize: 18,
     color: "#212529",
     marginBottom: 8,
     fontFamily: "Roboto",
-    fontWeight: "500"
+    fontWeight: "500",
   },
   viewForm: {
     backgroundColor: "#ffffff",
@@ -335,13 +368,13 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     paddingTop: 11,
-    paddingHorizontal: 20
+    paddingHorizontal: 20,
   },
   message: {
     color: "#FFF",
     fontSize: 28,
     fontWeight: "bold",
-    fontFamily: "Roboto"
+    fontFamily: "Roboto",
   },
   input: {
     paddingTop: 10,
@@ -353,14 +386,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     fontSize: 16,
     backgroundColor: "#f8f9fa",
-    color: "#495057"
+    color: "#495057",
   },
   inputPassword: {
     fontSize: 16,
     backgroundColor: "#f8f9fa",
     color: "#495057",
     paddingHorizontal: 10,
-    flex: 1
+    flex: 1,
   },
   buttonLogIn: {
     backgroundColor: "#215a6d",
@@ -369,14 +402,13 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     marginTop: 14,
     justifyContent: "center",
-    alignItems: "center"
-
+    alignItems: "center",
   },
   buttonText: {
     color: "#ffffff",
     fontSize: 18,
     fontFamily: "Roboto",
-    fontWeight: "500"
+    fontWeight: "500",
   },
   buttonRegister: {
     backgroundColor: colors.primary,
@@ -389,7 +421,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
     shadowColor: "#000",
-    shadowOffset: { height: 0, width: 0 }
+    shadowOffset: { height: 0, width: 0 },
   },
   item: {
     backgroundColor: "white",
@@ -401,11 +433,11 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
     shadowRadius: 1,
-    elevation: 3 // para Android
+    elevation: 3, // para Android
   },
   itemText: {
     fontSize: 16,
-    color: "#333" // Considera un color que se ajuste a tu tema
+    color: "#333", // Considera un color que se ajuste a tu tema
   },
   addressContainer: {
     borderRadius: 8,
@@ -416,17 +448,17 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     paddingLeft: 15, // espacio para el ícono
-    marginBottom: 12
+    marginBottom: 12,
   },
   addressText: {
     marginLeft: 10,
     backgroundColor: "#f8f9fa",
     fontFamily: "Roboto",
-    color: '#333'
+    color: "#333",
   },
   modalView: {
     marginTop: 20,
-    marginHorizontal:5,
+    marginHorizontal: 5,
     backgroundColor: "#fff",
     borderRadius: 10,
     padding: 20,
@@ -435,7 +467,7 @@ const styles = StyleSheet.create({
     // Estas sombras son más pronunciadas para una mayor profundidad
     shadowOffset: {
       width: 0,
-      height: 6
+      height: 6,
     },
     shadowOpacity: 0.37,
     shadowRadius: 7.49,
@@ -443,13 +475,13 @@ const styles = StyleSheet.create({
     // Un borde ligero puede ayudar a que el modal destaque más
     borderWidth: 1,
     borderColor: "#ddd", // Un color gris claro para el borde
-    height:400
+    height: 400,
   },
   modalHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    width: "100%"
+    width: "100%",
   },
   modalTitle: {
     fontSize: 20,
@@ -460,12 +492,12 @@ const styles = StyleSheet.create({
     borderColor: "#ddd", // Borde sutil para el campo de texto
     padding: 10,
     borderRadius: 5,
-    width: '100%', // Asegurarse de que ocupa el ancho completo dentro del modal
+    width: "100%", // Asegurarse de que ocupa el ancho completo dentro del modal
     marginTop: 8, // Espacio después del título
-    backgroundColor: "#f8f9fa"
+    backgroundColor: "#f8f9fa",
   },
   closeButton: {
-    position: 'absolute', // Posicionar absolutamente para que esté en la esquina superior derecha
+    position: "absolute", // Posicionar absolutamente para que esté en la esquina superior derecha
     top: 10,
     right: 10,
   },
@@ -479,12 +511,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     fontSize: 16,
     backgroundColor: "#f8f9fa",
-    color: '#333'
+    color: "#333",
   },
   errorText: {
     fontSize: 12,
-    color: 'red',
+    color: "red",
     marginTop: 5,
-  }
+  },
 });
-

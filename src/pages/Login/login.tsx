@@ -7,13 +7,14 @@ import {
   TouchableOpacity,
   Alert,
   ActivityIndicator,
-  View
+  View,
 } from "react-native";
 import * as Animatable from "react-native-animatable";
 import { StackActions, useNavigation } from "@react-navigation/native";
 import { AuthContext } from "../../context/AuthContext";
 import { loginClient, loginWorker } from "../../connection/requests";
-import { Modal } from 'react-native';
+import { Modal } from "react-native";
+import { colors } from "../../assets/colors";
 
 const Login: React.FC = () => {
   const { isLoading, signIn, setIsLoading } = useContext(AuthContext);
@@ -26,7 +27,7 @@ const Login: React.FC = () => {
 
   const [user, setUser] = useState<UserProps>({
     email: "",
-    password: ""
+    password: "",
   });
 
   const [isModalVisible, setModalVisible] = useState(false);
@@ -37,22 +38,20 @@ const Login: React.FC = () => {
     setIsLoading(true);
     try {
       let response;
-      if(rol == "client"){
+      if (rol == "client") {
         response = await loginClient(user);
-      }
-      else{
+      } else {
         response = await loginWorker(user);
       }
 
       const { accessToken, refreshToken, role } = response.data;
-      signIn(accessToken, refreshToken, role,user.email);
+      signIn(accessToken, refreshToken, role, user.email);
     } catch (error) {
       console.error(error);
       Alert.alert("Error", "Email or password invalid, try again");
     }
     setIsLoading(false);
   };
-
 
   return (
     <SafeAreaView style={styles.container}>
@@ -79,16 +78,30 @@ const Login: React.FC = () => {
         <View style={styles.radioContainer}>
           <TouchableOpacity
             style={styles.radioButton}
-            onPress={() => setRole('client')}>
+            onPress={() => setRole("client")}
+          >
             <Text style={styles.radioText}>Client</Text>
-            <View style={rol === 'client' ? styles.radioCircleSelected : styles.radioCircle} />
+            <View
+              style={
+                rol === "client"
+                  ? styles.radioCircleSelected
+                  : styles.radioCircle
+              }
+            />
           </TouchableOpacity>
 
           <TouchableOpacity
             style={styles.radioButton}
-            onPress={() => setRole('worker')}>
+            onPress={() => setRole("worker")}
+          >
             <Text style={styles.radioText}>Worker</Text>
-            <View style={rol === 'worker' ? styles.radioCircleSelected : styles.radioCircle} />
+            <View
+              style={
+                rol === "worker"
+                  ? styles.radioCircleSelected
+                  : styles.radioCircle
+              }
+            />
           </TouchableOpacity>
         </View>
         <TouchableOpacity style={styles.button} onPress={makeLogin}>
@@ -106,7 +119,9 @@ const Login: React.FC = () => {
           onRequestClose={() => setModalVisible(false)}
         >
           <View style={styles.fullScreenModal}>
-            <Text style={styles.modalQuestion}>Do you want to register as a client or as a worker?</Text>
+            <Text style={styles.modalQuestion}>
+              Do you want to register as a client or as a worker?
+            </Text>
             <TouchableOpacity
               style={styles.fullScreenButton}
               onPress={() => {
@@ -142,16 +157,16 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#215a6d",
     paddingHorizontal: 16,
-    paddingTop: 60
+    paddingTop: 60,
   },
   header: {
     flex: 1,
-    justifyContent: "center"
+    justifyContent: "center",
   },
   greeting: {
     fontSize: 28,
     fontWeight: "bold",
-    color: "#FFF"
+    color: "#FFF",
   },
   form: {
     flex: 2,
@@ -159,13 +174,13 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
     paddingHorizontal: 20,
-    paddingTop: 40
+    paddingTop: 40,
   },
   input: {
     borderBottomWidth: 1,
     marginBottom: 20,
     fontSize: 18,
-    color: "#333"
+    color: "#333",
   },
   button: {
     backgroundColor: "#215a6d",
@@ -173,25 +188,25 @@ const styles = StyleSheet.create({
     padding: 12,
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: 16
+    marginBottom: 16,
   },
   buttonSecondary: {
-    backgroundColor: "#3c7a8e"
+    backgroundColor: "#3c7a8e",
   },
   buttonText: {
     color: "#FFF",
     fontSize: 18,
-    fontWeight: "bold"
+    fontWeight: "bold",
   },
   radioContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-around',
-    width: '100%',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-around",
+    width: "100%",
   },
   radioButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     margin: 10,
   },
   radioText: {
@@ -202,27 +217,27 @@ const styles = StyleSheet.create({
     width: 20,
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: '#000',
-    alignItems: 'center',
-    justifyContent: 'center',
+    borderColor: "#000",
+    alignItems: "center",
+    justifyContent: "center",
   },
   radioCircleSelected: {
     height: 20,
     width: 20,
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: '#000',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#000',
+    borderColor: "#000",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#000",
   },
   modalView: {
     margin: 20,
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderRadius: 20,
     padding: 35,
-    alignItems: 'center',
-    shadowColor: '#000',
+    alignItems: "center",
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 2,
@@ -233,39 +248,39 @@ const styles = StyleSheet.create({
   },
   modalText: {
     marginBottom: 15,
-    textAlign: 'center',
+    textAlign: "center",
   },
   modalButton: {
-    backgroundColor: '#215a6d',
+    backgroundColor: "#215a6d",
     borderRadius: 20,
     padding: 10,
     elevation: 2,
     marginBottom: 10,
   },
   modalButtonText: {
-    color: 'white',
-    fontWeight: 'bold',
-    textAlign: 'center',
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
   },
   fullScreenModal: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#FFF', // Puedes cambiar el color de fondo si lo deseas
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#FFF", // Puedes cambiar el color de fondo si lo deseas
   },
   modalQuestion: {
     fontSize: 24,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 20,
-    textAlign: 'center',
+    textAlign: "center",
   },
   fullScreenButton: {
-    backgroundColor: '#215a6d',
+    backgroundColor: "#215a6d",
     borderRadius: 20,
     padding: 15,
-    width: '80%',
-    justifyContent: 'center',
-    alignItems: 'center',
+    width: "80%",
+    justifyContent: "center",
+    alignItems: "center",
     marginBottom: 10,
   },
 });

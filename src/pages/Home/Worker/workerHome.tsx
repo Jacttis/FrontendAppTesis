@@ -13,7 +13,7 @@ import client from "../../../connection/client";
 import ClientScroll from "./clientScroll";
 import { ALERT_TYPE, Dialog } from "react-native-alert-notification";
 import { colors } from "../../../assets/colors";
-import images from "../../../assets/images";
+import { Image } from "react-native-animatable";
 
 export interface client {
   email: string;
@@ -116,55 +116,59 @@ export default function WorkerHome() {
   };
 
   return (
-    <ImageBackground
-      source={images.background}
-      resizeMode="cover"
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        height: "100%",
-        width: "100%",
-      }}
-    >
-      <View style={styles.container}>
-        <View style={styles.topSection}>
-          <Text style={{ fontWeight: "700", color: "black" }}>
-            Clients who liked you
-          </Text>
-        </View>
-        <View style={styles.resultsContainer}>
-          {clients.length > 0 ? (
-            <ClientScroll
-              clients={clients}
-              clientSelected={clientSelected}
-              onClientSelected={(client: client) => setClientSelected(client)}
-            />
-          ) : searching ? (
-            <View>
-              <ActivityIndicator size={"large"} animating={true} />
-              <Text>Searching clients who liked you...</Text>
-            </View>
-          ) : (
-            <Text>Still no clients liked you...</Text>
-          )}
-        </View>
-        <View style={styles.clientInfoContainer}>
-          {clientSelected === undefined ? (
-            clients.length > 0 ? (
-              <Text>Touch a client to see his description!</Text>
-            ) : (
-              <Text> </Text>
-            )
-          ) : (
-            <ClientInfo
-              clientInfo={clientSelected}
-              onMatch={(client: client) => matchClient(client)}
-              onReject={(client: client) => rejectClient(client)}
-            />
-          )}
-        </View>
+    <View style={styles.container}>
+      <View style={styles.topSection}>
+        <Text style={{ fontWeight: "700", color: "black" }}>
+          Clients who liked you
+        </Text>
       </View>
-    </ImageBackground>
+
+      {clients.length > 0 ? (
+        <View style={styles.resultsContainer}>
+          <ClientScroll
+            clients={clients}
+            clientSelected={clientSelected}
+            onClientSelected={(client: client) => setClientSelected(client)}
+          />
+        </View>
+      ) : searching ? (
+        <View
+          style={{
+            height: "50%",
+            width: "80%",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <ActivityIndicator size={"large"} animating={true} />
+          <Text>Searching clients who liked you...</Text>
+        </View>
+      ) : (
+        <View style={styles.noResultContainer}>
+          <Image
+            style={styles.noResultImage}
+            source={require("../../../assets/noresultsearch.png")}
+          ></Image>
+          <Text>Still no clients liked you...</Text>
+        </View>
+      )}
+
+      <View style={styles.clientInfoContainer}>
+        {clientSelected === undefined ? (
+          clients.length > 0 ? (
+            <Text>Touch a client to see his description!</Text>
+          ) : (
+            <Text> </Text>
+          )
+        ) : (
+          <ClientInfo
+            clientInfo={clientSelected}
+            onMatch={(client: client) => matchClient(client)}
+            onReject={(client: client) => rejectClient(client)}
+          />
+        )}
+      </View>
+    </View>
   );
 }
 
@@ -199,5 +203,17 @@ const styles = StyleSheet.create({
     height: "100%",
     justifyContent: "space-evenly",
     alignItems: "center",
+  },
+  noResultContainer: {
+    height: "80%",
+    width: "90%",
+    justifyContent: "flex-start",
+    alignItems: "center",
+  },
+  noResultImage: {
+    width: "80%",
+    height: "50%",
+    resizeMode: "contain",
+    marginTop: 80,
   },
 });

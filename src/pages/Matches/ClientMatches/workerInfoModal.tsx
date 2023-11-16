@@ -10,6 +10,7 @@ import {
 } from "react-native-paper";
 import { getWorkerReviews } from "../../../connection/requests";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { defaultuser } from "../../../assets/images";
 import { colors } from "../../../assets/colors";
 
 interface review {
@@ -66,7 +67,7 @@ export default function WorkerInfoModal(props: any) {
             <Image
               style={styles.image}
               source={{
-                uri: workerInfo?.picture,
+                uri: workerInfo.picture,
               }}
             />
           )}
@@ -158,26 +159,10 @@ export default function WorkerInfoModal(props: any) {
         <Button
           mode="elevated"
           onPress={() => {
-            props.onRefused();
-          }}
-        >
-          <Text style={{ color: colors.red }}>✘</Text>
-        </Button>
-        <Button
-          mode="elevated"
-          onPress={() => {
             props.onClose();
           }}
         >
           <Text style={{ color: colors.primaryBlue }}>⤵</Text>
-        </Button>
-        <Button
-          mode="elevated"
-          onPress={() => {
-            props.onAccepted();
-          }}
-        >
-          <Text style={{ color: colors.primaryBlue }}>✔</Text>
         </Button>
       </View>
     </Modal>
@@ -253,14 +238,14 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   modalReviewItemImage: {
-    height: 30,
-    width: 30,
+    height: 35,
+    width: 35,
     borderRadius: 100,
     resizeMode: "cover",
   },
   modalReviewItemAvatar: {
-    height: 30,
-    width: 30,
+    height: 35,
+    width: 35,
     borderRadius: 100,
     backgroundColor: colors.primaryBlue,
   },

@@ -8,11 +8,16 @@ import {
   TouchableOpacity,
   FlatList,
   TouchableHighlight,
-  Modal, Alert
+  Modal,
+  Alert,
 } from "react-native";
 import * as Animatable from "react-native-animatable";
 import { StackActions, useNavigation } from "@react-navigation/native";
-import { fetchAddressSuggestions, AddressSuggestion, getLocation } from "../../../services/GeoLocationService";
+import {
+  fetchAddressSuggestions,
+  AddressSuggestion,
+  getLocation,
+} from "../../../services/GeoLocationService";
 import { registerClient } from "../../../connection/requests";
 import { AuthContext } from "../../../context/AuthContext";
 import DateTimePicker from "@react-native-community/datetimepicker";
@@ -22,7 +27,9 @@ import { colors } from "../../../assets/colors";
 export default function RegisterClient() {
   const navigation = useNavigation();
   const [showPassword, setShowPassword] = useState(false);
-  const [addressSuggestions, setAddressSuggestions] = useState<AddressSuggestion[]>([]);
+  const [addressSuggestions, setAddressSuggestions] = useState<
+    AddressSuggestion[]
+  >([]);
   const [address, setAddress] = useState<string>("");
   const { signIn, setIsLoading } = useContext(AuthContext);
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -31,6 +38,7 @@ export default function RegisterClient() {
   const showDatepicker = () => {
     setShow(true);
   };
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
 
   useEffect(() => {
     setIsLoading(true);
@@ -41,32 +49,37 @@ export default function RegisterClient() {
           ...prevClient,
           address: location.display_name,
           latitude: location.lat,
-          longitude: location.lon
+          longitude: location.lon,
         }));
       }
-
     });
     setIsLoading(false);
   }, []);
 
   const checkClientIsFullySetted = () => {
-    return client.address != "" && client.name != "" && client.email != "" && client.password != ""
-      && client.phoneNumber != "";
-  }
+    return (
+      client.address != "" &&
+      client.name != "" &&
+      client.email != "" &&
+      client.password != "" &&
+      client.phoneNumber != ""
+    );
+  };
 
   const makeRegisterClient = () => {
     setIsLoading(true);
-    if(checkClientIsFullySetted()) {
-      registerClient(client).then((response) => {
-        const { accessToken, refreshToken, role } = response.data;
-        signIn(accessToken, refreshToken, role,client.email);
-        //navigation.dispatch(StackActions.replace('bottomTabs'));
-      }).catch((error) => {
-        console.log(error);
-      });
-    }
-    else {
-      return (Alert.alert("Please complete every field"))
+    if (checkClientIsFullySetted()) {
+      registerClient(client)
+        .then((response) => {
+          const { accessToken, refreshToken, role } = response.data;
+          signIn(accessToken, refreshToken, role, client.email);
+          //navigation.dispatch(StackActions.replace('bottomTabs'));
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } else {
+      return Alert.alert("Please complete every field");
     }
     setIsLoading(false);
   };
@@ -79,8 +92,15 @@ export default function RegisterClient() {
     longitude: string;
     password: string;
     phoneNumber: string;
+    birthDate: string;
+  };
 
-    birthDate: Date;
+  const getDateString = (date: Date) => {
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+
+    return `${year}-${month}-${day}`;
   };
 
   const [client, setClient] = useState<ClientProps>({
@@ -91,10 +111,12 @@ export default function RegisterClient() {
     address: "",
     password: "",
     phoneNumber: "",
-    birthDate: new Date()
+    birthDate: getDateString(new Date()),
   });
 
-  const [debounceTimer, setDebounceTimer] = useState<NodeJS.Timeout | null>(null);
+  const [debounceTimer, setDebounceTimer] = useState<NodeJS.Timeout | null>(
+    null
+  );
 
   const handleAddressChange = (address: string) => {
     setAddress(address);
@@ -111,11 +133,13 @@ export default function RegisterClient() {
     setDebounceTimer(timer);
   };
 
-
   return (
     <SafeAreaView style={styles.viewMain}>
-
-      <Animatable.View animation="fadeInLeft" delay={500} style={styles.viewHeader}>
+      <Animatable.View
+        animation="fadeInLeft"
+        delay={500}
+        style={styles.viewHeader}
+      >
         <Text style={styles.message}>Register</Text>
       </Animatable.View>
 
@@ -155,11 +179,19 @@ export default function RegisterClient() {
             secureTextEntry={!showPassword}
           />
           <TouchableOpacity
-            onPress={() => setShowPassword(prevShow => !prevShow)}
-            style={{ position: "absolute", right: 10, height: "100%", justifyContent: "center" }}
-
+            onPress={() => setShowPassword((prevShow) => !prevShow)}
+            style={{
+              position: "absolute",
+              right: 10,
+              height: "100%",
+              justifyContent: "center",
+            }}
           >
-            <FontAwesome name={showPassword ? "eye-slash" : "eye"} size={20} color="#000" />
+            <FontAwesome
+              name={showPassword ? "eye-slash" : "eye"}
+              size={20}
+              color="#000"
+            />
           </TouchableOpacity>
         </View>
 
@@ -175,19 +207,24 @@ export default function RegisterClient() {
           style={styles.input}
         />
         <Text style={styles.title}>Birth Date</Text>
-        <TouchableOpacity
-          onPress={showDatepicker}
-        >
-          <Text style={styles.textBirthDate}>{client.birthDate.toLocaleDateString()}</Text>
+        <TouchableOpacity onPress={showDatepicker}>
+          <Text style={styles.textBirthDate}>
+            {selectedDate.toLocaleDateString()}
+          </Text>
         </TouchableOpacity>
 
-        {show && (<DateTimePicker
-            value={client.birthDate}
+        {show && (
+          <DateTimePicker
+            value={selectedDate}
             mode="date"
             display="default"
             onChange={(event, selectedDate) => {
               if (selectedDate != undefined) {
-                setClient({ ...client, birthDate: selectedDate });
+                setSelectedDate(selectedDate);
+                setClient({
+                  ...client,
+                  birthDate: getDateString(selectedDate),
+                });
                 setShow(false);
               }
             }}
@@ -201,7 +238,9 @@ export default function RegisterClient() {
             style={styles.addressContainer}
           >
             <FontAwesome name="map-marker" size={20} color="#000" />
-            <Text style={styles.addressText}>{client.address ?? "Enter an address"}</Text>
+            <Text style={styles.addressText}>
+              {client.address ?? "Enter an address"}
+            </Text>
           </TouchableOpacity>
 
           <Modal
@@ -213,7 +252,10 @@ export default function RegisterClient() {
             <View style={styles.modalView}>
               <View style={styles.modalHeader}>
                 <Text style={styles.modalTitle}>Select Your Address</Text>
-                <TouchableOpacity style={styles.closeButton} onPress={() => setIsModalVisible(false)}>
+                <TouchableOpacity
+                  style={styles.closeButton}
+                  onPress={() => setIsModalVisible(false)}
+                >
                   <FontAwesome name="close" size={24} color="#000" />
                 </TouchableOpacity>
               </View>
@@ -236,7 +278,7 @@ export default function RegisterClient() {
                         ...prevClient,
                         address: item.display_name,
                         latitude: item.lat,
-                        longitude: item.lon
+                        longitude: item.lon,
                       }));
                       setAddress(item.display_name);
                       setIsModalVisible(false);
@@ -255,14 +297,11 @@ export default function RegisterClient() {
           style={styles.buttonRegister}
           onPress={() => {
             makeRegisterClient();
-
-          }
-          }>
+          }}
+        >
           <Text style={styles.buttonText}>Register</Text>
         </TouchableOpacity>
-
       </Animatable.View>
-
     </SafeAreaView>
   );
 }
@@ -270,7 +309,7 @@ export default function RegisterClient() {
 const styles = StyleSheet.create({
   viewMain: {
     flex: 1,
-    backgroundColor: colors.primary
+    backgroundColor: colors.primary,
   },
   viewPassword: {
     borderRadius: 8,
@@ -281,19 +320,19 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     paddingRight: 30, // espacio para el ícono
-    marginBottom: 12
+    marginBottom: 12,
   },
   viewHeader: {
     marginTop: "14%",
     marginBottom: "8%",
-    marginStart: "5%"
+    marginStart: "5%",
   },
   title: {
     fontSize: 18,
     color: "#212529",
     marginBottom: 8,
     fontFamily: "Roboto",
-    fontWeight: "500"
+    fontWeight: "500",
   },
   viewForm: {
     backgroundColor: "#ffffff",
@@ -301,13 +340,13 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     paddingTop: 24,
-    paddingHorizontal: 20
+    paddingHorizontal: 20,
   },
   message: {
     color: "#FFF",
     fontSize: 28,
     fontWeight: "bold",
-    fontFamily: "Roboto"
+    fontFamily: "Roboto",
   },
   input: {
     paddingTop: 10,
@@ -319,14 +358,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     fontSize: 16,
     backgroundColor: "#f8f9fa",
-    color: "#495057"
+    color: "#495057",
   },
   inputPassword: {
     fontSize: 16,
     backgroundColor: "#f8f9fa",
     color: "#495057",
     paddingHorizontal: 10,
-    flex: 1
+    flex: 1,
   },
   buttonLogIn: {
     backgroundColor: "#215a6d",
@@ -335,14 +374,13 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     marginTop: 14,
     justifyContent: "center",
-    alignItems: "center"
-
+    alignItems: "center",
   },
   buttonText: {
     color: "#ffffff",
     fontSize: 18,
     fontFamily: "Roboto",
-    fontWeight: "500"
+    fontWeight: "500",
   },
   buttonRegister: {
     backgroundColor: colors.primary,
@@ -355,7 +393,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
     shadowColor: "#000",
-    shadowOffset: { height: 0, width: 0 }
+    shadowOffset: { height: 0, width: 0 },
   },
   item: {
     backgroundColor: "white",
@@ -367,11 +405,11 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
     shadowRadius: 1,
-    elevation: 3 // para Android
+    elevation: 3, // para Android
   },
   itemText: {
     fontSize: 16,
-    color: "#333" // Considera un color que se ajuste a tu tema
+    color: "#333", // Considera un color que se ajuste a tu tema
   },
   addressContainer: {
     borderRadius: 8,
@@ -382,13 +420,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     paddingLeft: 15, // espacio para el ícono
-    marginBottom: 12
+    marginBottom: 12,
   },
   addressText: {
     marginLeft: 10,
     backgroundColor: "#f8f9fa",
     fontFamily: "Roboto",
-    color: '#333'
+    color: "#333",
   },
   modalView: {
     marginTop: 50,
@@ -399,17 +437,17 @@ const styles = StyleSheet.create({
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 4
+      height: 4,
     },
-    shadowOpacity: 0.30,
+    shadowOpacity: 0.3,
     shadowRadius: 4.65,
-    elevation: 8
+    elevation: 8,
   },
   modalHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    width: "100%"
+    width: "100%",
   },
   modalTitle: {
     fontSize: 20,
@@ -420,11 +458,11 @@ const styles = StyleSheet.create({
     borderColor: "#ddd", // Borde sutil para el campo de texto
     padding: 10,
     borderRadius: 5,
-    width: '100%', // Asegurarse de que ocupa el ancho completo dentro del modal
+    width: "100%", // Asegurarse de que ocupa el ancho completo dentro del modal
     marginTop: 8, // Espacio después del título
   },
   closeButton: {
-    position: 'absolute', // Posicionar absolutamente para que esté en la esquina superior derecha
+    position: "absolute", // Posicionar absolutamente para que esté en la esquina superior derecha
     top: 10,
     right: 10,
   },
@@ -438,7 +476,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     fontSize: 16,
     backgroundColor: "#f8f9fa",
-    color: '#333'
-  }
+    color: "#333",
+  },
 });
-

@@ -29,7 +29,7 @@ export default function ClientCard(props: any) {
       >
         <View style={{ height: "10%", width: "100%" }}></View>
         <View style={styles.imageContainer}>
-          {clientInfo?.picture === "" ? (
+          {clientInfo?.picture === null ? (
             <Avatar.Text
               style={styles.avatar}
               labelStyle={{ bottom: 4 }}
@@ -39,7 +39,7 @@ export default function ClientCard(props: any) {
             <Image
               style={styles.image}
               source={{
-                uri: "https://images.unsplash.com/photo-1614213951697-a45781262acf?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8d29ya2VyfGVufDB8fDB8fHww&w=1000&q=80",
+                uri: clientInfo?.picture,
               }}
             />
           )}
@@ -109,8 +109,7 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     borderRadius: 100,
-    borderWidth: 0.5,
-    borderColor: "blue",
+    backgroundColor: colors.primaryBlue,
   },
   infoContainer: {
     width: "100%",

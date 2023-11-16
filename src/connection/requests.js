@@ -24,6 +24,13 @@ export const getWorkerReviews = async (workerInfo) => {
   return axios.post("review/workerReviews", JSON.stringify(workerInfo));
 };
 
+export const addWorkerReview = async (accessToken, reviewInfo) => {
+  return axiosAuth(accessToken).post(
+    "review/addWorkerReview",
+    JSON.stringify(reviewInfo)
+  );
+};
+
 export const interactWorker = async (accessToken, interactionInfo) => {
   return axiosAuth(accessToken).post(
     "matching/client/interaction",
@@ -75,8 +82,6 @@ export const loginWorker = async (workerInfo) => {
   return axios.post("auth/worker/login", JSON.stringify(workerInfo));
 };
 
-
 export const getWorker = async (accessToken, email) => {
   return axiosAuth(accessToken).get(`/workers/getWorker?email=${email}`);
 };
-
