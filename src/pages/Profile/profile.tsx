@@ -43,7 +43,6 @@ const ProfileScreen = () => {
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
       getUserInfo();
-      console.log("ASD");
     });
 
     return unsubscribe;
