@@ -18,9 +18,12 @@ import {
 import { Image } from "react-native-animatable";
 import { Avatar } from "react-native-paper";
 import { colors } from "../../assets/colors";
+import { useNavigation } from "@react-navigation/native";
 
 const ProfileScreen = () => {
   const { role, userToken, signOut, email } = useContext(AuthContext);
+  const navigation = useNavigation();
+
   const [averageRating, setAverageRating] = useState(1);
 
   type UserProps = {
@@ -38,6 +41,15 @@ const ProfileScreen = () => {
   };
 
   useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", () => {
+      getUserInfo();
+      console.log("ASD");
+    });
+
+    return unsubscribe;
+  }, [navigation]);
+
+  const getUserInfo = () => {
     if (role === "worker") {
       getWorkerAverageRating();
       getWorker(userToken, email)
@@ -52,7 +64,7 @@ const ProfileScreen = () => {
         })
         .catch((error) => console.log(error));
     }
-  }, []);
+  };
 
   // Estado inicial del perfil
   const [profile, setProfile] = useState<UserProps>({

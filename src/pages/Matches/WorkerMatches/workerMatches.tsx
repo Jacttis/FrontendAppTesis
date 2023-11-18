@@ -31,8 +31,12 @@ export default function WorkerMatches() {
   }, []);
 
   useEffect(() => {
-    obtainClientsMatched();
-  }, []);
+    const unsubscribe = navigation.addListener("focus", () => {
+      obtainClientsMatched();
+    });
+
+    return unsubscribe;
+  }, [navigation]);
 
   const obtainClientsMatched = () => {
     setIsSearching(true);

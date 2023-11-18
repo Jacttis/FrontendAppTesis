@@ -16,6 +16,7 @@ import { AuthContext } from "../../../context/AuthContext";
 import { Image } from "react-native-animatable";
 import Slider from "@react-native-community/slider";
 import { colors } from "../../../assets/colors";
+import { useNavigation } from "@react-navigation/native";
 
 interface filter {
   minimumDistanceInKm: number;
@@ -37,6 +38,7 @@ const swiperRef = React.createRef<Swiper<worker>>();
 
 export default function Home() {
   const { userToken } = useContext(AuthContext);
+  const navigation = useNavigation();
 
   const [workers, setWorkers] = useState<worker[]>([]);
   const [actualLikedWorker, setActualLikedWorker] = useState<worker>();
@@ -67,6 +69,14 @@ export default function Home() {
   useEffect(() => {
     getProfessions();
   }, []);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", () => {
+      getWorkersForClient();
+    });
+
+    return unsubscribe;
+  }, [navigation]);
 
   useEffect(() => {
     if (index >= workers.length && index != 0) {
