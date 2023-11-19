@@ -6,6 +6,7 @@ import { useEffect, useState, useContext } from "react";
 import { Rating, AirbnbRating } from "react-native-ratings";
 import { addWorkerReview } from "../../../connection/requests";
 import { AuthContext } from "../../../context/AuthContext";
+import { colors } from "../../../assets/colors";
 
 export default function ReviewModal(props: any) {
   const { userToken } = useContext(AuthContext);
@@ -95,7 +96,11 @@ export default function ReviewModal(props: any) {
         <View style={styles.bottomContainer}>
           {isWaiting ? (
             <View>
-              <ActivityIndicator size={"small"} animating={true} />
+              <ActivityIndicator
+                size={"small"}
+                animating={true}
+                color={colors.primaryBlue}
+              />
               <Text>Making review...</Text>
             </View>
           ) : (

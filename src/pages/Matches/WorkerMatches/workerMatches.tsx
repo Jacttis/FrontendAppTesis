@@ -31,8 +31,12 @@ export default function WorkerMatches() {
   }, []);
 
   useEffect(() => {
-    obtainClientsMatched();
-  }, []);
+    const unsubscribe = navigation.addListener("focus", () => {
+      obtainClientsMatched();
+    });
+
+    return unsubscribe;
+  }, [navigation]);
 
   const obtainClientsMatched = () => {
     setIsSearching(true);
@@ -82,7 +86,11 @@ export default function WorkerMatches() {
               alignItems: "center",
             }}
           >
-            <ActivityIndicator size={"large"} animating={true} />
+            <ActivityIndicator
+              size={"large"}
+              animating={true}
+              color={colors.primaryBlue}
+            />
             <Text>Searching matches...</Text>
           </View>
         ) : (
@@ -105,12 +113,12 @@ const styles = StyleSheet.create({
   textContainer: {
     width: "100%",
     marginTop: 20,
-    padding: 5,
+    padding: 15,
   },
   matchesContainer: {
     width: "100%",
     height: "85%",
-    marginTop: 15,
+    marginTop: 5,
     padding: 10,
     alignItems: "center",
   },

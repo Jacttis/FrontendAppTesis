@@ -47,8 +47,12 @@ export default function ClientMatches() {
   }, []);
 
   useEffect(() => {
-    obtainWorkersMatched();
-  }, []);
+    const unsubscribe = navigation.addListener("focus", () => {
+      obtainWorkersMatched();
+    });
+
+    return unsubscribe;
+  }, [navigation]);
 
   const obtainWorkersMatched = () => {
     setIsSearching(true);
@@ -98,7 +102,11 @@ export default function ClientMatches() {
               alignItems: "center",
             }}
           >
-            <ActivityIndicator size={"large"} animating={true} />
+            <ActivityIndicator
+              size={"large"}
+              animating={true}
+              color={colors.primaryBlue}
+            />
             <Text>Searching matches...</Text>
           </View>
         ) : (

@@ -14,6 +14,7 @@ import ClientScroll from "./clientScroll";
 import { ALERT_TYPE, Dialog } from "react-native-alert-notification";
 import { colors } from "../../../assets/colors";
 import { Image } from "react-native-animatable";
+import { useNavigation } from "@react-navigation/native";
 
 export interface client {
   email: string;
@@ -38,6 +39,7 @@ export interface match {
 
 export default function WorkerHome() {
   const { userToken } = useContext(AuthContext);
+  const navigation = useNavigation();
 
   const [clientSelected, setClientSelected] = useState<client>();
   const [clients, setClients] = useState<client[]>([]);
@@ -45,8 +47,12 @@ export default function WorkerHome() {
   const [searching, setSearching] = useState<boolean>(false);
 
   useEffect(() => {
-    searchLikedClients();
-  }, []);
+    const unsubscribe = navigation.addListener("focus", () => {
+      searchLikedClients();
+    });
+
+    return unsubscribe;
+  }, [navigation]);
 
   const searchLikedClients = () => {
     setSearching(true);
@@ -140,7 +146,11 @@ export default function WorkerHome() {
             alignItems: "center",
           }}
         >
-          <ActivityIndicator size={"large"} animating={true} />
+          <ActivityIndicator
+            size={"large"}
+            color={colors.primaryBlue}
+            animating={true}
+          />
           <Text>Searching clients who liked you...</Text>
         </View>
       ) : (

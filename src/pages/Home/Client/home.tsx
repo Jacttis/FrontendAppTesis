@@ -14,8 +14,9 @@ import React from "react";
 import LikedWorkerModal from "./likedWorkerModal";
 import { AuthContext } from "../../../context/AuthContext";
 import { Image } from "react-native-animatable";
-import Slider from "@react-native-community/slider";
+import Slider, { SliderProps } from "@react-native-community/slider";
 import { colors } from "../../../assets/colors";
+import { useNavigation } from "@react-navigation/native";
 
 interface filter {
   minimumDistanceInKm: number;
@@ -34,9 +35,11 @@ export interface worker {
 }
 
 const swiperRef = React.createRef<Swiper<worker>>();
+const selectRef = React.createRef<SelectDropdown>();
 
 export default function Home() {
   const { userToken } = useContext(AuthContext);
+  const navigation = useNavigation();
 
   const [workers, setWorkers] = useState<worker[]>([]);
   const [actualLikedWorker, setActualLikedWorker] = useState<worker>();
@@ -45,6 +48,7 @@ export default function Home() {
     minimumDistanceInKm: 0,
     professionName: "",
   });
+  const [professionIndex, setProfessionIndex] = useState(0);
   const [distanceRange, setDistanceRange] = useState(20);
 
   const [searching, setSearching] = useState(false);
@@ -69,6 +73,19 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", () => {
+      selectRef.current?.selectIndex(0);
+      setDistanceRange(20);
+      setFilters({
+        minimumDistanceInKm: 20,
+        professionName: "",
+      });
+    });
+
+    return unsubscribe;
+  }, [navigation]);
+
+  useEffect(() => {
     if (index >= workers.length && index != 0) {
       getWorkersForClient();
     }
@@ -76,14 +93,15 @@ export default function Home() {
 
   useEffect(() => {
     getWorkersForClient();
+    console.log(filters);
   }, [filters]);
 
-  useEffect(() => {
+  const updateDistanceFilter = () => {
     setFilters({
       minimumDistanceInKm: distanceRange,
       professionName: filters.professionName,
     });
-  }, [distanceRange]);
+  };
 
   const getWorkersForClient = () => {
     resetWorkers();
@@ -201,9 +219,11 @@ export default function Home() {
             data={professions}
             defaultValueByIndex={0}
             defaultValue={"All Professions"}
+            ref={selectRef}
             search={true}
             buttonStyle={styles.select}
             onSelect={(selectedItem, index) => {
+              setProfessionIndex(index);
               let professionSelected = index === 0 ? "" : selectedItem;
               setFilters({
                 professionName: professionSelected,
@@ -221,7 +241,8 @@ export default function Home() {
             minimumTrackTintColor={colors.primaryBlue}
             thumbTintColor={colors.primaryBlue}
             value={distanceRange}
-            onSlidingComplete={(value) => setDistanceRange(Math.trunc(value))}
+            onValueChange={(value) => setDistanceRange(Math.trunc(value))}
+            onSlidingComplete={(value) => updateDistanceFilter()}
           ></Slider>
           <Text>{distanceRange} Kilometers Away</Text>
         </View>
@@ -308,7 +329,11 @@ export default function Home() {
         </View>
       ) : searching ? (
         <View style={styles.searchResultContainer}>
-          <ActivityIndicator size={"large"} animating={true} />
+          <ActivityIndicator
+            size={"large"}
+            color={colors.primaryBlue}
+            animating={true}
+          />
           <Text>Searching workers...</Text>
         </View>
       ) : (

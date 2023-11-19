@@ -133,7 +133,11 @@ export default function WorkerInfoModal(props: any) {
                 })}
               </ScrollView>
             ) : searching ? (
-              <ActivityIndicator size={"small"} animating={true} />
+              <ActivityIndicator
+                size={"small"}
+                color={colors.primaryBlue}
+                animating={true}
+              />
             ) : (
               <Text style={{ marginLeft: "auto", marginRight: "auto" }}>
                 Worker has no reviews!
